@@ -1,2 +1,2 @@
 # raxcl-blog
-将博客前后端集合为一个Respository统一管理
+个人博客，长期维护
