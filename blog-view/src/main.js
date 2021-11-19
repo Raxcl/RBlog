@@ -3,30 +3,30 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 //自定义css
-import './assets/css/base.css'
+//import './assets/css/base.css'
 //阿里icon
-import './assets/css/icon/iconfont.css'
+//import './assets/css/icon/iconfont.css'
 //typo.css
-import "./assets/css/typo.css";
+//import "./assets/css/typo.css";
 //semantic-ui
-import 'semantic-ui-css/semantic.min.css'
+//import 'semantic-ui-css/semantic.min.css'
 //element-ui
 import Element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+//import 'element-ui/lib/theme-chalk/index.css'
 //moment
-import './util/dateTimeFormatUtils.js'
+//import './util/dateTimeFormatUtils.js'
 //v-viewer
-import 'viewerjs/dist/viewer.css'
+//import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer'
 //directive
-import './util/directive'
+//import './util/directive'
 
-console.log(
-	'%c NBlog %c By Naccl %c https://github.com/Naccl/NBlog',
-	'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
-	'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #000',
-	'background:transparent'
-)
+// console.log(
+// 	'%c NBlog %c By Naccl %c https://github.com/Naccl/NBlog',
+// 	'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+// 	'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #000',
+// 	'background:transparent'
+// )
 
 Vue.use(Element)
 Vue.use(Viewer)
