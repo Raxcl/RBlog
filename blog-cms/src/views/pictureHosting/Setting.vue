@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-alert title="图床配置及用法请查看：https://github.com/Naccl/PictureHosting" type="warning" show-icon v-if="hintShow"></el-alert>
+		<el-alert title="图床配置及用法请查看：https://github.com/Raxcl/PictureHosting" type="warning" show-icon v-if="hintShow"></el-alert>
 		<el-row>
 			<el-col :span="8">
 				<el-input placeholder="请输入token进行初始化" v-model="token" :clearable="true" @keyup.native.enter="searchUser" style="min-width: 500px">

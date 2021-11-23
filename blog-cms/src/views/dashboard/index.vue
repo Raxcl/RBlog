@@ -79,7 +79,7 @@
 	import echarts from 'echarts'
 	import 'echarts/map/js/china'
 	import {getDashboard} from "@/api/dashboard";
-	//城市经纬度数据来自 https://github.com/Naccl/region2coord
+	//城市经纬度数据来自 https://github.com/Raxcl/region2coord
 	import geoCoordMap from '@/util/city2coord.json'
 
 	export default {

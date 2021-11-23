@@ -1,8 +1,8 @@
 {
   "name": "blog-view",
   "version": "1.0.0",
-  "description": "NBlog view",
-  "author": "Naccl <i@naccl.top>",
+  "description": "Raxcl view",
+  "author": "Raxcl <i@raxcl.cn>",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

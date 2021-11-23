@@ -1,8 +1,8 @@
 {
   "name": "blog-cms",
   "version": "2.0.0",
-  "description": "NBlog cms",
-  "author": "Naccl <i@naccl.top>",
+  "description": "Raxcl cms",
+  "author": "Raxcl <i@raxcl.top>",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
