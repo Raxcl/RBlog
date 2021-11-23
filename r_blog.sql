@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 80027
  Source Host           : 81.71.87.241:3307
- Source Schema         : raxcl_blog
+ Source Schema         : r_blog
 
  Target Server Type    : MySQL
  Target Server Version : 80027
  File Encoding         : 65001
 
- Date: 23/11/2021 20:39:30
+ Date: 23/11/2021 21:03:25
 */
 
 SET NAMES utf8mb4;
@@ -197,7 +197,7 @@ CREATE TABLE `login_log`  (
   `create_time` datetime NOT NULL COMMENT '登录时间',
   `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of login_log
@@ -241,7 +241,7 @@ CREATE TABLE `operation_log`  (
   `create_time` datetime NOT NULL COMMENT '操作时间',
   `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of operation_log
@@ -399,7 +399,7 @@ CREATE TABLE `visit_log`  (
   `create_time` datetime NOT NULL COMMENT '访问时间',
   `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 114 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of visit_log
@@ -513,6 +513,10 @@ INSERT INTO `visit_log` VALUES (106, 'da376f08-974e-35ba-93ee-260405633908', '/b
 INSERT INTO `visit_log` VALUES (107, 'da376f08-974e-35ba-93ee-260405633908', '/archives', 'GET', '{}', '访问页面', '文章归档', '', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 10, '2021-11-23 20:31:39', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
 INSERT INTO `visit_log` VALUES (108, 'da376f08-974e-35ba-93ee-260405633908', '/moments', 'GET', '{\"pageNum\":1,\"jwt\":\"\"}', '访问页面', '动态', '第1页', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 18, '2021-11-23 20:31:40', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
 INSERT INTO `visit_log` VALUES (109, 'da376f08-974e-35ba-93ee-260405633908', '/blogs', 'GET', '{\"pageNum\":1}', '访问页面', '首页', '第1页', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 20, '2021-11-23 20:31:40', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
+INSERT INTO `visit_log` VALUES (110, 'da376f08-974e-35ba-93ee-260405633908', '/blogs', 'GET', '{\"pageNum\":1}', '访问页面', '首页', '第1页', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 29, '2021-11-23 20:43:31', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
+INSERT INTO `visit_log` VALUES (111, 'da376f08-974e-35ba-93ee-260405633908', '/moments', 'GET', '{\"pageNum\":1,\"jwt\":\"\"}', '访问页面', '动态', '第1页', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 21, '2021-11-23 20:43:35', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
+INSERT INTO `visit_log` VALUES (112, 'da376f08-974e-35ba-93ee-260405633908', '/friends', 'GET', '{}', '访问页面', '友链', '', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 31, '2021-11-23 20:43:37', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
+INSERT INTO `visit_log` VALUES (113, 'da376f08-974e-35ba-93ee-260405633908', '/about', 'GET', '{}', '访问页面', '关于我', '', '10.60.17.56', '内网IP|内网IP', 'Windows 10', 'Chrome 92.0.4515.159', 9, '2021-11-23 20:43:39', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36');
 
 -- ----------------------------
 -- Table structure for visit_record
@@ -546,7 +550,7 @@ CREATE TABLE `visitor`  (
   `pv` int NULL DEFAULT NULL COMMENT '访问页数统计',
   `user_agent` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'user-agent用户代理',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of visitor

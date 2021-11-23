@@ -112,7 +112,7 @@ public class ImageUtils {
 		headers.put("Authorization", Collections.singletonList("token " + githubToken));
 
 		HashMap<String, String> body = new HashMap<>();
-		body.put("message", "Add files via NBlog");
+		body.put("message", "Add files via RBlog");
 		body.put("content", imgBase64);
 
 		HttpEntity httpEntity = new HttpEntity(body, headers);
