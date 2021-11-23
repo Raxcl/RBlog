@@ -1,10 +1,10 @@
 <template>
 	<header ref="header">
 		<div class="view">
-			<img ref="imgbg1" src="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/img/bg1.jpg" style="display: none;">
-			<div class="bg1" style="background-image: url('https://cdn.jsdelivr.net/gh/Naccl/blog-resource/img/bg1.jpg');"></div>
-			<div class="bg2" style="background-image: url('https://cdn.jsdelivr.net/gh/Naccl/blog-resource/img/bg2.jpg');"></div>
-			<div class="bg3" style="background-image: url('https://cdn.jsdelivr.net/gh/Naccl/blog-resource/img/bg3.jpg');" v-show="loaded"></div>
+			<img ref="imgbg1" src="https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/bg1.jpg" style="display: none;">
+			<div class="bg1" style="background-image: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/bg1.jpg');"></div>
+			<div class="bg2" style="background-image: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/bg2.jpg');"></div>
+			<div class="bg3" style="background-image: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/bg3.jpg');" v-show="loaded"></div>
 		</div>
 		<div class="text-malfunction" data-word="博客主题">
 			<div class="line"></div>
@@ -280,13 +280,13 @@
 	}
 
 	.wave1 {
-		background: url('https://cdn.jsdelivr.net/gh/Naccl/blog-resource/img/wave1.png') repeat-x;
+		background: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/wave1.png') repeat-x;
 		height: 75px;
 		width: 100%;
 	}
 
 	.wave2 {
-		background: url('https://cdn.jsdelivr.net/gh/Naccl/blog-resource/img/wave2.png') repeat-x;
+		background: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/wave2.png') repeat-x;
 		height: 90px;
 		width: calc(100% + 100px);
 		left: -100px;
