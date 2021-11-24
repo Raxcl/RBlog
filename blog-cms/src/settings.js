@@ -3,7 +3,7 @@ module.exports = {
 	 * @type {string}
 	 * @description page title
 	 */
-	title: 'Raxcl\'s Blog Admin',
+	title: 'RBlog Admin',
 
 	/**
 	 * @type {string}

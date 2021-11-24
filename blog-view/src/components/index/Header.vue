@@ -6,7 +6,7 @@
 			<div class="bg2" style="background-image: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/bg2.jpg');"></div>
 			<div class="bg3" style="background-image: url('https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/bg3.jpg');" v-show="loaded"></div>
 		</div>
-		<div class="text-malfunction" data-word="博客主题">
+		<div class="text-malfunction" data-word="RBlog">
 			<div class="line"></div>
 		</div>
 		<div class="wrapper">
