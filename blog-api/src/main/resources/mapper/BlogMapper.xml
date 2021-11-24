@@ -277,7 +277,7 @@
     <update id="updateBlog">
         update blog set title=#{title}, first_picture=#{firstPicture}, content=#{content}, description=#{description},
         is_recommend=#{recommend}, is_published=#{published}, is_appreciation=#{appreciation}, is_comment_enabled=#{commentEnabled},
-        is_top=#{cn}, create_time=#{createTime}, update_time=#{updateTime}, views=#{views},
+        is_top=#{top}, create_time=#{createTime}, update_time=#{updateTime}, views=#{views},
         words=#{words}, read_time=#{readTime}, category_id=#{category.id}, password=#{password}
         where id=#{id}
     </update>
