@@ -33,4 +33,5 @@ build/
 .vscode/
 
 log
-# application-prod.properties
+application-prod.properties
+application.properties

@@ -15,6 +15,25 @@
     <url>https://raxcl.top/</url>
     <description>Blog API</description>
 
+    <!--多环境配置参数-->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profilesActive>dev</profilesActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profilesActive>prod</profilesActive>
+            </properties>
+        </profile>
+    </profiles>
+
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -151,6 +170,44 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+
+                <configuration>
+                    <!--镜像名称 raxcl/blog-api-->
+                    <imageName>app</imageName>
+                    <!--基础镜像jdk 1.8-->
+                    <baseImage>java</baseImage>
+                    <!--制作者提供本人信息-->
+                    <maintainer>raxcl raxcl@qq.com</maintainer>
+                    <!--切换到/ROOT目录-->
+                    <workdir>/ROOT</workdir>
+                    <cmd>["java", "-version"]</cmd>
+                    <entryPoint>["java", "-jar", "${project.build.finalName}.jar","--spring.profiles.active=prod"]</entryPoint>
+
+                    <!--指定Dockerfile路径
+                        <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                    -->
+                    <!--指定远程docker api地址-->
+                    <dockerHost>https://81.71.87.241:2376</dockerHost>
+                    <dockerCertPath>D:\environment\ca</dockerCertPath>
+
+                    <!--这里是复制jar包到docker容器指定目录配置-->
+                    <resources>
+                        <resource>
+                            <targetPath>/ROOT</targetPath>
+                            <!--用于指定需要复制的根目录，${project.build.directory}表示target目录-->
+                            <directory>${project.build.directory}</directory>
+                            <!--用于指定需要复制的文件。${project.build.finalName}.jar指的是打包后的jar包文件。-->
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
         </plugins>
     </build>
