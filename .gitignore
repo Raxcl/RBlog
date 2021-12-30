@@ -33,3 +33,5 @@ build/
 .vscode/
 
 /blog-cms-tmp
+application-prod.properties
+application.properties

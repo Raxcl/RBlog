@@ -1,8 +1,9 @@
-package cn.raxcl.controller;
+package cn.raxcl.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.entity.User;
 import cn.raxcl.model.dto.LoginInfo;
@@ -19,7 +20,8 @@ import java.util.Map;
  * @Date: 2020-09-02
  */
 @RestController
-public class LoginController {
+@RequestMapping("/admin")
+public class LoginAdminController {
 	@Autowired
 	UserService userService;
 

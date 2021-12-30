@@ -12,7 +12,7 @@
     <artifactId>blog-api</artifactId>
     <version>0.0.1</version>
     <name>blog-api</name>
-    <url>https://raxcl.top/</url>
+    <url>https://raxcl.cn/</url>
     <description>Blog API</description>
 
     <!--多环境配置参数-->
