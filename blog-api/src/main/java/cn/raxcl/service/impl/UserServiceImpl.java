@@ -12,8 +12,8 @@ import cn.raxcl.util.HashUtils;
 
 /**
  * @Description: 用户业务层接口实现类
- * @Author: Raxcl
- * @Date: 2020-07-19
+ * @author Raxcl
+ * @date 2020-07-19
  */
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {

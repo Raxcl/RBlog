@@ -15,8 +15,8 @@ import cn.raxcl.service.impl.UserServiceImpl;
 
 /**
  * @Description: Spring Security配置类
- * @Author: Raxcl
- * @Date: 2020-07-19
+ * @author Raxcl
+ * @date 2020-07-19
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

@@ -5,8 +5,8 @@ import java.io.StringWriter;
 
 /**
  * @Description: 字符串校验
- * @Author: Raxcl
- * @Date: 2020-08-02
+ * @author Raxcl
+ * @date 2020-08-02
  */
 public class StringUtils {
 	/**

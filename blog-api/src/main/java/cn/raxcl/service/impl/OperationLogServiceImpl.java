@@ -15,8 +15,8 @@ import java.util.Map;
 
 /**
  * @Description: 操作日志业务层实现
- * @Author: Raxcl
- * @Date: 2020-11-30
+ * @author Raxcl
+ * @date 2020-11-30
  */
 @Service
 public class OperationLogServiceImpl implements OperationLogService {
@@ -30,7 +30,7 @@ public class OperationLogServiceImpl implements OperationLogService {
 		return operationLogMapper.getOperationLogListByDate(startDate, endDate);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveOperationLog(OperationLog log) {
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
@@ -45,7 +45,7 @@ public class OperationLogServiceImpl implements OperationLogService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteOperationLogById(Long id) {
 		if (operationLogMapper.deleteOperationLogById(id) != 1) {

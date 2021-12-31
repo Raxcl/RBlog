@@ -14,8 +14,8 @@ import java.util.concurrent.Future;
 
 /**
  * @Description: 定时任务执行与结果记录
- * @Author: Raxcl
- * @Date: 2020-11-01
+ * @author Raxcl
+ * @date 2020-11-01
  */
 @Slf4j
 public class ScheduleJob extends QuartzJobBean {

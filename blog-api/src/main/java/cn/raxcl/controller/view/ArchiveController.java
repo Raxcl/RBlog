@@ -1,4 +1,4 @@
-package cn.raxcl.controller;
+package cn.raxcl.controller.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +11,8 @@ import java.util.Map;
 
 /**
  * @Description: 归档页面
- * @Author: Raxcl
- * @Date: 2020-08-12
+ * @author Raxcl
+ * @date 2020-08-12
  */
 @RestController
 public class ArchiveController {

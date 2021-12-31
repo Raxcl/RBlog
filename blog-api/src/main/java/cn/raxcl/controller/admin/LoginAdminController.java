@@ -16,8 +16,8 @@ import java.util.Map;
 
 /**
  * @Description: 前台登录
- * @Author: Raxcl
- * @Date: 2020-09-02
+ * @author Raxcl
+ * @date 2020-09-02
  */
 @RestController
 @RequestMapping("/admin")

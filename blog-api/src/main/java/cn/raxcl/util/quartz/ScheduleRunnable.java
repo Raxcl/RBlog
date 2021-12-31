@@ -8,8 +8,8 @@ import java.lang.reflect.Method;
 
 /**
  * @Description: 执行定时任务
- * @Author: Raxcl
- * @Date: 2020-11-01
+ * @author Raxcl
+ * @date 2020-11-01
  */
 public class ScheduleRunnable implements Runnable {
 	private Object target;

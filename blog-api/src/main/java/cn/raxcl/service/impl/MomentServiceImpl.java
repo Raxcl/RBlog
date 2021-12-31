@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @Description: 博客动态业务层实现
- * @Author: Raxcl
- * @Date: 2020-08-24
+ * @author Raxcl
+ * @date 2020-08-24
  */
 @Service
 public class MomentServiceImpl implements MomentService {
@@ -48,7 +48,7 @@ public class MomentServiceImpl implements MomentService {
 		return moments;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void addLikeByMomentId(Long momentId) {
 		if (momentMapper.addLikeByMomentId(momentId) != 1) {
@@ -56,7 +56,7 @@ public class MomentServiceImpl implements MomentService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateMomentPublishedById(Long momentId, Boolean published) {
 		if (momentMapper.updateMomentPublishedById(momentId, published) != 1) {
@@ -73,7 +73,7 @@ public class MomentServiceImpl implements MomentService {
 		return moment;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteMomentById(Long id) {
 		if (momentMapper.deleteMomentById(id) != 1) {
@@ -81,7 +81,7 @@ public class MomentServiceImpl implements MomentService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveMoment(Moment moment) {
 		if (momentMapper.saveMoment(moment) != 1) {

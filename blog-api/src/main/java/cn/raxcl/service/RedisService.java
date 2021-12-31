@@ -43,6 +43,10 @@ public interface RedisService {
 
 	boolean hasValueInSet(String key, Object value);
 
+	/**
+	 * 删除友链页面缓存
+	 * @param key 键
+	 */
 	void deleteCacheByKey(String key);
 
 	boolean hasKey(String key);

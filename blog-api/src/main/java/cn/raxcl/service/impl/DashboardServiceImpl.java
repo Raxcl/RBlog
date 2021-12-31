@@ -24,8 +24,8 @@ import java.util.Map;
 
 /**
  * @Description: 仪表盘业务层实现
- * @Author: Raxcl
- * @Date: 2020-10-08
+ * @author Raxcl
+ * @date 2020-10-08
  */
 @Service
 public class DashboardServiceImpl implements DashboardService {

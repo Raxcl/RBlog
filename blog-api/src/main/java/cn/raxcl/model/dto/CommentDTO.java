@@ -1,25 +1,22 @@
-package cn.raxcl.entity;
+package cn.raxcl.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import cn.raxcl.model.vo.BlogIdAndTitle;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
- * @Description: 博客评论
+ * @Description: 评论DTO
  * @author Raxcl
- * @date 2021-12-31 15:16:51
+ * @date 2021-12-31 15:16:54
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Comment {
+public class CommentDTO {
 	private Long id;
 	/**
 	 * 昵称
@@ -70,16 +67,11 @@ public class Comment {
 	 */
 	private Long parentCommentId;
 	/**
+	 * 所属的文章id
+	 */
+	private Long blogId;
+	/**
 	 * 如果评论昵称为QQ号，则将昵称和头像置为QQ昵称和QQ头像，并将此字段置为QQ号备份
 	 */
 	private String qq;
-
-	/**
-	 * 所属的文章
-	 */
-	private BlogIdAndTitle blog;
-	/**
-	 * 回复该评论的评论
-	 */
-	private List<Comment> replyComments = new ArrayList<>();
 }

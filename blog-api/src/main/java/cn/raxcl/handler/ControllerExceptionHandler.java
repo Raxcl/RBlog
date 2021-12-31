@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @Description: 对Controller层全局异常处理
  * @RestControllerAdvice 捕获异常后，返回json数据类型
- * @Author: Raxcl
- * @Date: 2020-08-14
+ * @author Raxcl
+ * @date 2020-08-14
  */
 @RestControllerAdvice
 public class ControllerExceptionHandler {

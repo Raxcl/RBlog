@@ -14,8 +14,8 @@ import java.util.List;
 
 /**
  * @Description: 博客DTO
- * @Author: Raxcl
- * @Date: 2020-08-27
+ * @author Raxcl
+ * @date 2020-08-27
  */
 @NoArgsConstructor
 @Getter

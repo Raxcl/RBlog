@@ -7,8 +7,8 @@ import lombok.ToString;
 
 /**
  * @Description: 关于我
- * @Author: Raxcl
- * @Date: 2020-08-31
+ * @author Raxcl
+ * @date 2020-08-31
  */
 @NoArgsConstructor
 @Getter

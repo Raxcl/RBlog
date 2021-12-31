@@ -11,8 +11,8 @@ import java.util.List;
 
 /**
  * @Description: 页面评论
- * @Author: Raxcl
- * @Date: 2020-08-15
+ * @author Raxcl
+ * @date 2020-08-15
  */
 @NoArgsConstructor
 @Getter

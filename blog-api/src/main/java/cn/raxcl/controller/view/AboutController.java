@@ -1,4 +1,4 @@
-package cn.raxcl.controller;
+package cn.raxcl.controller.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +9,8 @@ import cn.raxcl.service.AboutService;
 
 /**
  * @Description: 关于我页面
- * @Author: Raxcl
- * @Date: 2020-08-31
+ * @author Raxcl
+ * @date 2020-08-31
  */
 @RestController
 public class AboutController {

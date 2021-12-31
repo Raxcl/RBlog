@@ -9,8 +9,8 @@ import java.util.Date;
 
 /**
  * @Description: 访问日志
- * @Author: Raxcl
- * @Date: 2020-12-04
+ * @author Raxcl
+ * @date 2020-12-04
  */
 @NoArgsConstructor
 @Getter

@@ -20,8 +20,8 @@ import java.util.UUID;
 
 /**
  * @Description: 图片下载保存工具类
- * @Author: Raxcl
- * @Date: 2021-11-11
+ * @author Raxcl
+ * @date 2021-11-11
  */
 @Component
 public class ImageUtils {

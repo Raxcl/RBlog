@@ -2,8 +2,8 @@ package cn.raxcl.exception;
 
 /**
  * @Description: 404异常
- * @Author: Raxcl
- * @Date: 2020-08-14
+ * @author Raxcl
+ * @date 2020-08-14
  */
 
 public class NotFoundException extends RuntimeException {

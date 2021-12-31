@@ -9,8 +9,8 @@ import java.util.List;
 
 /**
  * @Description: 分页结果
- * @Author: Raxcl
- * @Date: 2020-08-08
+ * @author Raxcl
+ * @date 2020-08-08
  */
 @NoArgsConstructor
 @Getter

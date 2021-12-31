@@ -1,5 +1,6 @@
 package cn.raxcl.mapper;
 
+import cn.raxcl.model.dto.CommentDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.Comment;
@@ -9,8 +10,8 @@ import java.util.List;
 
 /**
  * @Description: 博客评论持久层接口
- * @Author: Raxcl
- * @Date: 2020-08-03
+ * @author Raxcl
+ * @date 2020-08-03
  */
 @Mapper
 @Repository
@@ -37,5 +38,5 @@ public interface CommentMapper {
 
 	int countComment();
 
-	int saveComment(cn.raxcl.model.dto.Comment comment);
+	int saveComment(CommentDTO commentDTO);
 }

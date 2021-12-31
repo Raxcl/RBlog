@@ -20,8 +20,8 @@ import java.util.Date;
 
 /**
  * @Description: 博客动态后台管理
- * @Author: Raxcl
- * @Date: 2020-08-24
+ * @author Raxcl
+ * @date 2020-08-24
  */
 @RestController
 @RequestMapping("/admin")

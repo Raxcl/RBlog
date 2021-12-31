@@ -1,6 +1,7 @@
 package cn.raxcl.service;
 
 import cn.raxcl.entity.Comment;
+import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.model.vo.PageComment;
 
 import java.util.List;
@@ -24,5 +25,5 @@ public interface CommentService {
 
 	int countByPageAndIsPublished(Integer page, Long blogId, Boolean isPublished);
 
-	void saveComment(cn.raxcl.model.dto.Comment comment);
+	void saveComment(CommentDTO commentDTO);
 }

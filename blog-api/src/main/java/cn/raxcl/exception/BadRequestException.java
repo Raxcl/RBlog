@@ -2,8 +2,8 @@ package cn.raxcl.exception;
 
 /**
  * @Description: 非法请求异常
- * @Author: Raxcl
- * @Date: 2020-07-23
+ * @author Raxcl
+ * @date 2020-07-23
  */
 
 public class BadRequestException extends RuntimeException {

@@ -3,7 +3,7 @@ package cn.raxcl.task;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.CityVisitor;
 import cn.raxcl.entity.VisitRecord;
 import cn.raxcl.model.dto.VisitLogUuidTime;
@@ -23,8 +23,8 @@ import java.util.Set;
 
 /**
  * @Description: 访客统计相关定时任务
- * @Author: Raxcl
- * @Date: 2021-02-05
+ * @author Raxcl
+ * @date 2021-02-05
  */
 @Component
 public class VisitorSyncScheduleTask {
@@ -47,7 +47,7 @@ public class VisitorSyncScheduleTask {
 	 */
 	public void syncVisitInfoToDatabase() {
 		//清空当天Redis的访客标识Set，以便统计每日UV
-		redisService.deleteCacheByKey(RedisKeyConfig.IDENTIFICATION_SET);
+		redisService.deleteCacheByKey(RedisKeyConstant.IDENTIFICATION_SET);
 		//获取昨天的所有访问日志
 		List<VisitLogUuidTime> yesterdayLogList = visitLogService.getUUIDAndCreateTimeByYesterday();
 		//用Set去重得到当天所有访客的uuid

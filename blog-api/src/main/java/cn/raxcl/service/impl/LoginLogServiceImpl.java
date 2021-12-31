@@ -15,8 +15,8 @@ import java.util.Map;
 
 /**
  * @Description: 登录日志业务层实现
- * @Author: Raxcl
- * @Date: 2020-12-03
+ * @author Raxcl
+ * @date 2020-12-03
  */
 @Service
 public class LoginLogServiceImpl implements LoginLogService {
@@ -30,7 +30,7 @@ public class LoginLogServiceImpl implements LoginLogService {
 		return loginLogMapper.getLoginLogListByDate(startDate, endDate);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveLoginLog(LoginLog log) {
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
@@ -45,7 +45,7 @@ public class LoginLogServiceImpl implements LoginLogService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteLoginLogById(Long id) {
 		if (loginLogMapper.deleteLoginLogById(id) != 1) {

@@ -1,6 +1,5 @@
 package cn.raxcl.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,18 +15,21 @@ import java.util.Map;
 
 /**
  * @Description: 邮件工具类
- * @Author: Raxcl
- * @Date: 2020-10-10
+ * @author Raxcl
+ * @date 2020-10-10
  */
 @Component
 @EnableAsync
 public class MailUtils {
-	@Autowired
-	private JavaMailSender javaMailSender;
-	@Autowired
-	private MailProperties mailProperties;
-	@Autowired
-	TemplateEngine templateEngine;
+	private final JavaMailSender javaMailSender;
+	private final MailProperties mailProperties;
+	private final TemplateEngine templateEngine;
+
+	public MailUtils(JavaMailSender javaMailSender, MailProperties mailProperties, TemplateEngine templateEngine) {
+		this.javaMailSender = javaMailSender;
+		this.mailProperties = mailProperties;
+		this.templateEngine = templateEngine;
+	}
 
 	@Async
 	public void sendSimpleMail(String toAccount, String subject, String content) {

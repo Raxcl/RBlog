@@ -8,8 +8,8 @@ import cn.raxcl.util.markdown.ext.cover.Cover;
 
 /**
  * @Description: 定界
- * @Author: Raxcl
- * @Date: 2020-05-13
+ * @author Raxcl
+ * @date 2020-05-13
  */
 public class CoverDelimiterProcessor implements DelimiterProcessor {
     @Override

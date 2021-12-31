@@ -8,8 +8,8 @@ import cn.raxcl.service.VisitRecordService;
 
 /**
  * @Description: 访问记录业务层实现
- * @Author: Raxcl
- * @Date: 2021-02-23
+ * @author Raxcl
+ * @date 2021-02-23
  */
 @Service
 public class VisitRecordServiceImpl implements VisitRecordService {

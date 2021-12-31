@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Description: 读写Redis相关操作
- * @Author: Raxcl
- * @Date: 2020-09-27
+ * @author Raxcl
+ * @date 2020-09-27
  */
 @Service
 public class RedisServiceImpl implements RedisService {

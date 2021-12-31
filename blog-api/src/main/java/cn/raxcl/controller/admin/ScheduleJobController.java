@@ -22,8 +22,8 @@ import java.util.Date;
 
 /**
  * @Description: 定时任务动态管理
- * @Author: Raxcl
- * @Date: 2020-11-01
+ * @author Raxcl
+ * @date 2020-11-01
  */
 @RestController
 @RequestMapping("/admin")

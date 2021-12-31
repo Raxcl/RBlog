@@ -7,8 +7,8 @@ import java.util.Set;
 
 /**
  * @Description:
- * @Author: Raxcl
- * @Date: 2020-11-01
+ * @author Raxcl
+ * @date 2020-11-01
  */
 public class ValidatorUtils {
 	private static Validator validator;

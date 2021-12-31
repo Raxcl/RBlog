@@ -22,8 +22,8 @@ import java.util.List;
 
 /**
  * @Description: 博客评论后台管理
- * @Author: Raxcl
- * @Date: 2020-08-03
+ * @author Raxcl
+ * @date 2020-08-03
  */
 @RestController
 @RequestMapping("/admin")

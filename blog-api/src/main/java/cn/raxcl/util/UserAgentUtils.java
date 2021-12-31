@@ -9,8 +9,8 @@ import java.util.Map;
 
 /**
  * @Description: UserAgent解析工具类
- * @Author: Raxcl
- * @Date: 2020-11-30
+ * @author Raxcl
+ * @date 2020-11-30
  */
 @Component
 public class UserAgentUtils {

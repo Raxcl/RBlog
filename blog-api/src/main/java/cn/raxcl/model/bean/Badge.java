@@ -7,8 +7,8 @@ import lombok.ToString;
 
 /**
  * @Description: GitHub徽标
- * @Author: Raxcl
- * @Date: 2020-08-09
+ * @author Raxcl
+ * @date 2020-08-09
  */
 @NoArgsConstructor
 @Getter

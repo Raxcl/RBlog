@@ -18,8 +18,8 @@ import java.util.List;
 
 /**
  * @Description: 定时任务业务层实现
- * @Author: Raxcl
- * @Date: 2020-11-01
+ * @author Raxcl
+ * @date 2020-11-01
  */
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
@@ -53,7 +53,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void saveJob(ScheduleJob scheduleJob) {
 		if (schedulerJobMapper.saveJob(scheduleJob) != 1) {
 			throw new PersistenceException("添加失败");
@@ -62,7 +62,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void updateJob(ScheduleJob scheduleJob) {
 		if (schedulerJobMapper.updateJob(scheduleJob) != 1) {
 			throw new PersistenceException("更新失败");
@@ -71,7 +71,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void deleteJobById(Long jobId) {
 		ScheduleUtils.deleteScheduleJob(scheduler, jobId);
 		if (schedulerJobMapper.deleteJobById(jobId) != 1) {
@@ -85,7 +85,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void updateJobStatusById(Long jobId, Boolean status) {
 		if (status) {
 			ScheduleUtils.resumeJob(scheduler, jobId);
@@ -103,14 +103,14 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void saveJobLog(ScheduleJobLog jobLog) {
 		if (scheduleJobLogMapper.saveJobLog(jobLog) != 1) {
 			throw new PersistenceException("日志添加失败");
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteJobLogByLogId(Long logId) {
 		if (scheduleJobLogMapper.deleteJobLogByLogId(logId) != 1) {

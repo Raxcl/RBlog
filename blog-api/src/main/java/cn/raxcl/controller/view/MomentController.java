@@ -1,4 +1,4 @@
-package cn.raxcl.controller;
+package cn.raxcl.controller.view;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ import cn.raxcl.util.JwtUtils;
 
 /**
  * @Description: 动态
- * @Author: Raxcl
- * @Date: 2020-08-25
+ * @author Raxcl
+ * @date 2020-08-25
  */
 @RestController
 public class MomentController {

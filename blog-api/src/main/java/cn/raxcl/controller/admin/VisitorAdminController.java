@@ -14,8 +14,8 @@ import cn.raxcl.service.VisitorService;
 
 /**
  * @Description: 访客统计
- * @Author: Raxcl
- * @Date: 2021-02-02
+ * @author Raxcl
+ * @date 2021-02-02
  */
 @RestController
 @RequestMapping("/admin")

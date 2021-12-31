@@ -15,8 +15,8 @@ import cn.raxcl.service.VisitLogService;
 
 /**
  * @Description: 访问日志后台管理
- * @Author: Raxcl
- * @Date: 2020-12-04
+ * @author Raxcl
+ * @date 2020-12-04
  */
 @RestController
 @RequestMapping("/admin")

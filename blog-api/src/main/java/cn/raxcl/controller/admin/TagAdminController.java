@@ -20,8 +20,8 @@ import cn.raxcl.util.StringUtils;
 
 /**
  * @Description: 博客标签后台管理
- * @Author: Raxcl
- * @Date: 2020-08-02
+ * @author Raxcl
+ * @date 2020-08-02
  */
 @RestController
 @RequestMapping("/admin")

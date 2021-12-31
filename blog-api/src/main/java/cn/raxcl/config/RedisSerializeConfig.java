@@ -8,8 +8,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 
 /**
  * @Description: Redis序列化配置
- * @Author: Raxcl
- * @Date: 2020-09-27
+ * @author Raxcl
+ * @date 2020-09-27
  */
 @Configuration
 public class RedisSerializeConfig {

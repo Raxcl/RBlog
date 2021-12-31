@@ -16,8 +16,8 @@ import java.io.PrintWriter;
 
 /**
  * @Description: 访问控制拦截器
- * @Author: Raxcl
- * @Date: 2021-04-04
+ * @author Raxcl
+ * @date 2021-04-04
  */
 @Component
 public class AccessLimitInterceptor extends HandlerInterceptorAdapter {

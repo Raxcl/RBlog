@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * @Description: 异常日志持久层接口
- * @Author: Raxcl
- * @Date: 2020-12-03
+ * @author Raxcl
+ * @date 2020-12-03
  */
 @Mapper
 @Repository

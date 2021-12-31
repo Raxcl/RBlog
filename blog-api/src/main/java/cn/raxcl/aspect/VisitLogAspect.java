@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import cn.raxcl.annotation.VisitLogger;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.VisitLog;
 import cn.raxcl.entity.Visitor;
 import cn.raxcl.model.vo.BlogDetail;
@@ -31,8 +31,8 @@ import java.util.UUID;
 
 /**
  * @Description: AOP记录访问日志
- * @Author: Raxcl
- * @Date: 2020-12-04
+ * @author Raxcl
+ * @date 2020-12-04
  */
 @Component
 @Aspect
@@ -89,14 +89,14 @@ public class VisitLogAspect {
 			identification = saveUUID(request);
 		} else {
 			//校验Redis中是否存在uuid
-			boolean redisHas = redisService.hasValueInSet(RedisKeyConfig.IDENTIFICATION_SET, identification);
+			boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
 			//Redis中不存在uuid
 			if (!redisHas) {
 				//校验数据库中是否存在uuid
 				boolean mysqlHas = visitorService.hasUUID(identification);
 				if (mysqlHas) {
 					//数据库存在，保存至Redis
-					redisService.saveValueToSet(RedisKeyConfig.IDENTIFICATION_SET, identification);
+					redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
 				} else {
 					//数据库不存在，签发新的uuid
 					identification = saveUUID(request);
@@ -131,10 +131,10 @@ public class VisitLogAspect {
 		//暴露自定义header供页面资源使用
 		response.addHeader("Access-Control-Expose-Headers", "identification");
 		//校验Redis中是否存在uuid
-		boolean redisHas = redisService.hasValueInSet(RedisKeyConfig.IDENTIFICATION_SET, uuid);
+		boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
 		if (!redisHas) {
 			//保存至Redis
-			redisService.saveValueToSet(RedisKeyConfig.IDENTIFICATION_SET, uuid);
+			redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
 			//保存至数据库
 			Visitor visitor = new Visitor(uuid, ip, userAgent);
 			visitorService.saveVisitor(visitor);

@@ -20,8 +20,8 @@ import java.util.Map;
 
 /**
  * @Description: 友链页面后台管理
- * @Author: Raxcl
- * @Date: 2020-09-08
+ * @author Raxcl
+ * @date 2020-09-08
  */
 @RestController
 @RequestMapping("/admin")
@@ -100,12 +100,10 @@ public class FriendAdminController {
 
 	/**
 	 * 获取友链页面信息
-	 *
-	 * @return
 	 */
 	@GetMapping("/friendInfo")
 	public Result friendInfo() {
-		return Result.ok("请求成功", friendService.getFriendInfo(false, false));
+		return Result.success("请求成功", friendService.getFriendInfo(false, false));
 	}
 
 	/**

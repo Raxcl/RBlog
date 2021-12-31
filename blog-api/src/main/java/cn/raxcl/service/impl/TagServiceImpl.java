@@ -3,7 +3,7 @@ package cn.raxcl.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.Tag;
 import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.exception.PersistenceException;
@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @Description: 博客标签业务层实现
- * @Author: Raxcl
- * @Date: 2020-07-30
+ * @author Raxcl
+ * @date 2020-07-30
  */
 @Service
 public class TagServiceImpl implements TagService {
@@ -32,7 +32,7 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public List<Tag> getTagListNotId() {
-		String redisKey = RedisKeyConfig.TAG_CLOUD_LIST;
+		String redisKey = RedisKeyConstant.TAG_CLOUD_LIST;
 		List<Tag> tagListFromRedis = redisService.getListByValue(redisKey);
 		if (tagListFromRedis != null) {
 			return tagListFromRedis;
@@ -47,13 +47,13 @@ public class TagServiceImpl implements TagService {
 		return tagMapper.getTagListByBlogId(blogId);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveTag(Tag tag) {
 		if (tagMapper.saveTag(tag) != 1) {
 			throw new PersistenceException("标签添加失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConfig.TAG_CLOUD_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstant.TAG_CLOUD_LIST);
 	}
 
 	@Override
@@ -70,23 +70,23 @@ public class TagServiceImpl implements TagService {
 		return tagMapper.getTagByName(name);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteTagById(Long id) {
 		if (tagMapper.deleteTagById(id) != 1) {
 			throw new PersistenceException("标签删除失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConfig.TAG_CLOUD_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstant.TAG_CLOUD_LIST);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateTag(Tag tag) {
 		if (tagMapper.updateTag(tag) != 1) {
 			throw new PersistenceException("标签更新失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConfig.TAG_CLOUD_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstant.TAG_CLOUD_LIST);
 		//修改了标签名或颜色，可能有首页文章关联了标签，也要更新首页缓存
-		redisService.deleteCacheByKey(RedisKeyConfig.HOME_BLOG_INFO_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
 	}
 }

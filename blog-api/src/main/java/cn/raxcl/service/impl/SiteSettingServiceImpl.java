@@ -3,7 +3,7 @@ package cn.raxcl.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.SiteSetting;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.SiteSettingMapper;
@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 
 /**
  * @Description: 站点设置业务层实现
- * @Author: Raxcl
- * @Date: 2020-08-09
+ * @author Raxcl
+ * @date 2020-08-09
  */
 @Service
 public class SiteSettingServiceImpl implements SiteSettingService {
@@ -61,7 +61,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
 	@Override
 	public Map<String, Object> getSiteInfo() {
-		String redisKey = RedisKeyConfig.SITE_INFO_MAP;
+		String redisKey = RedisKeyConstant.SITE_INFO_MAP;
 		Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
 		if (siteInfoMapFromRedis != null) {
 			return siteInfoMapFromRedis;
@@ -140,21 +140,21 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		deleteSiteInfoRedisCache();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void saveOneSiteSetting(SiteSetting siteSetting) {
 		if (siteSettingMapper.saveSiteSetting(siteSetting) != 1) {
 			throw new PersistenceException("配置添加失败");
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void updateOneSiteSetting(SiteSetting siteSetting) {
 		if (siteSettingMapper.updateSiteSetting(siteSetting) != 1) {
 			throw new PersistenceException("配置修改失败");
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void deleteOneSiteSettingById(Integer id) {
 		if (siteSettingMapper.deleteSiteSettingById(id) != 1) {
 			throw new PersistenceException("配置删除失败");
@@ -165,6 +165,6 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	 * 删除站点信息缓存
 	 */
 	private void deleteSiteInfoRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConfig.SITE_INFO_MAP);
+		redisService.deleteCacheByKey(RedisKeyConstant.SITE_INFO_MAP);
 	}
 }

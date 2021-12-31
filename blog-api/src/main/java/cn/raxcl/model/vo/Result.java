@@ -7,8 +7,8 @@ import lombok.ToString;
 
 /**
  * @Description: 封装响应结果
- * @Author: Raxcl
- * @Date: 2020-07-19
+ * @author Raxcl
+ * @date 2020-07-19
  */
 
 @NoArgsConstructor
@@ -32,6 +32,15 @@ public class Result {
 		this.data = data;
 	}
 
+	public static Result success(String msg, Object data) {
+		return new Result(200, msg, data);
+	}
+
+	public static Result success(String msg) {
+		return new Result(200, msg);
+	}
+
+	 //TODO 慢慢替换成success
 	public static Result ok(String msg, Object data) {
 		return new Result(200, msg, data);
 	}

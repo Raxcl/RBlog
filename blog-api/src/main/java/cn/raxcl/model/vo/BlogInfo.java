@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * @Description: 博客简要信息
- * @Author: Raxcl
- * @Date: 2020-08-08
+ * @author Raxcl
+ * @date 2020-08-08
  */
 @NoArgsConstructor
 @Getter

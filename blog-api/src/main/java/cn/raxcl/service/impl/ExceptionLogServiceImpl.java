@@ -15,8 +15,8 @@ import java.util.Map;
 
 /**
  * @Description: 异常日志业务层实现
- * @Author: Raxcl
- * @Date: 2020-12-03
+ * @author Raxcl
+ * @date 2020-12-03
  */
 @Service
 public class ExceptionLogServiceImpl implements ExceptionLogService {
@@ -30,7 +30,7 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
 		return exceptionLogMapper.getExceptionLogListByDate(startDate, endDate);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveExceptionLog(ExceptionLog log) {
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
@@ -45,7 +45,7 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteExceptionLogById(Long id) {
 		if (exceptionLogMapper.deleteExceptionLogById(id) != 1) {

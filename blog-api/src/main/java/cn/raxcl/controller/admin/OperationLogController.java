@@ -14,8 +14,8 @@ import cn.raxcl.service.OperationLogService;
 
 /**
  * @Description: 操作日志后台管理
- * @Author: Raxcl
- * @Date: 2020-12-01
+ * @author Raxcl
+ * @date 2020-12-01
  */
 @RestController
 @RequestMapping("/admin")

@@ -1,4 +1,4 @@
-package cn.raxcl.controller;
+package cn.raxcl.controller.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +12,8 @@ import cn.raxcl.service.BlogService;
 
 /**
  * @Description: 分类
- * @Author: Raxcl
- * @Date: 2020-08-19
+ * @author Raxcl
+ * @date 2020-08-19
  */
 @RestController
 public class CategoryController {

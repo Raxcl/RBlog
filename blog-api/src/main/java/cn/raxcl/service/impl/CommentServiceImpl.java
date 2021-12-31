@@ -1,5 +1,6 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.model.dto.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +15,8 @@ import java.util.List;
 
 /**
  * @Description: 博客评论业务层实现
- * @Author: Raxcl
- * @Date: 2020-08-03
+ * @author Raxcl
+ * @date 2020-08-03
  */
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -75,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
 		return comments;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateCommentPublishedById(Long commentId, Boolean published) {
 		if (commentMapper.updateCommentPublishedById(commentId, published) != 1) {
@@ -83,7 +84,7 @@ public class CommentServiceImpl implements CommentService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateCommentNoticeById(Long commentId, Boolean notice) {
 		if (commentMapper.updateCommentNoticeById(commentId, notice) != 1) {
@@ -91,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteCommentById(Long commentId) {
 		List<Comment> comments = getAllReplyComments(commentId);
@@ -103,13 +104,13 @@ public class CommentServiceImpl implements CommentService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteCommentsByBlogId(Long blogId) {
 		commentMapper.deleteCommentsByBlogId(blogId);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateComment(Comment comment) {
 		if (commentMapper.updateComment(comment) != 1) {
@@ -122,10 +123,10 @@ public class CommentServiceImpl implements CommentService {
 		return commentMapper.countByPageAndIsPublished(page, blogId, isPublished);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void saveComment(cn.raxcl.model.dto.Comment comment) {
-		if (commentMapper.saveComment(comment) != 1) {
+	public void saveComment(CommentDTO commentDTO) {
+		if (commentMapper.saveComment(commentDTO) != 1) {
 			throw new PersistenceException("评论失败");
 		}
 	}

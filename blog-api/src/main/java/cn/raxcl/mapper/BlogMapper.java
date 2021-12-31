@@ -17,8 +17,8 @@ import java.util.List;
 
 /**
  * @Description: 博客文章持久层接口
- * @Author: Raxcl
- * @Date: 2020-07-26
+ * @author Raxcl
+ * @date 2020-07-26
  */
 @Mapper
 @Repository

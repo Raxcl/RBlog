@@ -7,8 +7,8 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * @Description: 获取QQ昵称头像信息
- * @Author: Raxcl
- * @Date: 2020-09-10
+ * @author Raxcl
+ * @date 2020-09-10
  */
 public class QQInfoUtils {
 	private static RestTemplate restTemplate = new RestTemplate();

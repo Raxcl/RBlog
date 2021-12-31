@@ -14,8 +14,8 @@ import java.util.Map;
 
 /**
  * @Description: 关于我页面后台管理
- * @Author: Raxcl
- * @Date: 2020-09-01
+ * @author Raxcl
+ * @date 2020-09-01
  */
 @RestController
 @RequestMapping("/admin")

@@ -14,8 +14,8 @@ import cn.raxcl.service.ExceptionLogService;
 
 /**
  * @Description: 异常日志后台管理
- * @Author: Raxcl
- * @Date: 2020-12-04
+ * @author Raxcl
+ * @date 2020-12-04
  */
 @RestController
 @RequestMapping("/admin")

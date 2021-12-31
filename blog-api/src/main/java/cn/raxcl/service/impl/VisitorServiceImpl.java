@@ -3,7 +3,7 @@ package cn.raxcl.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.Visitor;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.VisitorMapper;
@@ -18,8 +18,8 @@ import java.util.Map;
 
 /**
  * @Description: 访客统计业务层实现
- * @Author: Raxcl
- * @Date: 2021-01-31
+ * @author Raxcl
+ * @date 2021-01-31
  */
 @Service
 public class VisitorServiceImpl implements VisitorService {
@@ -45,7 +45,7 @@ public class VisitorServiceImpl implements VisitorService {
 		return visitorMapper.hasUUID(uuid) == 0 ? false : true;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveVisitor(Visitor visitor) {
 		String ipSource = IpAddressUtils.getCityInfo(visitor.getIp());
@@ -65,11 +65,11 @@ public class VisitorServiceImpl implements VisitorService {
 		visitorMapper.updatePVAndLastTimeByUUID(dto);
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteVisitor(Long id, String uuid) {
 		//删除Redis中该访客的uuid
-		redisService.deleteValueBySet(RedisKeyConfig.IDENTIFICATION_SET, uuid);
+		redisService.deleteValueBySet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
 		if (visitorMapper.deleteVisitorById(id) != 1) {
 			throw new PersistenceException("删除访客失败");
 		}

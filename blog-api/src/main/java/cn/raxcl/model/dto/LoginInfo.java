@@ -7,8 +7,8 @@ import lombok.ToString;
 
 /**
  * @Description: 登录账号密码
- * @Author: Raxcl
- * @Date: 2020-09-02
+ * @author Raxcl
+ * @date 2020-09-02
  */
 @NoArgsConstructor
 @Getter

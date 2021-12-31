@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * @Description: JWT登录过滤器
- * @Author: Raxcl
- * @Date: 2020-07-21
+ * @author Raxcl
+ * @date 2020-07-21
  */
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	LoginLogService loginLogService;

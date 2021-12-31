@@ -15,8 +15,8 @@ import cn.raxcl.util.markdown.ext.heimu.internal.HeimuTextContentNodeRenderer;
 
 /**
  * @Description: 自定义黑幕拓展
- * @Author: Raxcl
- * @Date: 2020-05-13
+ * @author Raxcl
+ * @date 2020-05-13
  */
 public class HeimuExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
 	private HeimuExtension() {

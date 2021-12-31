@@ -1,4 +1,4 @@
-package cn.raxcl.controller;
+package cn.raxcl.controller.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +18,8 @@ import java.util.Map;
 
 /**
  * @Description: 站点相关
- * @Author: Raxcl
- * @Date: 2020-08-09
+ * @author Raxcl
+ * @date 2020-08-09
  */
 
 @RestController

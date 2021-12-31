@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Description:
- * @Author: Raxcl
- * @Date: 2020-11-01
+ * @author Raxcl
+ * @date 2020-11-01
  */
 @Component
 public class SpringContextUtils implements ApplicationContextAware {

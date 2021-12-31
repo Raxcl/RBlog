@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.CityVisitor;
 import cn.raxcl.model.vo.Result;
 import cn.raxcl.service.DashboardService;
@@ -16,8 +16,8 @@ import java.util.Map;
 
 /**
  * @Description: 后台管理仪表盘
- * @Author: Raxcl
- * @Date: 2020-10-08
+ * @author Raxcl
+ * @date 2020-10-08
  */
 @RestController
 @RequestMapping("/admin")
@@ -30,7 +30,7 @@ public class DashboardAdminController {
 	@GetMapping("/dashboard")
 	public Result dashboard() {
 		int todayPV = dashboardService.countVisitLogByToday();
-		int todayUV = redisService.countBySet(RedisKeyConfig.IDENTIFICATION_SET);
+		int todayUV = redisService.countBySet(RedisKeyConstant.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
 		Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();

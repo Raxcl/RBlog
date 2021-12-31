@@ -11,8 +11,8 @@ import cn.raxcl.interceptor.AccessLimitInterceptor;
 
 /**
  * @Description: 配置CORS跨域支持、拦截器
- * @Author: Raxcl
- * @Date: 2020-07-22
+ * @author Raxcl
+ * @date 2020-07-22
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

@@ -1,9 +1,8 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.config.RedisKeyConfig;
+import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.Friend;
 import cn.raxcl.entity.SiteSetting;
 import cn.raxcl.exception.PersistenceException;
@@ -19,17 +18,20 @@ import java.util.List;
 
 /**
  * @Description: 友链业务层实现
- * @Author: Raxcl
- * @Date: 2020-09-08
+ * @author Raxcl
+ * @date 2021-12-31 17:45:13
  */
 @Service
 public class FriendServiceImpl implements FriendService {
-	@Autowired
-	FriendMapper friendMapper;
-	@Autowired
-	SiteSettingMapper siteSettingMapper;
-	@Autowired
-	RedisService redisService;
+	private final FriendMapper friendMapper;
+	private final SiteSettingMapper siteSettingMapper;
+	private final RedisService redisService;
+
+	public FriendServiceImpl(FriendMapper friendMapper, SiteSettingMapper siteSettingMapper, RedisService redisService) {
+		this.friendMapper = friendMapper;
+		this.siteSettingMapper = siteSettingMapper;
+		this.redisService = redisService;
+	}
 
 	@Override
 	public List<Friend> getFriendList() {
@@ -41,7 +43,7 @@ public class FriendServiceImpl implements FriendService {
 		return friendMapper.getFriendVOList();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateFriendPublishedById(Long friendId, Boolean published) {
 		if (friendMapper.updateFriendPublishedById(friendId, published) != 1) {
@@ -49,7 +51,7 @@ public class FriendServiceImpl implements FriendService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveFriend(Friend friend) {
 		friend.setViews(0);
@@ -59,7 +61,7 @@ public class FriendServiceImpl implements FriendService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateFriend(cn.raxcl.model.dto.Friend friend) {
 		if (friendMapper.updateFriend(friend) != 1) {
@@ -67,7 +69,7 @@ public class FriendServiceImpl implements FriendService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteFriend(Long id) {
 		if (friendMapper.deleteFriend(id) != 1) {
@@ -75,7 +77,7 @@ public class FriendServiceImpl implements FriendService {
 		}
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateViewsByNickname(String nickname) {
 		if (friendMapper.updateViewsByNickname(nickname) != 1) {
@@ -85,7 +87,8 @@ public class FriendServiceImpl implements FriendService {
 
 	@Override
 	public FriendInfo getFriendInfo(boolean cache, boolean md) {
-		String redisKey = RedisKeyConfig.FRIEND_INFO_MAP;
+		//友链页面信息key
+		String redisKey = RedisKeyConstant.FRIEND_INFO_MAP;
 		if (cache) {
 			FriendInfo friendInfoFromRedis = redisService.getObjectByValue(redisKey, FriendInfo.class);
 			if (friendInfoFromRedis != null) {
@@ -115,7 +118,7 @@ public class FriendServiceImpl implements FriendService {
 		return friendInfo;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateFriendInfoContent(String content) {
 		if (siteSettingMapper.updateFriendInfoContent(content) != 1) {
@@ -124,7 +127,7 @@ public class FriendServiceImpl implements FriendService {
 		deleteFriendInfoRedisCache();
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void updateFriendInfoCommentEnabled(Boolean commentEnabled) {
 		if (siteSettingMapper.updateFriendInfoCommentEnabled(commentEnabled) != 1) {
@@ -137,6 +140,6 @@ public class FriendServiceImpl implements FriendService {
 	 * 删除友链页面缓存
 	 */
 	private void deleteFriendInfoRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConfig.FRIEND_INFO_MAP);
+		redisService.deleteCacheByKey(RedisKeyConstant.FRIEND_INFO_MAP);
 	}
 }

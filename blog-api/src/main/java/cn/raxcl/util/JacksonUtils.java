@@ -9,8 +9,8 @@ import java.io.InputStream;
 
 /**
  * @Description: Jackson Object Mapper
- * @Author: Raxcl
- * @Date: 2020-11-07
+ * @author Raxcl
+ * @date 2020-11-07
  */
 public class JacksonUtils {
 	private static ObjectMapper objectMapper = new ObjectMapper();

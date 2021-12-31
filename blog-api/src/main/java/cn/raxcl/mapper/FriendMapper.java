@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * @Description: 友链持久层接口
- * @Author: Raxcl
- * @Date: 2020-09-08
+ * @author Raxcl
+ * @date 2020-09-08
  */
 @Mapper
 @Repository
