@@ -1,4 +1,6 @@
 HELP.md
+application-prod.properties
+application.properties
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -33,5 +35,4 @@ build/
 .vscode/
 
 /blog-cms-tmp
-application-prod.properties
-application.properties
+blog-api/src/main/resources/application.properties
