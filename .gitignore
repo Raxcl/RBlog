@@ -1,6 +1,4 @@
 HELP.md
-application-prod.properties
-application.properties
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -20,6 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
+application-prod.properties
+application.properties
 
 ### NetBeans ###
 /nbproject/private/
@@ -35,4 +35,4 @@ build/
 .vscode/
 
 /blog-cms-tmp
-blog-api/src/main/resources/application.properties
+
