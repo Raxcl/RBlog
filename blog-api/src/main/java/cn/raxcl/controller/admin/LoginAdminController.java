@@ -1,5 +1,6 @@
 package cn.raxcl.controller.admin;
 
+import cn.raxcl.constant.CommonConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,12 +43,12 @@ public class LoginAdminController {
 	@PostMapping("/login")
 	public Result login(@RequestBody LoginInfo loginInfo) {
 		User user = userService.findUserByUsernameAndPassword(loginInfo.getUsername(), loginInfo.getPassword());
-		if (!"ROLE_admin".equals(user.getRole())) {
+		if (!CommonConstant.ROLE_ADMIN.equals(user.getRole())) {
 			return Result.create(403, "无权限");
 		}
 		user.setPassword(null);
 		String jwt = JwtUtils.generateToken("admin:" + user.getUsername(),expireTime, secretKey);
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(8);
 		map.put("user", user);
 		map.put("token", jwt);
 		return Result.ok("登录成功", map);

@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,8 +16,12 @@ import cn.raxcl.util.HashUtils;
  */
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
-	@Autowired
-	private UserMapper userMapper;
+
+	private final UserMapper userMapper;
+
+	public UserServiceImpl(UserMapper userMapper) {
+		this.userMapper = userMapper;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,7 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("用户不存在");
 		}
-		if (!HashUtils.matchBC(password, user.getPassword())) {
+		if (!HashUtils.matchBc(password, user.getPassword())) {
 			throw new UsernameNotFoundException("密码错误");
 		}
 		return user;

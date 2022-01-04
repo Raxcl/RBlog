@@ -163,6 +163,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--注解执行器配置，可以在引用application中属性时有效提示-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>

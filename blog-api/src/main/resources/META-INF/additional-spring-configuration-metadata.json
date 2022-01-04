@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "custom.blog.name",
+      "type": "java.lang.String",
+      "description": "Description for custom.blog.name."
+  }
+] }

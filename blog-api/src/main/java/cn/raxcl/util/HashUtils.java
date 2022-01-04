@@ -10,7 +10,10 @@ import org.springframework.util.DigestUtils;
  * @date 2020-11-17
  */
 public class HashUtils {
-	private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+	private HashUtils(){}
+
+	private static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
 	public static String getMd5(CharSequence str) {
 		return DigestUtils.md5DigestAsHex(str.toString().getBytes());
@@ -18,19 +21,15 @@ public class HashUtils {
 
 	public static long getMurmurHash32(String str) {
 		int i = MurmurHash3.hash32(str);
-		long num = i < 0 ? Integer.MAX_VALUE - (long) i : i;
-		return num;
+		return i < 0 ? Integer.MAX_VALUE - (long) i : i;
 	}
 
-	public static String getBC(CharSequence rawPassword) {
-		return bCryptPasswordEncoder.encode(rawPassword);
+	public static String getBc(CharSequence rawPassword) {
+		return B_CRYPT_PASSWORD_ENCODER.encode(rawPassword);
 	}
 
-	public static boolean matchBC(CharSequence rawPassword, String encodedPassword) {
-		return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
+	public static boolean matchBc(CharSequence rawPassword, String encodedPassword) {
+		return B_CRYPT_PASSWORD_ENCODER.matches(rawPassword, encodedPassword);
 	}
 
-	public static void main(String[] args) {
-		System.out.println(getBC("123456"));
-	}
 }
