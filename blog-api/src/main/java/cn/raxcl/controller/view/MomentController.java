@@ -1,7 +1,7 @@
 package cn.raxcl.controller.view;
 
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +25,16 @@ import cn.raxcl.util.JwtUtils;
  */
 @RestController
 public class MomentController {
-	@Autowired
-	MomentService momentService;
-	@Autowired
-	UserServiceImpl userService;
+	@Value("${token.secretKey}")
+	private String secretKey;
+
+	private final MomentService momentService;
+	private final UserServiceImpl userService;
+
+	public MomentController(MomentService momentService, UserServiceImpl userService) {
+		this.momentService = momentService;
+		this.userService = userService;
+	}
 
 	/**
 	 * 分页查询动态List
@@ -44,7 +50,7 @@ public class MomentController {
 		boolean adminIdentity = false;
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
-				String subject = JwtUtils.getTokenBody(jwt).getSubject();
+				String subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
 				if (subject.startsWith("admin:")) {//博主身份Token
 					String username = subject.replace("admin:", "");
 					User admin = (User) userService.loadUserByUsername(username);

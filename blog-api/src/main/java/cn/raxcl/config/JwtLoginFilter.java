@@ -1,5 +1,6 @@
 package cn.raxcl.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +36,11 @@ import java.util.Map;
  * @date 2020-07-21
  */
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
+	@Value("${token.secretKey}")
+	private String secretKey;
+	@Value("${token.expireTime}")
+	private Long expireTime;
+
 	LoginLogService loginLogService;
 	ThreadLocal<String> currentUsername = new ThreadLocal<>();
 
@@ -68,7 +74,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 	                                        FilterChain chain, Authentication authResult) throws IOException {
-		String jwt = JwtUtils.generateToken(authResult.getName(), authResult.getAuthorities());
+		String jwt = JwtUtils.generateToken(authResult.getName(), authResult.getAuthorities(),expireTime, secretKey);
 		response.setContentType("application/json;charset=utf-8");
 		User user = (User) authResult.getPrincipal();
 		user.setPassword(null);

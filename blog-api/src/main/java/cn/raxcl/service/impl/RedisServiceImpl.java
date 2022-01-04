@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import cn.raxcl.model.vo.BlogInfo;
@@ -15,12 +14,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * @Description: 读写Redis相关操作
  * @author Raxcl
- * @date 2020-09-27
+ * @date 2022-01-04 10:55:51
  */
 @Service
 public class RedisServiceImpl implements RedisService {
-	@Autowired
-	RedisTemplate jsonRedisTemplate;
+	
+	private final RedisTemplate jsonRedisTemplate;
+
+	public RedisServiceImpl(RedisTemplate jsonRedisTemplate) {
+		this.jsonRedisTemplate = jsonRedisTemplate;
+	}
 
 	@Override
 	public PageResult<BlogInfo> getBlogInfoPageResultByHash(String hash, Integer pageNum) {

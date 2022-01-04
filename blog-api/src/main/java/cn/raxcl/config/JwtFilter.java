@@ -1,6 +1,7 @@
 package cn.raxcl.config;
 
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -26,6 +27,9 @@ import java.util.List;
  * @date 2020-07-21
  */
 public class JwtFilter extends GenericFilterBean {
+	@Value("${token.secretKey}")
+	private String secretKey;
+
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -38,7 +42,7 @@ public class JwtFilter extends GenericFilterBean {
 		String jwt = request.getHeader("Authorization");
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
-				Claims claims = JwtUtils.getTokenBody(jwt);
+				Claims claims = JwtUtils.getTokenBody(jwt, secretKey);
 				String username = claims.getSubject();
 				List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, authorities);

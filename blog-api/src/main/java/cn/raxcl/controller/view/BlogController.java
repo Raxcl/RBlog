@@ -1,6 +1,6 @@
 package cn.raxcl.controller.view;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,10 +29,16 @@ import java.util.List;
  */
 @RestController
 public class BlogController {
-	@Autowired
-	BlogService blogService;
-	@Autowired
-	UserServiceImpl userService;
+	@Value("${token.secretKey}")
+	private String secretKey;
+
+	private final BlogService blogService;
+	private final UserServiceImpl userService;
+
+	public BlogController(BlogService blogService, UserServiceImpl userService) {
+		this.blogService = blogService;
+		this.userService = userService;
+	}
 
 	/**
 	 * 按置顶、创建时间排序 分页查询博客简要信息列表
@@ -63,7 +69,7 @@ public class BlogController {
 		if (!"".equals(blog.getPassword())) {
 			if (JwtUtils.judgeTokenIsExist(jwt)) {
 				try {
-					String subject = JwtUtils.getTokenBody(jwt).getSubject();
+					String subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
 					if (subject.startsWith("admin:")) {//博主身份Token
 						String username = subject.replace("admin:", "");
 						User admin = (User) userService.loadUserByUsername(username);
@@ -102,7 +108,7 @@ public class BlogController {
 		String password = blogService.getBlogPassword(blogPassword.getBlogId());
 		if (password.equals(blogPassword.getPassword())) {
 			//生成有效时间一个月的Token
-			String jwt = JwtUtils.generateToken(blogPassword.getBlogId().toString(), 1000 * 3600 * 24 * 30L);
+			String jwt = JwtUtils.generateToken(blogPassword.getBlogId().toString(), 1000 * 3600 * 24 * 30L, secretKey);
 			return Result.ok("密码正确", jwt);
 		} else {
 			return Result.create(403, "密码错误");

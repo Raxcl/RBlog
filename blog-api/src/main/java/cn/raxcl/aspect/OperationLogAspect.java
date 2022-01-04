@@ -1,10 +1,12 @@
 package cn.raxcl.aspect;
 
+import cn.raxcl.exception.NotFoundException;
+import io.jsonwebtoken.lang.Objects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,29 +25,34 @@ import java.util.Map;
 /**
  * @Description: AOP记录操作日志
  * @author Raxcl
- * @date 2020-11-29
+ * @date 2022-01-04 14:53:25
  */
 @Component
 @Aspect
 public class OperationLogAspect {
-	@Autowired
-	OperationLogService operationLogService;
+
+	@Value("${token.secretKey}")
+	private String secretKey;
 
 	ThreadLocal<Long> currentTime = new ThreadLocal<>();
+
+	private final OperationLogService operationLogService;
+
+	public OperationLogAspect(OperationLogService operationLogService) {
+		this.operationLogService = operationLogService;
+	}
 
 	/**
 	 * 配置切入点
 	 */
 	@Pointcut("@annotation(operationLogger)")
-	public void logPointcut(OperationLogger operationLogger) {
-	}
+	public void logPointcut(OperationLogger operationLogger) {}
 
 	/**
 	 * 配置环绕通知
 	 *
-	 * @param joinPoint
-	 * @return
-	 * @throws Throwable
+	 * @param joinPoint 切点
+	 * @throws Throwable 异常
 	 */
 	@Around("logPointcut(operationLogger)")
 	public Object logAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
@@ -67,8 +74,11 @@ public class OperationLogAspect {
 	 */
 	private OperationLog handleLog(ProceedingJoinPoint joinPoint, OperationLogger operationLogger, int times) {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		if (attributes == null){
+			throw new NotFoundException("attributes为空 ---OperationLogAspect.class");
+		}
 		HttpServletRequest request = attributes.getRequest();
-		String username = JwtUtils.getTokenBody(request.getHeader("Authorization")).getSubject();
+		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), secretKey).getSubject();
 		String uri = request.getRequestURI();
 		String method = request.getMethod();
 		String description = operationLogger.value();

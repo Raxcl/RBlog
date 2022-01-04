@@ -13,28 +13,17 @@ import java.util.Date;
 /**
  * @Description: JWT工具类
  * @author Raxcl
- * @date 2020-09-02
+ * @date 2022-01-04 11:08:34
  */
 @Component
 public class JwtUtils {
-	private static long expireTime;
-	private static String secretKey;
-
-	@Value("${token.secretKey}")
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
-
-	@Value("${token.expireTime}")
-	public void setExpireTime(long expireTime) {
-		this.expireTime = expireTime;
+	private JwtUtils(){
 	}
 
 	/**
 	 * 判断token是否存在
 	 *
-	 * @param token
-	 * @return
+	 * @param token token
 	 */
 	public static boolean judgeTokenIsExist(String token) {
 		return token != null && !"".equals(token) && !"null".equals(token);
@@ -43,64 +32,57 @@ public class JwtUtils {
 	/**
 	 * 生成token
 	 *
-	 * @param subject
-	 * @return
+	 * @param subject subject
 	 */
-	public static String generateToken(String subject) {
-		String jwt = Jwts.builder()
+	public static String generateToken(String subject,Long expireTime, String secretKey) {
+		return Jwts.builder()
 				.setSubject(subject)
 				.setExpiration(new Date(System.currentTimeMillis() + expireTime))
 				.signWith(SignatureAlgorithm.HS512, secretKey)
 				.compact();
-		return jwt;
 	}
 
 	/**
 	 * 生成带角色权限的token
 	 *
-	 * @param subject
-	 * @param authorities
-	 * @return
+	 * @param subject subject
+	 * @param authorities authorities
 	 */
-	public static String generateToken(String subject, Collection<? extends GrantedAuthority> authorities) {
+	public static String generateToken(String subject, Collection<? extends GrantedAuthority> authorities,long expireTime,String secretKey ) {
 		StringBuilder sb = new StringBuilder();
 		for (GrantedAuthority authority : authorities) {
 			sb.append(authority.getAuthority()).append(",");
 		}
-		String jwt = Jwts.builder()
+		return Jwts.builder()
 				.setSubject(subject)
 				.claim("authorities", sb)
 				.setExpiration(new Date(System.currentTimeMillis() + expireTime))
 				.signWith(SignatureAlgorithm.HS512, secretKey)
 				.compact();
-		return jwt;
 	}
 
 	/**
 	 * 生成自定义过期时间token
 	 *
-	 * @param subject
-	 * @param expireTime
-	 * @return
+	 * @param subject  subject
+	 * @param expireTime expireTime
 	 */
-	public static String generateToken(String subject, long expireTime) {
-		String jwt = Jwts.builder()
+	public static String generateToken(String subject, long expireTime, String secretKey) {
+		return Jwts.builder()
 				.setSubject(subject)
 				.setExpiration(new Date(System.currentTimeMillis() + expireTime))
 				.signWith(SignatureAlgorithm.HS512, secretKey)
 				.compact();
-		return jwt;
+
 	}
 
 
 	/**
 	 * 获取tokenBody同时校验token是否有效（无效则会抛出异常）
 	 *
-	 * @param token
-	 * @return
+	 * @param token token
 	 */
-	public static Claims getTokenBody(String token) {
-		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.replace("Bearer", "")).getBody();
-		return claims;
+	public static Claims getTokenBody(String token, String secretKey) {
+		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.replace("Bearer", "")).getBody();
 	}
 }
