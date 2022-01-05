@@ -44,7 +44,7 @@ public class LoginLogController {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<LoginLog> pageInfo = new PageInfo<>(loginLogService.getLoginLogListByDate(startDate, endDate));
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -56,6 +56,6 @@ public class LoginLogController {
 	@DeleteMapping("/loginLog")
 	public Result delete(@RequestParam Long id) {
 		loginLogService.deleteLoginLogById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

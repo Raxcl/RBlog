@@ -47,6 +47,6 @@ public class DashboardAdminController {
 		map.put("tag", tagBlogCountMap);
 		map.put("visitRecord", visitRecordMap);
 		map.put("cityVisitor", cityVisitorList);
-		return Result.ok("获取成功", map);
+		return Result.success("获取成功", map);
 	}
 }

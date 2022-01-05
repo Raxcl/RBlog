@@ -44,13 +44,13 @@ public class LoginAdminController {
 	public Result login(@RequestBody LoginInfo loginInfo) {
 		User user = userService.findUserByUsernameAndPassword(loginInfo.getUsername(), loginInfo.getPassword());
 		if (!CommonConstant.ROLE_ADMIN.equals(user.getRole())) {
-			return Result.create(403, "无权限");
+			return Result.exception(403, "无权限");
 		}
 		user.setPassword(null);
 		String jwt = JwtUtils.generateToken("admin:" + user.getUsername(),expireTime, secretKey);
 		Map<String, Object> map = new HashMap<>(8);
 		map.put("user", user);
 		map.put("token", jwt);
-		return Result.ok("登录成功", map);
+		return Result.success("登录成功", map);
 	}
 }

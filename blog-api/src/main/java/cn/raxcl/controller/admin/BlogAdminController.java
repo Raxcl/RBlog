@@ -69,7 +69,7 @@ public class BlogAdminController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("blogs", pageInfo);
 		map.put("categories", categories);
-		return Result.ok("请求成功", map);
+		return Result.success("请求成功", map);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class BlogAdminController {
 		blogService.deleteBlogTagByBlogId(id);
 		blogService.deleteBlogById(id);
 		commentService.deleteCommentsByBlogId(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class BlogAdminController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("categories", categories);
 		map.put("tags", tags);
-		return Result.ok("请求成功", map);
+		return Result.success("请求成功", map);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class BlogAdminController {
 	@PutMapping("/blog/top")
 	public Result updateTop(@RequestParam Long id, @RequestParam Boolean top) {
 		blogService.updateBlogTopById(id, top);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class BlogAdminController {
 	@PutMapping("/blog/recommend")
 	public Result updateRecommend(@RequestParam Long id, @RequestParam Boolean recommend) {
 		blogService.updateBlogRecommendById(id, recommend);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class BlogAdminController {
 	@PutMapping("blog/{id}/visibility")
 	public Result updateVisibility(@PathVariable Long id, @RequestBody BlogVisibility blogVisibility) {
 		blogService.updateBlogVisibilityById(id, blogVisibility);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class BlogAdminController {
 	@GetMapping("/blog")
 	public Result getBlog(@RequestParam Long id) {
 		Blog blog = blogService.getBlogById(id);
-		return Result.ok("获取成功", blog);
+		return Result.success("获取成功", blog);
 	}
 
 	/**
@@ -257,7 +257,7 @@ public class BlogAdminController {
 			for (Tag t : tags) {
 				blogService.saveBlogTag(blog.getId(), t.getId());
 			}
-			return Result.ok("添加成功");
+			return Result.success("添加成功");
 		} else {
 			blog.setUpdateTime(date);
 			blogService.updateBlog(blog);
@@ -266,7 +266,7 @@ public class BlogAdminController {
 			for (Tag t : tags) {
 				blogService.saveBlogTag(blog.getId(), t.getId());
 			}
-			return Result.ok("更新成功");
+			return Result.success("更新成功");
 		}
 	}
 }

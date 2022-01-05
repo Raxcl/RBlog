@@ -42,7 +42,7 @@ public class FriendAdminController {
 		String orderBy = "create_time asc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Friend> pageInfo = new PageInfo<>(friendService.getFriendList());
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class FriendAdminController {
 	@PutMapping("/friend/published")
 	public Result updatePublished(@RequestParam Long id, @RequestParam Boolean published) {
 		friendService.updateFriendPublishedById(id, published);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class FriendAdminController {
 	@PostMapping("/friend")
 	public Result saveFriend(@RequestBody Friend friend) {
 		friendService.saveFriend(friend);
-		return Result.ok("添加成功");
+		return Result.success("添加成功");
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class FriendAdminController {
 	@PutMapping("/friend")
 	public Result updateFriend(@RequestBody cn.raxcl.model.dto.Friend friend) {
 		friendService.updateFriend(friend);
-		return Result.ok("修改成功");
+		return Result.success("修改成功");
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class FriendAdminController {
 	@DeleteMapping("/friend")
 	public Result deleteFriend(@RequestParam Long id) {
 		friendService.deleteFriend(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class FriendAdminController {
 	@PutMapping("/friendInfo/commentEnabled")
 	public Result updateFriendInfoCommentEnabled(@RequestParam Boolean commentEnabled) {
 		friendService.updateFriendInfoCommentEnabled(commentEnabled);
-		return Result.ok("修改成功");
+		return Result.success("修改成功");
 	}
 
 	/**
@@ -129,6 +129,6 @@ public class FriendAdminController {
 	@PutMapping("/friendInfo/content")
 	public Result updateFriendInfoContent(@RequestBody Map map) {
 		friendService.updateFriendInfoContent((String) map.get("content"));
-		return Result.ok("修改成功");
+		return Result.success("修改成功");
 	}
 }

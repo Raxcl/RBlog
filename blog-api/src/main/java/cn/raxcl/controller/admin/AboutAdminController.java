@@ -30,7 +30,7 @@ public class AboutAdminController {
 	 */
 	@GetMapping("/about")
 	public Result about() {
-		return Result.ok("请求成功", aboutService.getAboutSetting());
+		return Result.success("请求成功", aboutService.getAboutSetting());
 	}
 
 	/**
@@ -43,6 +43,6 @@ public class AboutAdminController {
 	@PutMapping("/about")
 	public Result updateAbout(@RequestBody Map<String, String> map) {
 		aboutService.updateAbout(map);
-		return Result.ok("修改成功");
+		return Result.success("修改成功");
 	}
 }

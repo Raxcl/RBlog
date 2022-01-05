@@ -44,7 +44,7 @@ public class VisitorAdminController {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Visitor> pageInfo = new PageInfo<>(visitorService.getVisitorListByDate(startDate, endDate));
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -58,6 +58,6 @@ public class VisitorAdminController {
 	@DeleteMapping("/visitor")
 	public Result delete(@RequestParam Long id, @RequestParam String uuid) {
 		visitorService.deleteVisitor(id, uuid);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

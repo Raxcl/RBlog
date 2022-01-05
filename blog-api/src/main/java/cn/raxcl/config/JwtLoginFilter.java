@@ -62,7 +62,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		} catch (BadRequestException exception) {
 			response.setContentType("application/json;charset=utf-8");
-			Result result = Result.create(400, "非法请求");
+			Result result = Result.exception(400, "非法请求");
 			PrintWriter out = response.getWriter();
 			out.write(JacksonUtils.writeValueAsString(result));
 			out.flush();
@@ -81,7 +81,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		Map<String, Object> map = new HashMap<>();
 		map.put("user", user);
 		map.put("token", jwt);
-		Result result = Result.ok("登录成功", map);
+		Result result = Result.success("登录成功", map);
 		PrintWriter out = response.getWriter();
 		out.write(JacksonUtils.writeValueAsString(result));
 		out.flush();
@@ -108,7 +108,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 			msg = "用户名或密码错误";
 		}
 		PrintWriter out = response.getWriter();
-		out.write(JacksonUtils.writeValueAsString(Result.create(401, msg)));
+		out.write(JacksonUtils.writeValueAsString(Result.exception(401, msg)));
 		out.flush();
 		out.close();
 		LoginLog log = handleLog(request, false, StringUtils.substring(msg, 0, 50));

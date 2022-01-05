@@ -50,7 +50,7 @@ public class JwtFilter extends GenericFilterBean {
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.setContentType("application/json;charset=utf-8");
-				Result result = Result.create(403, "凭证已失效，请重新登录！");
+				Result result = Result.exception(403, "凭证已失效，请重新登录！");
 				PrintWriter out = response.getWriter();
 				out.write(JacksonUtils.writeValueAsString(result));
 				out.flush();

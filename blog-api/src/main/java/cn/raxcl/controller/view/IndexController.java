@@ -49,6 +49,6 @@ public class IndexController {
 		map.put("categoryList", categoryList);
 		map.put("tagList", tagList);
 		map.put("randomBlogList", randomBlogList);
-		return Result.ok("请求成功", map);
+		return Result.success("请求成功", map);
 	}
 }

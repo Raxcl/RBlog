@@ -37,6 +37,6 @@ public class TestController {
                 messageHelper.setSubject("你好");
                 messageHelper.setText("测试内容");
                 javaMailSender.send(mimeMessage);
-        return Result.ok("密码正确");
+        return Result.success("密码正确");
     }
 }

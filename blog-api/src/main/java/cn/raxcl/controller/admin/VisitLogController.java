@@ -47,7 +47,7 @@ public class VisitLogController {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<VisitLog> pageInfo = new PageInfo<>(visitLogService.getVisitLogListByUUIDAndDate(StringUtils.trim(uuid), startDate, endDate));
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -59,6 +59,6 @@ public class VisitLogController {
 	@DeleteMapping("/visitLog")
 	public Result delete(@RequestParam Long id) {
 		visitLogService.deleteVisitLogById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

@@ -7,6 +7,24 @@ package cn.raxcl.constant;
 public class CommonConstant {
 
     private CommonConstant(){}
-    
+
     public static final String ROLE_ADMIN = "ROLE_admin";
+
+    /**
+     *  GitHub上传文件API
+     */
+    public static final String GITHUB_UPLOAD_API = "https://api.github.com/repos/%s/%s/contents%s/%s";
+
+    /**
+     * GitHub上传文件API
+     */
+    public static final String CDN_URL4_GITHUB = "https://cdn.jsdelivr.net/gh/%s/%s%s/%s";
+
+    /**
+     * 博主身份前缀
+     */
+    public static final String ADMIN = "admin:";
+
+    public static final String SUBJECT_MSG = "博主身份Token已失效，请重新登录！";
+
 }

@@ -34,7 +34,7 @@ public class SiteSettingAdminController {
 	@GetMapping("/siteSettings")
 	public Result siteSettings() {
 		Map<String, List<SiteSetting>> typeMap = siteSettingService.getList();
-		return Result.ok("请求成功", typeMap);
+		return Result.success("请求成功", typeMap);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class SiteSettingAdminController {
 		List<LinkedHashMap> siteSettings = (List<LinkedHashMap>) map.get("settings");
 		List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
 		siteSettingService.updateSiteSetting(siteSettings, deleteIds);
-		return Result.ok("更新成功");
+		return Result.success("更新成功");
 	}
 
 	/**
@@ -59,6 +59,6 @@ public class SiteSettingAdminController {
 	 */
 	@GetMapping("/webTitleSuffix")
 	public Result getWebTitleSuffix() {
-		return Result.ok("请求成功", siteSettingService.getWebTitleSuffix());
+		return Result.success("请求成功", siteSettingService.getWebTitleSuffix());
 	}
 }

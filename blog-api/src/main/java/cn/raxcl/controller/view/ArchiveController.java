@@ -28,6 +28,6 @@ public class ArchiveController {
 	@GetMapping("/archives")
 	public Result archives() {
 		Map<String, Object> archiveBlogMap = blogService.getArchiveBlogAndCountByIsPublished();
-		return Result.ok("请求成功", archiveBlogMap);
+		return Result.success("请求成功", archiveBlogMap);
 	}
 }

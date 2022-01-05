@@ -38,7 +38,7 @@ public class FriendController {
 		Map<String, Object> map = new HashMap<>();
 		map.put("friendList", friendList);
 		map.put("friendInfo", friendInfo);
-		return Result.ok("获取成功", map);
+		return Result.success("获取成功", map);
 	}
 
 	/**
@@ -51,6 +51,6 @@ public class FriendController {
 	@PostMapping("/friend")
 	public Result addViews(@RequestParam String nickname) {
 		friendService.updateViewsByNickname(nickname);
-		return Result.ok("请求成功");
+		return Result.success("请求成功");
 	}
 }

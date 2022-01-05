@@ -42,7 +42,7 @@ public class MomentAdminController {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentList());
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class MomentAdminController {
 	@PutMapping("/moment/published")
 	public Result updatePublished(@RequestParam Long id, @RequestParam Boolean published) {
 		momentService.updateMomentPublishedById(id, published);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class MomentAdminController {
 	 */
 	@GetMapping("/moment")
 	public Result moment(@RequestParam Long id) {
-		return Result.ok("获取成功", momentService.getMomentById(id));
+		return Result.success("获取成功", momentService.getMomentById(id));
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class MomentAdminController {
 	@DeleteMapping("/moment")
 	public Result deleteMoment(@RequestParam Long id) {
 		momentService.deleteMomentById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class MomentAdminController {
 			moment.setCreateTime(new Date());
 		}
 		momentService.saveMoment(moment);
-		return Result.ok("添加成功");
+		return Result.success("添加成功");
 	}
 
 	/**
@@ -112,6 +112,6 @@ public class MomentAdminController {
 			moment.setCreateTime(new Date());
 		}
 		momentService.updateMoment(moment);
-		return Result.ok("修改成功");
+		return Result.success("修改成功");
 	}
 }

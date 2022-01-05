@@ -43,7 +43,7 @@ public class CategoryAdminController {
 		String orderBy = "id desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Category> pageInfo = new PageInfo<>(categoryService.getCategoryList());
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -89,10 +89,10 @@ public class CategoryAdminController {
 		}
 		if ("save".equals(type)) {
 			categoryService.saveCategory(category);
-			return Result.ok("分类添加成功");
+			return Result.success("分类添加成功");
 		} else {
 			categoryService.updateCategory(category);
-			return Result.ok("分类更新成功");
+			return Result.success("分类更新成功");
 		}
 	}
 
@@ -111,6 +111,6 @@ public class CategoryAdminController {
 			return Result.error("已有博客与此分类关联，不可删除");
 		}
 		categoryService.deleteCategoryById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

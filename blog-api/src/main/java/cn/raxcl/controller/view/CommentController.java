@@ -1,35 +1,17 @@
 package cn.raxcl.controller.view;
 
-import cn.raxcl.entity.Comment;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.mail.MailProperties;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.AccessLimit;
+import cn.raxcl.entity.Comment;
 import cn.raxcl.entity.User;
 import cn.raxcl.model.dto.CommentDTO;
-import cn.raxcl.model.vo.FriendInfo;
-import cn.raxcl.model.vo.PageComment;
-import cn.raxcl.model.vo.PageResult;
 import cn.raxcl.model.vo.Result;
-import cn.raxcl.service.AboutService;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.CommentService;
-import cn.raxcl.service.FriendService;
 import cn.raxcl.service.impl.UserServiceImpl;
-import cn.raxcl.util.HashUtils;
-import cn.raxcl.util.IpAddressUtils;
-import cn.raxcl.util.JwtUtils;
-import cn.raxcl.util.MailUtils;
-import cn.raxcl.util.QQInfoUtils;
-import cn.raxcl.util.StringUtils;
-
+import cn.raxcl.util.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,37 +24,50 @@ import java.util.Map;
  */
 @RestController
 public class CommentController {
+	/**
+	 * GitHub token
+	 */
+	@Value("${upload.github.token}")
+	private String githubToken;
+	/**
+	 * GitHub用户名
+	 */
+	@Value("${upload.github.username}")
+	private String githubUsername;
+	/**
+	 * GitHub仓库名
+	 */
+	@Value("${upload.github.repos}")
+	private String githubRepos;
+	/**
+	 * GitHub仓库路径
+	 */
+	@Value("${upload.github.repos-path}")
+	private String githubReposPath;
+	@Value("${custom.blog.name}")
+	public String blogName;
+	@Value("${custom.url.cms}")
+	public String cmsUrl;
+	@Value("${custom.url.website}")
+	public String websiteUrl;
+	@Value("${token.secretKey}")
+	private String secretKey;
+
 	private final CommentService commentService;
 	private final BlogService blogService;
-	private final AboutService aboutService;
 	private final UserServiceImpl userService;
-	private final FriendService friendService;
 	private final MailProperties mailProperties;
 	private final MailUtils mailUtils;
 
-	public CommentController(CommentService commentService, BlogService blogService, AboutService aboutService,
-							 UserServiceImpl userService, FriendService friendService, MailProperties mailProperties,
+	public CommentController(CommentService commentService, BlogService blogService,UserServiceImpl userService,
+							 MailProperties mailProperties,
 							 MailUtils mailUtils) {
 		this.commentService = commentService;
 		this.blogService = blogService;
-		this.aboutService = aboutService;
 		this.userService = userService;
-		this.friendService = friendService;
 		this.mailProperties = mailProperties;
 		this.mailUtils = mailUtils;
 	}
-
-	@Value("${custom.blog.name}")
-	public String blogName;
-
-	@Value("${custom.url.cms}")
-	public String cmsUrl;
-
-	@Value("${custom.url.website}")
-	public String websiteUrl;
-
-	@Value("${token.secretKey}")
-	private String secretKey;
 
 	/**
 	 * 根据页面分页查询评论列表
@@ -90,87 +85,7 @@ public class CommentController {
 	                       @RequestParam(defaultValue = "1") Integer pageNum,
 	                       @RequestParam(defaultValue = "10") Integer pageSize,
 	                       @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
-		//查询对应页面评论是否开启
-		int judgeResult = judgeCommentEnabled(page, blogId);
-		if (judgeResult == 2) {
-			return Result.create(404, "该博客不存在");
-		} else if (judgeResult == 1) {
-			return Result.create(403, "评论已关闭");
-		} else if (judgeResult == 3) {//文章受密码保护，需要验证Token
-			if (JwtUtils.judgeTokenIsExist(jwt)) {
-				try {
-					String subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
-					if (subject.startsWith("admin:")) {//博主身份Token
-						String username = subject.replace("admin:", "");
-						User admin = (User) userService.loadUserByUsername(username);
-						if (admin == null) {
-							return Result.create(403, "博主身份Token已失效，请重新登录！");
-						}
-					} else {//经密码验证后的Token
-						Long tokenBlogId = Long.parseLong(subject);
-						//博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
-						if (!tokenBlogId.equals(blogId)) {
-							return Result.create(403, "Token不匹配，请重新验证密码！");
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					return Result.create(403, "Token已失效，请重新验证密码！");
-				}
-			} else {
-				return Result.create(403, "此文章受密码保护，请验证密码！");
-			}
-		}
-		//查询该页面所有评论的数量
-		Integer allComment = commentService.countByPageAndIsPublished(page, blogId, null);
-		//查询该页面公开评论的数量
-		Integer openComment = commentService.countByPageAndIsPublished(page, blogId, true);
-		PageHelper.startPage(pageNum, pageSize);
-		PageInfo<PageComment> pageInfo = new PageInfo<>(commentService.getPageCommentList(page, blogId, (long) -1));
-		PageResult<PageComment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-		Map<String, Object> map = new HashMap<>();
-		map.put("allComment", allComment);
-		map.put("closeComment", allComment - openComment);
-		map.put("comments", pageResult);
-		return Result.ok("获取成功", map);
-	}
-
-	/**
-	 * 查询对应页面评论是否开启
-	 *
-	 * @param page   页面分类（0普通文章，1关于我，2友链）
-	 * @param blogId 如果page==0，需要博客id参数，校验文章是否公开状态
-	 * @return 0:公开可查询状态 1:评论关闭 2:该博客不存在 3:文章受密码保护
-	 */
-	private int judgeCommentEnabled(Integer page, Long blogId) {
-		//普通博客
-		if (page == 0) {
-			Boolean commentEnabled = blogService.getCommentEnabledByBlogId(blogId);
-			Boolean published = blogService.getPublishedByBlogId(blogId);
-			if (commentEnabled == null || published == null) {//未查询到此博客
-				return 2;
-			} else if (!published) {//博客未公开
-				return 2;
-			} else if (!commentEnabled) {//博客评论已关闭
-				return 1;
-			}
-			//判断文章是否存在密码
-			String password = blogService.getBlogPassword(blogId);
-			if (!"".equals(password)) {
-				return 3;
-			}
-		} else if (page == 1) {//关于我页面
-			if (!aboutService.getAboutCommentEnabled()) {//页面评论已关闭
-				return 1;
-			}
-		//友链页面
-		} else if (page == 2) {
-			FriendInfo friendInfo = friendService.getFriendInfo(true, false);
-			if (!friendInfo.getCommentEnabled()) {
-				return 1;
-			}
-		}
-		return 0;
+		return commentService.comments(page, blogId, pageNum, pageSize, jwt);
 	}
 
 	/**
@@ -211,11 +126,11 @@ public class CommentController {
 			}
 		}
 		//判断是否可评论
-		int judgeResult = judgeCommentEnabled(commentDTO.getPage(), commentDTO.getBlogId());
+		int judgeResult = commentService.judgeCommentEnabled(commentDTO.getPage(), commentDTO.getBlogId());
 		if (judgeResult == 2) {
-			return Result.create(404, "该博客不存在");
+			return Result.exception(404, "该博客不存在");
 		} else if (judgeResult == 1) {
-			return Result.create(403, "评论已关闭");
+			return Result.exception(403, "评论已关闭");
 		} else if (judgeResult == 3) {//文章受密码保护
 			//验证Token合法性
 			if (JwtUtils.judgeTokenIsExist(jwt)) {
@@ -224,7 +139,7 @@ public class CommentController {
 					subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
 				} catch (Exception e) {
 					e.printStackTrace();
-					return Result.create(403, "Token已失效，请重新验证密码！");
+					return Result.exception(403, "Token已失效，请重新验证密码！");
 				}
 				//博主评论，不受密码保护限制，根据博主信息设置评论属性
 				if (subject.startsWith("admin:")) {
@@ -232,7 +147,7 @@ public class CommentController {
 					String username = subject.replace("admin:", "");
 					User admin = (User) userService.loadUserByUsername(username);
 					if (admin == null) {
-						return Result.create(403, "博主身份Token已失效，请重新登录！");
+						return Result.exception(403, "博主身份Token已失效，请重新登录！");
 					}
 					setAdminComment(commentDTO, request, admin);
 					isVisitorComment = false;
@@ -245,13 +160,13 @@ public class CommentController {
 					Long tokenBlogId = Long.parseLong(subject);
 					//博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
 					if (!tokenBlogId.equals(commentDTO.getBlogId())) {
-						return Result.create(403, "Token不匹配，请重新验证密码！");
+						return Result.exception(403, "Token不匹配，请重新验证密码！");
 					}
 					setVisitorComment(commentDTO, request);
 					isVisitorComment = true;
 				}
 			} else {//不存在Token则无评论权限
-				return Result.create(403, "此文章受密码保护，请验证密码！");
+				return Result.exception(403, "此文章受密码保护，请验证密码！");
 			}
 		} else if (judgeResult == 0) {//普通文章
 			//有Token则为博主评论，或文章原先为密码保护，后取消保护，但客户端仍存在Token
@@ -261,7 +176,7 @@ public class CommentController {
 					subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
 				} catch (Exception e) {
 					e.printStackTrace();
-					return Result.create(403, "Token已失效，请重新验证密码");
+					return Result.exception(403, "Token已失效，请重新验证密码");
 				}
 				//博主评论，根据博主信息设置评论属性
 				if (subject.startsWith("admin:")) {
@@ -269,7 +184,7 @@ public class CommentController {
 					String username = subject.replace("admin:", "");
 					User admin = (User) userService.loadUserByUsername(username);
 					if (admin == null) {
-						return Result.create(403, "博主身份Token已失效，请重新登录！");
+						return Result.exception(403, "博主身份Token已失效，请重新登录！");
 					}
 					setAdminComment(commentDTO, request, admin);
 					isVisitorComment = false;
@@ -292,7 +207,7 @@ public class CommentController {
 		}
 		commentService.saveComment(commentDTO);
 		judgeSendMail(commentDTO, isVisitorComment, parentComment);
-		return Result.ok("评论成功");
+		return Result.success("评论成功");
 	}
 
 	/**
@@ -323,10 +238,10 @@ public class CommentController {
 	private void setVisitorComment(CommentDTO commentDTO, HttpServletRequest request) {
 		String commentNickname = commentDTO.getNickname();
 		try {
-			if (QQInfoUtils.isQQNumber(commentNickname)) {
+			if (QqInfoUtils.isQqNumber(commentNickname)) {
 				commentDTO.setQq(commentNickname);
-				commentDTO.setNickname(QQInfoUtils.getQQNickname(commentNickname));
-				commentDTO.setAvatar(QQInfoUtils.getQQAvatarURLByGithubUpload(commentNickname));
+				commentDTO.setNickname(QqInfoUtils.getQqNickname(commentNickname));
+				commentDTO.setAvatar(QqInfoUtils.getQqAvatarUrlByGithubUpload(commentNickname,githubToken, githubUsername, githubRepos, githubReposPath));
 			} else {
 				commentDTO.setNickname(commentDTO.getNickname().trim());
 				setCommentRandomAvatar(commentDTO);

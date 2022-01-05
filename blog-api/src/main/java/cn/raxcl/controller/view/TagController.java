@@ -32,6 +32,6 @@ public class TagController {
 	public Result tag(@RequestParam String tagName,
 	                  @RequestParam(defaultValue = "1") Integer pageNum) {
 		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByTagNameAndIsPublished(tagName, pageNum);
-		return Result.ok("请求成功", pageResult);
+		return Result.success("请求成功", pageResult);
 	}
 }

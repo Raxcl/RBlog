@@ -31,7 +31,7 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(NotFoundException.class)
 	public Result notFoundExceptionHandler(HttpServletRequest request, NotFoundException e) {
 		logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-		return Result.create(404, e.getMessage());
+		return Result.exception(404, e.getMessage());
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(PersistenceException.class)
 	public Result persistenceExceptionHandler(HttpServletRequest request, PersistenceException e) {
 		logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-		return Result.create(500, e.getMessage());
+		return Result.exception(500, e.getMessage());
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public Result usernameNotFoundExceptionHandler(HttpServletRequest request, UsernameNotFoundException e) {
 		logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-		return Result.create(401, "用户名或密码错误！");
+		return Result.exception(401, "用户名或密码错误！");
 	}
 
 	/**
@@ -70,6 +70,6 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public Result exceptionHandler(HttpServletRequest request, Exception e) {
 		logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
-		return Result.create(500, "异常错误");
+		return Result.exception(500, "异常错误");
 	}
 }

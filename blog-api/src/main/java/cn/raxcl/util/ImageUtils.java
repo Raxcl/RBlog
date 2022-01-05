@@ -1,10 +1,14 @@
 package cn.raxcl.util;
 
+import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.exception.NotFoundException;
+import cn.raxcl.exception.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -21,60 +25,13 @@ import java.util.UUID;
 /**
  * @Description: 图片下载保存工具类
  * @author Raxcl
- * @date 2021-11-11
+ * @date 2022-01-05 14:46:10
  */
 @Component
 public class ImageUtils {
+	private ImageUtils(){}
 
-	private static RestTemplate restTemplate = new RestTemplate();
-
-	//GitHub上传文件API
-	private static final String githubUploadApi = "https://api.github.com/repos/%s/%s/contents%s/%s";
-	//GitHub上传文件API
-	private static final String cdnUrl4Github = "https://cdn.jsdelivr.net/gh/%s/%s%s/%s";
-
-	//服务访问地址，用于返回图片url
-	private static String serverUploadPath;
-	//服务器文件上传路径
-	private static String serverUrl;
-	//GitHub token
-	private static String githubToken;
-	//GitHub用户名
-	private static String githubUsername;
-	//GitHub仓库名
-	private static String githubRepos;
-	//GitHub仓库路径
-	private static String githubReposPath;
-
-	@Value("${upload.path}")
-	public void setServerUploadPath(String serverUploadPath) {
-		this.serverUploadPath = serverUploadPath;
-	}
-
-	@Value("${custom.url.api}")
-	public void setServerUrl(String serverUrl) {
-		this.serverUrl = serverUrl;
-	}
-
-	@Value("${upload.github.token}")
-	public void setGithubToken(String githubToken) {
-		this.githubToken = githubToken;
-	}
-
-	@Value("${upload.github.username}")
-	public void setGithubUsername(String githubUsername) {
-		this.githubUsername = githubUsername;
-	}
-
-	@Value("${upload.github.repos}")
-	public void setGithubRepos(String githubRepos) {
-		this.githubRepos = githubRepos;
-	}
-
-	@Value("${upload.github.repos-path}")
-	public void setGithubReposPath(String githubReposPath) {
-		this.githubReposPath = githubReposPath;
-	}
+	private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
 	@AllArgsConstructor
 	@Getter
@@ -85,28 +42,35 @@ public class ImageUtils {
 	}
 
 	public static ImageResource getImageByRequest(String url) {
-		ResponseEntity<byte[]> responseEntity = restTemplate.getForEntity(url, byte[].class);
-		if ("image".equals(responseEntity.getHeaders().getContentType().getType())) {
-			return new ImageResource(responseEntity.getBody(), responseEntity.getHeaders().getContentType().getSubtype());
+		ResponseEntity<byte[]> responseEntity = REST_TEMPLATE.getForEntity(url, byte[].class);
+		MediaType contentType = responseEntity.getHeaders().getContentType();
+		if(contentType == null){
+			throw new NotFoundException("getImageByRequest is null---ImageUtils.class");
+		}
+		if ("image".equals(contentType.getType())) {
+			return new ImageResource(responseEntity.getBody(), contentType.getSubtype());
 		}
 		throw new BadRequestException("response contentType unlike image");
 	}
 
-	public static String saveImage(ImageResource image) throws IOException {
+	public static String saveImage(ImageResource image, String serverUploadPath, String serverUrl) throws IOException {
 		File folder = new File(serverUploadPath);
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
 		String fileName = UUID.randomUUID() + "." + image.getType();
-		FileOutputStream fileOutputStream = new FileOutputStream(serverUploadPath + fileName);
-		fileOutputStream.write(image.getData());
-		fileOutputStream.close();
+
+		try (FileOutputStream fileOutputStream = new FileOutputStream(serverUploadPath + fileName)) {
+			fileOutputStream.write(image.getData());
+		} catch (IOException e) {
+			throw new PersistenceException("saveImage is error---ImageUtils.class");
+		}
 		return serverUrl + "/image/" + fileName;
 	}
 
-	public static String push2Github(ImageResource image) {
+	public static String push2Github(ImageResource image, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
 		String fileName = UUID.randomUUID() + "." + image.getType();
-		String url = String.format(githubUploadApi, githubUsername, githubRepos, githubReposPath, fileName);
+		String url = String.format(CommonConstant.GITHUB_UPLOAD_API, githubUsername, githubRepos, githubReposPath, fileName);
 		String imgBase64 = Base64.getEncoder().encodeToString(image.getData());
 
 		HttpHeaders headers = new HttpHeaders();
@@ -117,8 +81,8 @@ public class ImageUtils {
 		body.put("content", imgBase64);
 
 		HttpEntity httpEntity = new HttpEntity(body, headers);
-		restTemplate.put(url, httpEntity);
+		REST_TEMPLATE.put(url, httpEntity);
 
-		return String.format(cdnUrl4Github, githubUsername, githubRepos, githubReposPath, fileName);
+		return String.format(CommonConstant.CDN_URL4_GITHUB, githubUsername, githubRepos, githubReposPath, fileName);
 	}
 }

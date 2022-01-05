@@ -43,7 +43,7 @@ public class TagAdminController {
 		String orderBy = "id desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Tag> pageInfo = new PageInfo<>(tagService.getTagList());
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -89,10 +89,10 @@ public class TagAdminController {
 		}
 		if ("save".equals(type)) {
 			tagService.saveTag(tag);
-			return Result.ok("添加成功");
+			return Result.success("添加成功");
 		} else {
 			tagService.updateTag(tag);
-			return Result.ok("更新成功");
+			return Result.success("更新成功");
 		}
 	}
 
@@ -111,6 +111,6 @@ public class TagAdminController {
 			return Result.error("已有博客与此标签关联，不可删除");
 		}
 		tagService.deleteTagById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

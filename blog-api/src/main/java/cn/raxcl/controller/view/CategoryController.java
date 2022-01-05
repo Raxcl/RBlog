@@ -32,6 +32,6 @@ public class CategoryController {
 	public Result category(@RequestParam String categoryName,
 	                       @RequestParam(defaultValue = "1") Integer pageNum) {
 		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByCategoryNameAndIsPublished(categoryName, pageNum);
-		return Result.ok("请求成功", pageResult);
+		return Result.success("请求成功", pageResult);
 	}
 }

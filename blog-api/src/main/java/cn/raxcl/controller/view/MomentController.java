@@ -64,7 +64,7 @@ public class MomentController {
 		}
 		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentVOList(pageNum, adminIdentity));
 		PageResult<Moment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-		return Result.ok("获取成功", pageResult);
+		return Result.success("获取成功", pageResult);
 	}
 
 	/**
@@ -79,6 +79,6 @@ public class MomentController {
 	@PostMapping("/moment/like/{id}")
 	public Result like(@PathVariable Long id) {
 		momentService.addLikeByMomentId(id);
-		return Result.ok("点赞成功");
+		return Result.success("点赞成功");
 	}
 }

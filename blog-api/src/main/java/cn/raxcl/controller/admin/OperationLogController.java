@@ -44,7 +44,7 @@ public class OperationLogController {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<OperationLog> pageInfo = new PageInfo<>(operationLogService.getOperationLogListByDate(startDate, endDate));
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -56,6 +56,6 @@ public class OperationLogController {
 	@DeleteMapping("/operationLog")
 	public Result delete(@RequestParam Long id) {
 		operationLogService.deleteOperationLogById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

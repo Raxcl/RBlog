@@ -50,7 +50,7 @@ public class BlogController {
 	@GetMapping("/blogs")
 	public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
 		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum);
-		return Result.ok("请求成功", pageResult);
+		return Result.success("请求成功", pageResult);
 	}
 
 	/**
@@ -74,26 +74,26 @@ public class BlogController {
 						String username = subject.replace("admin:", "");
 						User admin = (User) userService.loadUserByUsername(username);
 						if (admin == null) {
-							return Result.create(403, "博主身份Token已失效，请重新登录！");
+							return Result.exception(403, "博主身份Token已失效，请重新登录！");
 						}
 					} else {//经密码验证后的Token
 						Long tokenBlogId = Long.parseLong(subject);
 						//博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
 						if (!tokenBlogId.equals(id)) {
-							return Result.create(403, "Token不匹配，请重新验证密码！");
+							return Result.exception(403, "Token不匹配，请重新验证密码！");
 						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					return Result.create(403, "Token已失效，请重新验证密码！");
+					return Result.exception(403, "Token已失效，请重新验证密码！");
 				}
 			} else {
-				return Result.create(403, "此文章受密码保护，请验证密码！");
+				return Result.exception(403, "此文章受密码保护，请验证密码！");
 			}
 			blog.setPassword("");
 		}
 		blogService.updateViewsToRedis(id);
-		return Result.ok("获取成功", blog);
+		return Result.success("获取成功", blog);
 	}
 
 	/**
@@ -109,9 +109,9 @@ public class BlogController {
 		if (password.equals(blogPassword.getPassword())) {
 			//生成有效时间一个月的Token
 			String jwt = JwtUtils.generateToken(blogPassword.getBlogId().toString(), 1000 * 3600 * 24 * 30L, secretKey);
-			return Result.ok("密码正确", jwt);
+			return Result.success("密码正确", jwt);
 		} else {
-			return Result.create(403, "密码错误");
+			return Result.exception(403, "密码错误");
 		}
 	}
 
@@ -129,6 +129,6 @@ public class BlogController {
 			return Result.error("参数错误");
 		}
 		List<SearchBlog> searchBlogs = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
-		return Result.ok("获取成功", searchBlogs);
+		return Result.success("获取成功", searchBlogs);
 	}
 }

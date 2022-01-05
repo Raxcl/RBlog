@@ -43,7 +43,7 @@ public class ScheduleJobController {
 	                   @RequestParam(defaultValue = "10") Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		PageInfo<ScheduleJob> pageInfo = new PageInfo<>(scheduleJobService.getJobList());
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class ScheduleJobController {
 		scheduleJob.setCreateTime(new Date());
 		ValidatorUtils.validateEntity(scheduleJob);
 		scheduleJobService.saveJob(scheduleJob);
-		return Result.ok("添加成功");
+		return Result.success("添加成功");
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ScheduleJobController {
 		scheduleJob.setStatus(false);
 		ValidatorUtils.validateEntity(scheduleJob);
 		scheduleJobService.updateJob(scheduleJob);
-		return Result.ok("修改成功");
+		return Result.success("修改成功");
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class ScheduleJobController {
 	@DeleteMapping("/job")
 	public Result deleteJob(@RequestParam Long jobId) {
 		scheduleJobService.deleteJobById(jobId);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class ScheduleJobController {
 	@PostMapping("/job/run")
 	public Result runJob(@RequestParam Long jobId) {
 		scheduleJobService.runJobById(jobId);
-		return Result.ok("提交执行");
+		return Result.success("提交执行");
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class ScheduleJobController {
 	@PutMapping("/job/status")
 	public Result updateJobStatus(@RequestParam Long jobId, @RequestParam Boolean status) {
 		scheduleJobService.updateJobStatusById(jobId, status);
-		return Result.ok("更新成功");
+		return Result.success("更新成功");
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class ScheduleJobController {
 		String orderBy = "create_time desc";
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		PageInfo<ScheduleJobLog> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -150,6 +150,6 @@ public class ScheduleJobController {
 	@DeleteMapping("/job/log")
 	public Result delete(@RequestParam Long logId) {
 		scheduleJobService.deleteJobLogByLogId(logId);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 }

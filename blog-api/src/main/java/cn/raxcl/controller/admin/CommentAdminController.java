@@ -51,7 +51,7 @@ public class CommentAdminController {
 		PageHelper.startPage(pageNum, pageSize, orderBy);
 		List<Comment> comments = commentService.getListByPageAndParentCommentId(page, blogId, (long) -1);
 		PageInfo<Comment> pageInfo = new PageInfo<>(comments);
-		return Result.ok("请求成功", pageInfo);
+		return Result.success("请求成功", pageInfo);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class CommentAdminController {
 	@GetMapping("/blogIdAndTitle")
 	public Result blogIdAndTitle() {
 		List<Blog> blogs = blogService.getIdAndTitleList();
-		return Result.ok("请求成功", blogs);
+		return Result.success("请求成功", blogs);
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class CommentAdminController {
 	@PutMapping("/comment/published")
 	public Result updatePublished(@RequestParam Long id, @RequestParam Boolean published) {
 		commentService.updateCommentPublishedById(id, published);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class CommentAdminController {
 	@PutMapping("/comment/notice")
 	public Result updateNotice(@RequestParam Long id, @RequestParam Boolean notice) {
 		commentService.updateCommentNoticeById(id, notice);
-		return Result.ok("操作成功");
+		return Result.success("操作成功");
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class CommentAdminController {
 	@DeleteMapping("/comment")
 	public Result delete(@RequestParam Long id) {
 		commentService.deleteCommentById(id);
-		return Result.ok("删除成功");
+		return Result.success("删除成功");
 	}
 
 	/**
@@ -119,6 +119,6 @@ public class CommentAdminController {
 			return Result.error("参数有误");
 		}
 		commentService.updateComment(comment);
-		return Result.ok("评论修改成功");
+		return Result.success("评论修改成功");
 	}
 }

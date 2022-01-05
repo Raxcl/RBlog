@@ -49,7 +49,7 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 					//超出访问限制次数
 					response.setContentType("application/json;charset=utf-8");
 					PrintWriter out = response.getWriter();
-					Result result = Result.create(403, accessLimit.msg());
+					Result result = Result.exception(403, accessLimit.msg());
 					out.write(JacksonUtils.writeValueAsString(result));
 					out.flush();
 					out.close();
