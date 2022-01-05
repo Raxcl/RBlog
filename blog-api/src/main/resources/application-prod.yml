@@ -23,10 +23,10 @@ spring:
   driver-class-name: com.mysql.cj.jdbc.Driver
   url: jdbc:mysql://81.71.87.241:端口/r_blog?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
   username: 用户名
-  password: 密码
+  password: 秘钥
  redis:
   host: 81.71.87.241
-  password: 密码
+  password: 秘钥
   port: 端口
   timeout: 60s
 # 阿里云邮箱，port=25在Windows系统下有效，Linux系统需要改为465并将下面两行取消注释，其它邮箱服务商配置参考关键字"spring mail 服务器"
@@ -62,14 +62,14 @@ token:
 
 # 静态文件上传访问路径 Linux环境如：/home/RBlog/upload/
 upload:
- path: D:/RBlog/upload/
+ path: /home/RBlog/upload/
  access:
   path: /image/**
  resources:
   locations: file:${upload.path}
   # GitHub token教程见https://raxcl.github.io/PictureHosting/#/pictureHosting/help
  github:
-  token: github秘钥
+  token: git秘钥
   username: Raxcl
   # 需要用作图床的GitHub仓库名
   repos: blog-resource

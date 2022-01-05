@@ -4,5 +4,65 @@
       "name": "custom.blog.name",
       "type": "java.lang.String",
       "description": "Description for custom.blog.name."
-  }
-] }
+    },
+    {
+      "name": "custom.url.api",
+      "type": "java.lang.String",
+      "description": "Description for custom.url.api."
+    },
+    {
+      "name": "custom.url.cms",
+      "type": "java.lang.String",
+      "description": "Description for custom.url.cms."
+    },
+    {
+      "name": "custom.url.website",
+      "type": "java.lang.String",
+      "description": "Description for custom.url.website."
+    },
+    {
+      "name": "token.expireTime",
+      "type": "java.lang.Long",
+      "description": "Description for token.expireTime."
+    },
+    {
+      "name": "token.secretKey",
+      "type": "java.lang.String",
+      "description": "Description for token.secretKey."
+    },
+    {
+      "name": "upload.path",
+      "type": "java.lang.String",
+      "description": "Description for upload.path."
+    },
+    {
+      "name": "upload.access.path",
+      "type": "java.lang.String",
+      "description": "Description for upload.access.path."
+    },
+    {
+      "name": "upload.resources.locations",
+      "type": "java.lang.String",
+      "description": "Description for upload.resources.locations."
+    },
+    {
+      "name": "upload.github.token",
+      "type": "java.lang.String",
+      "description": "Description for upload.github.token."
+    },
+    {
+      "name": "upload.github.username",
+      "type": "java.lang.String",
+      "description": "Description for upload.github.username."
+    },
+    {
+      "name": "upload.github.repos-path",
+      "type": "java.lang.String",
+      "description": "Description for upload.github.repos-path."
+    },
+    {
+      "name": "upload.github.repos",
+      "type": "java.lang.String",
+      "description": "Description for upload.github.repos."
+    }
+  ] }

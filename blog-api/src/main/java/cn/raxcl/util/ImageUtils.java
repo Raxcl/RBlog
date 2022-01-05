@@ -25,6 +25,7 @@ import java.util.UUID;
  */
 @Component
 public class ImageUtils {
+
 	private static RestTemplate restTemplate = new RestTemplate();
 
 	//GitHub上传文件API
@@ -70,7 +71,7 @@ public class ImageUtils {
 		this.githubRepos = githubRepos;
 	}
 
-	@Value("${upload.github.repos.path}")
+	@Value("${upload.github.repos-path}")
 	public void setGithubReposPath(String githubReposPath) {
 		this.githubReposPath = githubReposPath;
 	}
