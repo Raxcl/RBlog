@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @Description: 博客评论持久层接口
  * @author Raxcl
- * @date 2020-08-03
+ * @date 2022-01-06 10:12:40
  */
 @Mapper
 @Repository
@@ -38,5 +38,10 @@ public interface CommentMapper {
 
 	int countComment();
 
+	/**
+	 * 保存评论
+	 * @param commentDTO commentDTO
+	 * @return int
+	 */
 	int saveComment(CommentDTO commentDTO);
 }

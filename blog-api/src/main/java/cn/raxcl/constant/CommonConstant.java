@@ -27,4 +27,14 @@ public class CommonConstant {
 
     public static final String SUBJECT_MSG = "博主身份Token已失效，请重新登录！";
 
+    public static final String ABOUT = "/about";
+    public static final String FRIENDS = "/friends";
+    public static final String BLOG = "/blog/";
+    public static final String COMMENTS = "/comments";
+
+    public static final Integer ZERO = 0;
+    public static final Integer ONE = 1;
+    public static final Integer TWO = 2;
+
+
 }
