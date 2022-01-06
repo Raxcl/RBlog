@@ -7,7 +7,6 @@ import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.model.temp.PostCommentDTO;
 import cn.raxcl.model.vo.FriendInfo;
 import cn.raxcl.model.vo.PageResult;
-import cn.raxcl.model.vo.Result;
 import cn.raxcl.service.*;
 import cn.raxcl.util.*;
 import com.github.pagehelper.PageInfo;
@@ -80,7 +79,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
     }
 
     @Override
-    public Result comments(Integer page, Long blogId, Integer pageNum, Integer pageSize, String jwt) {
+    public Map<String, Object> comments(Integer page, Long blogId, Integer pageNum, Integer pageSize, String jwt) {
 
         //评论功能校验
         checkComment(jwt, blogId, page);
@@ -96,7 +95,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         map.put("allComment", allComment);
         map.put("closeComment", allComment - openComment);
         map.put("comments", pageResult);
-        return Result.success("获取成功", map);
+        return map;
     }
 
     /**
@@ -111,9 +110,9 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         postCommentDTO.setJudgeResult(judgeResult);
         if (judgeResult == 1) {
             throw new NotFoundException("评论已关闭");
-        } else if (judgeResult == 2) {
+        } else if (judgeResult == CommonConstant.TWO) {
             throw new NotFoundException("该博客不存在");
-        } else if (judgeResult == 3) {
+        } else if (judgeResult == CommonConstant.THREE) {
             //文章受密码保护,验证Token合法性
             checkToken(jwt, blogId);
         }
@@ -189,7 +188,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
      * 评论内容校验  评论留下账号校验
      */
     @Override
-    public Result postComment(CommentDTO commentDTO, HttpServletRequest request, String jwt) {
+    public void postComment(CommentDTO commentDTO, HttpServletRequest request, String jwt) {
         //评论内容合法性校验
         if (StringUtils.isEmpty(commentDTO.getContent()) || commentDTO.getContent().length() > 250 ||
                 commentDTO.getPage() == null || commentDTO.getParentCommentId() == null) {
@@ -235,7 +234,6 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         }
         self().saveComment(commentDTO);
         judgeSendMail(commentDTO, postCommentDTO.getIsVisitorComment(), parentComment);
-        return Result.success("评论成功");
     }
 
     private void checkCommentToken(String jwt) {

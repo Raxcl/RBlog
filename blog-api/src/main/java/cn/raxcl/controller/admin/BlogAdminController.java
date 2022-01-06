@@ -2,6 +2,7 @@ package cn.raxcl.controller.admin;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,7 +64,7 @@ public class BlogAdminController {
 	                    @RequestParam(defaultValue = "1") Integer pageNum,
 	                    @RequestParam(defaultValue = "10") Integer pageSize) {
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Blog> pageInfo = new PageInfo<>(blogService.getListByTitleAndCategoryId(title, categoryId));
 		List<Category> categories = categoryService.getCategoryList();
 		Map<String, Object> map = new HashMap<>();

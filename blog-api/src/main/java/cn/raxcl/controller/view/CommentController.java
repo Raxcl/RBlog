@@ -6,6 +6,7 @@ import cn.raxcl.model.vo.Result;
 import cn.raxcl.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @Description: 评论
@@ -35,7 +36,8 @@ public class CommentController {
 	                       @RequestParam(defaultValue = "1") Integer pageNum,
 	                       @RequestParam(defaultValue = "10") Integer pageSize,
 	                       @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
-		return commentService.comments(page, blogId, pageNum, pageSize, jwt);
+		Map<String, Object> map = commentService.comments(page, blogId, pageNum, pageSize, jwt);
+		return Result.success("获取成功", map);
 	}
 
 	/**
@@ -51,7 +53,9 @@ public class CommentController {
 	public Result postComment(@RequestBody CommentDTO commentDTO,
 	                          HttpServletRequest request,
 	                          @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
-		return commentService.postComment(commentDTO, request, jwt);
+		commentService.postComment(commentDTO, request, jwt);
+		return Result.success("评论成功");
+
 	}
 
 }

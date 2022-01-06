@@ -17,6 +17,10 @@ public interface BlogService {
 
 	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
 
+	/**
+	 * 获取所有博客id和title 供评论分类的选择
+	 * @return List<Blog>
+	 */
 	List<Blog> getIdAndTitleList();
 
 	List<NewBlog> getNewBlogListByIsPublished();

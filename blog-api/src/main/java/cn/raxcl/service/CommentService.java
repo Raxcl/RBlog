@@ -2,9 +2,9 @@ package cn.raxcl.service;
 
 import cn.raxcl.entity.Comment;
 import cn.raxcl.model.dto.CommentDTO;
-import cn.raxcl.model.vo.Result;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author c-long.chan
@@ -21,16 +21,15 @@ public interface CommentService {
 	 * @param jwt 若文章受密码保护，需要获取访问Token
 	 * @return Result
 	 */
-	Result comments(Integer page, Long blogId, Integer pageNum, Integer pageSize, String jwt);
+	Map<String, Object> comments(Integer page, Long blogId, Integer pageNum, Integer pageSize, String jwt);
 
 	/**
 	 * 提交评论
 	 * @param commentDTO commentDTO
 	 * @param request request
 	 * @param jwt jwt
-	 * @return Result
 	 */
-	Result postComment(CommentDTO commentDTO, HttpServletRequest request, String jwt);
+	void postComment(CommentDTO commentDTO, HttpServletRequest request, String jwt);
 
 	/**
 	 * 保存评论
@@ -43,7 +42,7 @@ public interface CommentService {
 	 * @param page 页面分类（0普通文章，1关于我，2友链）
 	 * @param blogId 如果是博客文章页面 需要提供博客id
 	 * @param parentCommentId 父评论id
-	 * @return
+	 * @return List<Comment>
 	 */
 	List<Comment> getListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 

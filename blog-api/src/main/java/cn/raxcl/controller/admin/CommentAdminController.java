@@ -1,8 +1,7 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,10 +27,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class CommentAdminController {
-	@Autowired
-	CommentService commentService;
-	@Autowired
-	BlogService blogService;
+	private final CommentService commentService;
+	private final BlogService blogService;
+
+	public CommentAdminController(CommentService commentService, BlogService blogService) {
+		this.commentService = commentService;
+		this.blogService = blogService;
+	}
 
 	/**
 	 * 按页面和博客id分页查询评论List
@@ -40,7 +42,7 @@ public class CommentAdminController {
 	 * @param blogId   如果是博客文章页面 需要提供博客id
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/comments")
 	public Result comments(@RequestParam(defaultValue = "") Integer page,
@@ -48,7 +50,7 @@ public class CommentAdminController {
 	                       @RequestParam(defaultValue = "1") Integer pageNum,
 	                       @RequestParam(defaultValue = "10") Integer pageSize) {
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		List<Comment> comments = commentService.getListByPageAndParentCommentId(page, blogId, (long) -1);
 		PageInfo<Comment> pageInfo = new PageInfo<>(comments);
 		return Result.success("请求成功", pageInfo);
@@ -57,7 +59,7 @@ public class CommentAdminController {
 	/**
 	 * 获取所有博客id和title 供评论分类的选择
 	 *
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/blogIdAndTitle")
 	public Result blogIdAndTitle() {
@@ -70,7 +72,7 @@ public class CommentAdminController {
 	 *
 	 * @param id        评论id
 	 * @param published 是否公开
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("更新评论公开状态")
 	@PutMapping("/comment/published")
@@ -84,7 +86,7 @@ public class CommentAdminController {
 	 *
 	 * @param id     评论id
 	 * @param notice 是否接收提醒
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("更新评论邮件提醒状态")
 	@PutMapping("/comment/notice")
@@ -97,7 +99,7 @@ public class CommentAdminController {
 	 * 按id删除该评论及其所有子评论
 	 *
 	 * @param id 评论id
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("删除评论")
 	@DeleteMapping("/comment")
@@ -110,7 +112,7 @@ public class CommentAdminController {
 	 * 修改评论
 	 *
 	 * @param comment 评论实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("修改评论")
 	@PutMapping("/comment")
