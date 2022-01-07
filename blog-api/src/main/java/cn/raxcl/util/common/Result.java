@@ -1,4 +1,4 @@
-package cn.raxcl.model.vo;
+package cn.raxcl.util.common;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

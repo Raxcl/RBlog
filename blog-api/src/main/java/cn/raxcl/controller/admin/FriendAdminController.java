@@ -1,5 +1,6 @@
 package cn.raxcl.controller.admin;
 
+import cn.raxcl.model.dto.FriendDTO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.OperationLogger;
 import cn.raxcl.entity.Friend;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.FriendService;
 
 import java.util.Map;
@@ -75,13 +76,13 @@ public class FriendAdminController {
 	/**
 	 * 更新友链
 	 *
-	 * @param friend 友链DTO
+	 * @param friendDTO 友链DTO
 	 * @return
 	 */
 	@OperationLogger("更新友链")
 	@PutMapping("/friend")
-	public Result updateFriend(@RequestBody cn.raxcl.model.dto.Friend friend) {
-		friendService.updateFriend(friend);
+	public Result updateFriend(@RequestBody FriendDTO friendDTO) {
+		friendService.updateFriend(friendDTO);
 		return Result.success("修改成功");
 	}
 

@@ -18,6 +18,7 @@ import java.util.Date;
 @ToString
 public class LoginLog {
 	private Long id;
+
 	private String username;//用户名称
 	private String ip;//ip
 	private String ipSource;//ip来源

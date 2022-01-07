@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.VisitLog;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.VisitLogMapper;
-import cn.raxcl.model.dto.VisitLogUuidTime;
+import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 import cn.raxcl.service.VisitLogService;
 import cn.raxcl.util.IpAddressUtils;
 import cn.raxcl.util.UserAgentUtils;
@@ -32,7 +32,7 @@ public class VisitLogServiceImpl implements VisitLogService {
 	}
 
 	@Override
-	public List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday() {
+	public List<VisitLogUuidTimeDTO> getUUIDAndCreateTimeByYesterday() {
 		return visitLogMapper.getUUIDAndCreateTimeByYesterday();
 	}
 

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @Description: 博客分类
  * @author Raxcl
- * @date 2020-07-26
+ * @date 2022-01-07 09:55:09
  */
 @NoArgsConstructor
 @Getter
@@ -19,6 +19,12 @@ import java.util.List;
 @ToString
 public class Category {
 	private Long id;
-	private String name;//分类名称
-	private List<Blog> blogs = new ArrayList<>();//该分类下的博客文章
+	/**
+	 * 分类名称
+	 */
+	private String name;
+	/**
+	 * 该分类下的博客文章
+	 */
+	private List<Blog> blogs = new ArrayList<>();
 }

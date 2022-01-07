@@ -5,8 +5,8 @@ import cn.raxcl.entity.Blog;
 import cn.raxcl.entity.Category;
 import cn.raxcl.entity.Tag;
 import cn.raxcl.model.dto.BlogDTO;
-import cn.raxcl.model.dto.BlogVisibility;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.dto.BlogVisibilityDTO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.CategoryService;
 import cn.raxcl.service.CommentService;
@@ -124,13 +124,13 @@ public class BlogAdminController {
 	 * 更新博客可见性状态
 	 *
 	 * @param id             博客id
-	 * @param blogVisibility 博客可见性DTO
+	 * @param blogVisibilityDTO 博客可见性DTO
 	 * @return Result
 	 */
 	@OperationLogger("更新博客可见性状态")
 	@PutMapping("blog/{id}/visibility")
-	public Result updateVisibility(@PathVariable Long id, @RequestBody BlogVisibility blogVisibility) {
-		blogService.updateBlogVisibilityById(id, blogVisibility);
+	public Result updateVisibility(@PathVariable Long id, @RequestBody BlogVisibilityDTO blogVisibilityDTO) {
+		blogService.updateBlogVisibilityById(id, blogVisibilityDTO);
 		return Result.success("操作成功");
 	}
 

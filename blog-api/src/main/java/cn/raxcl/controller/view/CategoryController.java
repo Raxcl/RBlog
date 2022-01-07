@@ -4,9 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
-import cn.raxcl.model.vo.BlogInfo;
-import cn.raxcl.model.vo.PageResult;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.vo.BlogInfoVO;
+import cn.raxcl.model.vo.PageResultVO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.BlogService;
 
 /**
@@ -33,7 +33,7 @@ public class CategoryController {
 	@GetMapping("/category")
 	public Result category(@RequestParam String categoryName,
 	                       @RequestParam(defaultValue = "1") Integer pageNum) {
-		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByCategoryNameAndIsPublished(categoryName, pageNum);
-		return Result.success("请求成功", pageResult);
+		PageResultVO<BlogInfoVO> pageResultVO = blogService.getBlogInfoListByCategoryNameAndIsPublished(categoryName, pageNum);
+		return Result.success("请求成功", pageResultVO);
 	}
 }

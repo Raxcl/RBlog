@@ -10,7 +10,7 @@ import cn.raxcl.mapper.SiteSettingMapper;
 import cn.raxcl.model.bean.Badge;
 import cn.raxcl.model.bean.Copyright;
 import cn.raxcl.model.bean.Favorite;
-import cn.raxcl.model.vo.Introduction;
+import cn.raxcl.model.vo.IntroductionVO;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.service.SiteSettingService;
 import cn.raxcl.util.JacksonUtils;
@@ -70,7 +70,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		Map<String, Object> map = new HashMap<>();
 		Map<String, Object> siteInfo = new HashMap<>();
 		List<Badge> badges = new ArrayList<>();
-		Introduction introduction = new Introduction();
+		IntroductionVO introductionVO = new IntroductionVO();
 		List<Favorite> favorites = new ArrayList<>();
 		List<String> rollTexts = new ArrayList<>();
 		for (SiteSetting s : siteSettings) {
@@ -86,19 +86,19 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 				badges.add(badge);
 			} else if (s.getType() == 3) {
 				if ("avatar".equals(s.getNameEn())) {
-					introduction.setAvatar(s.getValue());
+					introductionVO.setAvatar(s.getValue());
 				} else if ("name".equals(s.getNameEn())) {
-					introduction.setName(s.getValue());
+					introductionVO.setName(s.getValue());
 				} else if ("github".equals(s.getNameEn())) {
-					introduction.setGithub(s.getValue());
+					introductionVO.setGithub(s.getValue());
 				} else if ("qq".equals(s.getNameEn())) {
-					introduction.setQq(s.getValue());
+					introductionVO.setQq(s.getValue());
 				} else if ("bilibili".equals(s.getNameEn())) {
-					introduction.setBilibili(s.getValue());
+					introductionVO.setBilibili(s.getValue());
 				} else if ("netease".equals(s.getNameEn())) {
-					introduction.setNetease(s.getValue());
+					introductionVO.setNetease(s.getValue());
 				} else if ("email".equals(s.getNameEn())) {
-					introduction.setEmail(s.getValue());
+					introductionVO.setEmail(s.getValue());
 				} else if ("favorite".equals(s.getNameEn())) {
 					Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
 					favorites.add(favorite);
@@ -110,9 +110,9 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 				}
 			}
 		}
-		introduction.setFavorites(favorites);
-		introduction.setRollText(rollTexts);
-		map.put("introduction", introduction);
+		introductionVO.setFavorites(favorites);
+		introductionVO.setRollText(rollTexts);
+		map.put("introduction", introductionVO);
 		map.put("siteInfo", siteInfo);
 		map.put("badges", badges);
 		redisService.saveMapToValue(redisKey, map);

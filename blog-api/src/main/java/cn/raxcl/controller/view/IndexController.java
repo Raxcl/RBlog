@@ -1,13 +1,13 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.model.vo.NewBlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.entity.Category;
 import cn.raxcl.entity.Tag;
-import cn.raxcl.model.vo.NewBlog;
-import cn.raxcl.model.vo.RandomBlog;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.vo.RandomBlogVO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.CategoryService;
 import cn.raxcl.service.SiteSettingService;
@@ -41,14 +41,14 @@ public class IndexController {
 	@GetMapping("/site")
 	public Result site() {
 		Map<String, Object> map = siteSettingService.getSiteInfo();
-		List<NewBlog> newBlogList = blogService.getNewBlogListByIsPublished();
+		List<NewBlogVO> newBlogVOList = blogService.getNewBlogListByIsPublished();
 		List<Category> categoryList = categoryService.getCategoryNameList();
 		List<Tag> tagList = tagService.getTagListNotId();
-		List<RandomBlog> randomBlogList = blogService.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
-		map.put("newBlogList", newBlogList);
+		List<RandomBlogVO> randomBlogVOList = blogService.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
+		map.put("newBlogList", newBlogVOList);
 		map.put("categoryList", categoryList);
 		map.put("tagList", tagList);
-		map.put("randomBlogList", randomBlogList);
+		map.put("randomBlogList", randomBlogVOList);
 		return Result.success("请求成功", map);
 	}
 }

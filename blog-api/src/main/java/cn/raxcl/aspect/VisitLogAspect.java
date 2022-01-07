@@ -12,8 +12,8 @@ import cn.raxcl.annotation.VisitLogger;
 import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.VisitLog;
 import cn.raxcl.entity.Visitor;
-import cn.raxcl.model.vo.BlogDetail;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.vo.BlogDetailVO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.service.VisitLogService;
 import cn.raxcl.service.VisitorService;
@@ -184,7 +184,7 @@ public class VisitLogAspect {
 		} else if (behavior.equals("查看博客")) {
 			Result res = (Result) result;
 			if (res.getCode() == 200) {
-				BlogDetail blog = (BlogDetail) res.getData();
+				BlogDetailVO blog = (BlogDetailVO) res.getData();
 				String title = blog.getTitle();
 				content = title;
 				remark = "文章标题：" + title;

@@ -1,18 +1,13 @@
 package cn.raxcl.mapper;
 
 import cn.raxcl.model.dto.BlogDTO;
+import cn.raxcl.model.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.Blog;
-import cn.raxcl.model.dto.BlogView;
-import cn.raxcl.model.dto.BlogVisibility;
-import cn.raxcl.model.vo.ArchiveBlog;
-import cn.raxcl.model.vo.BlogDetail;
-import cn.raxcl.model.vo.BlogInfo;
-import cn.raxcl.model.vo.CategoryBlogCount;
-import cn.raxcl.model.vo.NewBlog;
-import cn.raxcl.model.vo.RandomBlog;
-import cn.raxcl.model.vo.SearchBlog;
+import cn.raxcl.model.dto.BlogViewDTO;
+import cn.raxcl.model.dto.BlogVisibilityDTO;
+import cn.raxcl.model.vo.ArchiveBlogVO;
 
 import java.util.List;
 
@@ -37,7 +32,7 @@ public interface BlogMapper {
 	 * @param query 关键字字符串
 	 * @return List<SearchBlog>
 	 */
-	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+	List<SearchBlogVO> getSearchBlogListByQueryAndIsPublished(String query);
 
 	/**
 	 * 获取所有博客id和title 供评论分类的选择
@@ -49,20 +44,20 @@ public interface BlogMapper {
 	 * 获取博客list
 	 * @return List<NewBlog>
 	 */
-	List<NewBlog> getNewBlogListByIsPublished();
+	List<NewBlogVO> getNewBlogListByIsPublished();
 
 	/**
 	 * 按置顶、创建时间排序 分页查询博客简要信息列表
 	 * @return List<BlogInfo>
 	 */
-	List<BlogInfo> getBlogInfoListByIsPublished();
+	List<BlogInfoVO> getBlogInfoListByIsPublished();
 
 	/**
 	 * 根据分类name分页查询公开博客列表
 	 * @param categoryName 分类name
 	 * @return List<BlogInfo>
 	 */
-	List<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName);
+	List<BlogInfoVO> getBlogInfoListByCategoryNameAndIsPublished(String categoryName);
 
 	/**
 	 * 根据标签name分页查询公开博客列表
@@ -70,7 +65,7 @@ public interface BlogMapper {
 	 * @param tagName 标签name
 	 * @return List<BlogInfo>
 	 */
-	List<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName);
+	List<BlogInfoVO> getBlogInfoListByTagNameAndIsPublished(String tagName);
 
 	/**
 	 * 获取分组后是否发版数据
@@ -83,20 +78,20 @@ public interface BlogMapper {
 	 * @param yearMonth yearMonth
 	 * @return List<ArchiveBlog>
 	 */
-	List<ArchiveBlog> getArchiveBlogListByYearMonthAndIsPublished(String yearMonth);
+	List<ArchiveBlogVO> getArchiveBlogListByYearMonthAndIsPublished(String yearMonth);
 
 	/**
 	 * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客
 	 * @param limitNum limitNum
 	 * @return List<RandomBlog>
 	 */
-	List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(Integer limitNum);
+	List<RandomBlogVO> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(Integer limitNum);
 
 	/**
 	 * 获取博客信息list
 	 * @return List<BlogView>
 	 */
-	List<BlogView> getBlogViewsList();
+	List<BlogViewDTO> getBlogViewsList();
 
 	/**
 	 * 删除博客
@@ -141,7 +136,7 @@ public interface BlogMapper {
 	 * @param bv 博客可见性DTO
 	 * @return int
 	 */
-	int updateBlogVisibilityById(Long blogId, BlogVisibility bv);
+	int updateBlogVisibilityById(Long blogId, BlogVisibilityDTO bv);
 
 	/**
 	 * 更新博客置顶状态
@@ -178,7 +173,7 @@ public interface BlogMapper {
 	 * @param id 博客id
 	 * @return BlogDetail
 	 */
-	BlogDetail getBlogByIdAndIsPublished(Long id);
+	BlogDetailVO getBlogByIdAndIsPublished(Long id);
 
 	/**
 	 * 获取博客密码
@@ -238,5 +233,5 @@ public interface BlogMapper {
 	 *  获取博客分类总计list
 	 * @return List<CategoryBlogCount>
 	 */
-	List<CategoryBlogCount> getCategoryBlogCountList();
+	List<CategoryBlogCountVO> getCategoryBlogCountList();
 }

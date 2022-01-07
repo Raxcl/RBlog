@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.OperationLogger;
 import cn.raxcl.entity.Blog;
 import cn.raxcl.entity.Comment;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.CommentService;
 import cn.raxcl.util.StringUtils;

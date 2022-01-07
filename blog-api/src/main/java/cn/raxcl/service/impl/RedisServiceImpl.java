@@ -1,9 +1,9 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.model.vo.BlogInfoVO;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import cn.raxcl.model.vo.BlogInfo;
-import cn.raxcl.model.vo.PageResult;
+import cn.raxcl.model.vo.PageResultVO;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.util.JacksonUtils;
 
@@ -26,11 +26,11 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	@Override
-	public PageResult<BlogInfo> getBlogInfoPageResultByHash(String hash, Integer pageNum) {
+	public PageResultVO<BlogInfoVO> getBlogInfoPageResultByHash(String hash, Integer pageNum) {
 		if (jsonRedisTemplate.opsForHash().hasKey(hash, pageNum)) {
 			Object redisResult = jsonRedisTemplate.opsForHash().get(hash, pageNum);
-			PageResult<BlogInfo> pageResult = JacksonUtils.convertValue(redisResult, PageResult.class);
-			return pageResult;
+			PageResultVO<BlogInfoVO> pageResultVO = JacksonUtils.convertValue(redisResult, PageResultVO.class);
+			return pageResultVO;
 		} else {
 			return null;
 		}

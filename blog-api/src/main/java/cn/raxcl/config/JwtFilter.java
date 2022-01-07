@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.util.JacksonUtils;
 import cn.raxcl.util.JwtUtils;
 

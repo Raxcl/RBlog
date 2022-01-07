@@ -1,5 +1,7 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.model.vo.CategoryBlogCountVO;
+import cn.raxcl.model.vo.TagBlogCountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.raxcl.entity.Category;
@@ -13,8 +15,6 @@ import cn.raxcl.mapper.CommentMapper;
 import cn.raxcl.mapper.TagMapper;
 import cn.raxcl.mapper.VisitLogMapper;
 import cn.raxcl.mapper.VisitRecordMapper;
-import cn.raxcl.model.vo.CategoryBlogCount;
-import cn.raxcl.model.vo.TagBlogCount;
 import cn.raxcl.service.DashboardService;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public Map<String, List> getCategoryBlogCountMap() {
 		//查询分类id对应的博客数量
-		List<CategoryBlogCount> categoryBlogCountList = blogMapper.getCategoryBlogCountList();
+		List<CategoryBlogCountVO> categoryBlogCountVOList = blogMapper.getCategoryBlogCountList();
 		//查询所有分类的id和名称
 		List<Category> categoryList = categoryMapper.getCategoryList();
 		//所有分类名称的List
@@ -73,31 +73,31 @@ public class DashboardServiceImpl implements DashboardService {
 			legend.add(category.getName());
 		}
 		//分类对应的博客数量List
-		List<CategoryBlogCount> series = new ArrayList<>();
-		if (categoryBlogCountList.size() == categoryList.size()) {
+		List<CategoryBlogCountVO> series = new ArrayList<>();
+		if (categoryBlogCountVOList.size() == categoryList.size()) {
 			Map<Long, String> m = new HashMap<>();
 			for (Category c : categoryList) {
 				m.put(c.getId(), c.getName());
 			}
-			for (CategoryBlogCount c : categoryBlogCountList) {
+			for (CategoryBlogCountVO c : categoryBlogCountVOList) {
 				c.setName(m.get(c.getId()));
 				series.add(c);
 			}
 		} else {
 			Map<Long, Integer> m = new HashMap<>();
-			for (CategoryBlogCount c : categoryBlogCountList) {
+			for (CategoryBlogCountVO c : categoryBlogCountVOList) {
 				m.put(c.getId(), c.getValue());
 			}
 			for (Category c : categoryList) {
-				CategoryBlogCount categoryBlogCount = new CategoryBlogCount();
-				categoryBlogCount.setName(c.getName());
+				CategoryBlogCountVO categoryBlogCountVO = new CategoryBlogCountVO();
+				categoryBlogCountVO.setName(c.getName());
 				Integer count = m.get(c.getId());
 				if (count == null) {
-					categoryBlogCount.setValue(0);
+					categoryBlogCountVO.setValue(0);
 				} else {
-					categoryBlogCount.setValue(count);
+					categoryBlogCountVO.setValue(count);
 				}
-				series.add(categoryBlogCount);
+				series.add(categoryBlogCountVO);
 			}
 		}
 		Map<String, List> map = new HashMap<>();
@@ -109,7 +109,7 @@ public class DashboardServiceImpl implements DashboardService {
 	@Override
 	public Map<String, List> getTagBlogCountMap() {
 		//查询标签id对应的博客数量
-		List<TagBlogCount> tagBlogCountList = tagMapper.getTagBlogCount();
+		List<TagBlogCountVO> tagBlogCountVOList = tagMapper.getTagBlogCount();
 		//查询所有标签的id和名称
 		List<Tag> tagList = tagMapper.getTagList();
 		//所有标签名称的List
@@ -118,31 +118,31 @@ public class DashboardServiceImpl implements DashboardService {
 			legend.add(tag.getName());
 		}
 		//标签对应的博客数量List
-		List<TagBlogCount> series = new ArrayList<>();
-		if (tagBlogCountList.size() == tagList.size()) {
+		List<TagBlogCountVO> series = new ArrayList<>();
+		if (tagBlogCountVOList.size() == tagList.size()) {
 			Map<Long, String> m = new HashMap<>();
 			for (Tag t : tagList) {
 				m.put(t.getId(), t.getName());
 			}
-			for (TagBlogCount t : tagBlogCountList) {
+			for (TagBlogCountVO t : tagBlogCountVOList) {
 				t.setName(m.get(t.getId()));
 				series.add(t);
 			}
 		} else {
 			Map<Long, Integer> m = new HashMap<>();
-			for (TagBlogCount t : tagBlogCountList) {
+			for (TagBlogCountVO t : tagBlogCountVOList) {
 				m.put(t.getId(), t.getValue());
 			}
 			for (Tag t : tagList) {
-				TagBlogCount tagBlogCount = new TagBlogCount();
-				tagBlogCount.setName(t.getName());
+				TagBlogCountVO tagBlogCountVO = new TagBlogCountVO();
+				tagBlogCountVO.setName(t.getName());
 				Integer count = m.get(t.getId());
 				if (count == null) {
-					tagBlogCount.setValue(0);
+					tagBlogCountVO.setValue(0);
 				} else {
-					tagBlogCount.setValue(count);
+					tagBlogCountVO.setValue(count);
 				}
-				series.add(tagBlogCount);
+				series.add(tagBlogCountVO);
 			}
 		}
 		Map<String, List> map = new HashMap<>();

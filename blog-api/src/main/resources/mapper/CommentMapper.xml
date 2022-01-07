@@ -17,7 +17,7 @@
         <result property="parentCommentId" column="parent_comment_id"/>
         <result property="website" column="website"/>
         <result property="qq" column="qq"/>
-        <association property="blog" javaType="cn.raxcl.model.vo.BlogIdAndTitle">
+        <association property="blog" javaType="cn.raxcl.model.vo.BlogIdAndTitleVO">
             <id property="id" column="blog_id"/>
             <result property="title" column="title"/>
         </association>
@@ -47,7 +47,7 @@
         where c.parent_comment_id=#{parentCommentId}
     </select>
 
-    <resultMap id="pageComment" type="cn.raxcl.model.vo.PageComment">
+    <resultMap id="pageComment" type="cn.raxcl.model.vo.PageCommentVO">
         <id property="id" column="id"/>
         <result property="nickname" column="nickname"/>
         <result property="content" column="content"/>

@@ -3,7 +3,7 @@ package cn.raxcl.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.Visitor;
-import cn.raxcl.model.dto.VisitLogUuidTime;
+import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public interface VisitorMapper {
 
 	int saveVisitor(Visitor visitor);
 
-	int updatePVAndLastTimeByUUID(VisitLogUuidTime dto);
+	int updatePVAndLastTimeByUUID(VisitLogUuidTimeDTO dto);
 
 	int deleteVisitorById(Long id);
 }

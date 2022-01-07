@@ -12,13 +12,13 @@ import java.util.List;
 /**
  * @Description: 侧边栏资料卡
  * @author Raxcl
- * @date 2020-08-09
+ * @date 2022-01-07 09:33:38
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Introduction {
+public class IntroductionVO {
 	private String avatar;
 	private String name;
 	private String github;
@@ -27,7 +27,7 @@ public class Introduction {
 	private String netease;
 	private String email;
 
-	private List<String> rollText = new ArrayList<>();
-	private List<Favorite> favorites = new ArrayList<>();
+	private List<String> rollText;
+	private List<Favorite> favorites;
 
 }

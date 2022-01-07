@@ -1,23 +1,20 @@
-package cn.raxcl.entity;
+package cn.raxcl.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
-
 /**
- * @Description: 友链
+ * @Description: 友链VO
  * @author Raxcl
- * @date 2022-01-07 09:56:51
+ * @date 2022-01-07 09:33:35
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Friend {
-	private Long id;
+public class FriendVO {
 	/**
 	 * 昵称
 	 */
@@ -34,16 +31,4 @@ public class Friend {
 	 * 头像
 	 */
 	private String avatar;
-	/**
-	 * 公开或隐藏
-	 */
-	private Boolean published;
-	/**
-	 * 浏览次数
-	 */
-	private Integer views;
-	/**
-	 * 创建时间
-	 */
-	private Date createTime;
 }

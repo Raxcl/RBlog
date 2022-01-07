@@ -3,7 +3,7 @@ package cn.raxcl.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.VisitLog;
-import cn.raxcl.model.dto.VisitLogUuidTime;
+import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public interface VisitLogMapper {
 	List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate);
 
-	List<VisitLogUuidTime> getUUIDAndCreateTimeByYesterday();
+	List<VisitLogUuidTimeDTO> getUUIDAndCreateTimeByYesterday();
 
 	int saveVisitLog(VisitLog log);
 

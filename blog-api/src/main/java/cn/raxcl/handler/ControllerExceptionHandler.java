@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.exception.PersistenceException;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 
 import javax.servlet.http.HttpServletRequest;
 

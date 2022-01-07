@@ -9,7 +9,7 @@ import lombok.ToString;
 /**
  * @Description: 城市访客数量
  * @author Raxcl
- * @date 2021-02-26
+ * @date 2022-01-07 09:55:12
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +17,12 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CityVisitor {
-	private String city;//城市名称
-	private Integer uv;//独立访客数量
+	/**
+	 * 城市名称
+	 */
+	private String city;
+	/**
+	 * 独立访客数量
+	 */
+	private Integer uv;
 }

@@ -50,7 +50,7 @@
         update tag set tag_name=#{name}, color=#{color} where id=#{id}
     </update>
 
-    <resultMap id="tagBlogCount" type="cn.raxcl.model.vo.TagBlogCount">
+    <resultMap id="tagBlogCount" type="cn.raxcl.model.vo.TagBlogCountVO">
         <id property="id" column="tag_id"/>
         <result property="value" column="blog_count"/>
     </resultMap>

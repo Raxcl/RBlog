@@ -8,7 +8,7 @@ import lombok.ToString;
 /**
  * @Description: 访问记录
  * @author Raxcl
- * @date 2021-02-23
+ * @date 2022-01-07 10:13:21
  */
 @NoArgsConstructor
 @Getter
@@ -16,9 +16,18 @@ import lombok.ToString;
 @ToString
 public class VisitRecord {
 	private Long id;
-	private Integer pv;//访问量
-	private Integer uv;//独立用户
-	private String date;//日期"02-23"
+	/**
+	 * 访问量
+	 */
+	private Integer pv;
+	/**
+	 * 独立用户
+	 */
+	private Integer uv;
+	/**
+	 * 日期"02-23"
+	 */
+	private String date;
 
 	public VisitRecord(Integer pv, Integer uv, String date) {
 		this.pv = pv;

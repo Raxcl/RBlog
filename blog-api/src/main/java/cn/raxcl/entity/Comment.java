@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import cn.raxcl.model.vo.BlogIdAndTitle;
+import cn.raxcl.model.vo.BlogIdAndTitleVO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,7 +77,7 @@ public class Comment {
 	/**
 	 * 所属的文章
 	 */
-	private BlogIdAndTitle blog;
+	private BlogIdAndTitleVO blog;
 	/**
 	 * 回复该评论的评论
 	 */

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.entity.ExceptionLog;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.ExceptionLogService;
 
 /**

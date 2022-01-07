@@ -12,8 +12,8 @@ import cn.raxcl.annotation.AccessLimit;
 import cn.raxcl.annotation.VisitLogger;
 import cn.raxcl.entity.Moment;
 import cn.raxcl.entity.User;
-import cn.raxcl.model.vo.PageResult;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.vo.PageResultVO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.MomentService;
 import cn.raxcl.service.impl.UserServiceImpl;
 import cn.raxcl.util.JwtUtils;
@@ -63,8 +63,8 @@ public class MomentController {
 			}
 		}
 		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentVOList(pageNum, adminIdentity));
-		PageResult<Moment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-		return Result.success("获取成功", pageResult);
+		PageResultVO<Moment> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
+		return Result.success("获取成功", pageResultVO);
 	}
 
 	/**

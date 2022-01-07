@@ -6,16 +6,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 标签和博客数量
+ * @Description: 评论管理页面按博客title查询评论
  * @author Raxcl
- * @date 2020-10-08
+ * @date 2022-01-07 09:33:19
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class TagBlogCount {
+public class BlogIdAndTitleVO {
 	private Long id;
-	private String name;//标签名
-	private Integer value;//标签下博客数量
+	private String title;
 }

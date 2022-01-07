@@ -4,7 +4,7 @@ import cn.raxcl.model.dto.CommentDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.Comment;
-import cn.raxcl.model.vo.PageComment;
+import cn.raxcl.model.vo.PageCommentVO;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public interface CommentMapper {
 	 * @param parentCommentId parentCommentId
 	 * @return List<PageComment>
 	 */
-	List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
+	List<PageCommentVO> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId);
 
 	/**
 	 * 按id查询评论

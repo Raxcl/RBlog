@@ -3,7 +3,7 @@ package cn.raxcl.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.Tag;
-import cn.raxcl.model.vo.TagBlogCount;
+import cn.raxcl.model.vo.TagBlogCountVO;
 
 import java.util.List;
 
@@ -31,5 +31,5 @@ public interface TagMapper {
 
 	int updateTag(Tag tag);
 
-	List<TagBlogCount> getTagBlogCount();
+	List<TagBlogCountVO> getTagBlogCount();
 }

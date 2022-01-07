@@ -58,7 +58,7 @@
         </where>
     </select>
 
-    <resultMap id="searchBlog" type="cn.raxcl.model.vo.SearchBlog">
+    <resultMap id="searchBlog" type="cn.raxcl.model.vo.SearchBlogVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
@@ -72,7 +72,7 @@
         where is_published=true and password='' and content like #{queryPattern}
     </select>
 
-    <resultMap id="blogIdAndTitle" type="cn.raxcl.model.vo.BlogIdAndTitle">
+    <resultMap id="blogIdAndTitle" type="cn.raxcl.model.vo.BlogIdAndTitleVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
     </resultMap>
@@ -82,7 +82,7 @@
         select id, title from blog order by create_time desc
     </select>
 
-    <resultMap id="newBlog" type="cn.raxcl.model.vo.NewBlog">
+    <resultMap id="newBlog" type="cn.raxcl.model.vo.NewBlogVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="password" column="password"/>
@@ -96,7 +96,7 @@
         order by create_time desc
     </select>
 
-    <resultMap id="blogInfo" type="cn.raxcl.model.vo.BlogInfo">
+    <resultMap id="blogInfo" type="cn.raxcl.model.vo.BlogInfoVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="description" column="description"/>
@@ -141,7 +141,7 @@
         order by date_format(create_time, '%Y年%m月') desc
     </select>
 
-    <resultMap id="archiveBlog" type="cn.raxcl.model.vo.ArchiveBlog">
+    <resultMap id="archiveBlog" type="cn.raxcl.model.vo.ArchiveBlogVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="day" column="create_day"/>
@@ -156,7 +156,7 @@
         order by create_time desc
     </select>
 
-    <resultMap id="randomBlog" type="cn.raxcl.model.vo.RandomBlog">
+    <resultMap id="randomBlog" type="cn.raxcl.model.vo.RandomBlogVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="password" column="password"/>
@@ -173,7 +173,7 @@
     </select>
 
     <!--查询所有文章的浏览量-->
-    <select id="getBlogViewsList" resultType="cn.raxcl.model.dto.BlogView">
+    <select id="getBlogViewsList" resultType="cn.raxcl.model.dto.BlogViewDTO">
         select id, views from blog
     </select>
 
@@ -237,7 +237,7 @@
         select title from blog where id=#{id}
     </select>
 
-    <resultMap id="blogDetail" type="cn.raxcl.model.vo.BlogDetail">
+    <resultMap id="blogDetail" type="cn.raxcl.model.vo.BlogDetailVO">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
@@ -313,7 +313,7 @@
         select is_published from blog where id=#{blogId}
     </select>
 
-    <resultMap id="categoryBlogCount" type="cn.raxcl.model.vo.CategoryBlogCount">
+    <resultMap id="categoryBlogCount" type="cn.raxcl.model.vo.CategoryBlogCountVO">
         <id property="id" column="category_id"/>
         <result property="value" column="blog_count"/>
     </resultMap>

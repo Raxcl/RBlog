@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.entity.VisitLog;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.VisitLogService;
 
 /**

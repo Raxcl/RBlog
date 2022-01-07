@@ -1,13 +1,13 @@
 package cn.raxcl.service;
 
-import cn.raxcl.model.vo.BlogInfo;
-import cn.raxcl.model.vo.PageResult;
+import cn.raxcl.model.vo.BlogInfoVO;
+import cn.raxcl.model.vo.PageResultVO;
 
 import java.util.List;
 import java.util.Map;
 
 public interface RedisService {
-	PageResult<BlogInfo> getBlogInfoPageResultByHash(String hash, Integer pageNum);
+	PageResultVO<BlogInfoVO> getBlogInfoPageResultByHash(String hash, Integer pageNum);
 
 	void saveKVToHash(String hash, Object key, Object value);
 

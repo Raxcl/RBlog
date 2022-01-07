@@ -6,16 +6,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 关键字搜索博客
+ * @Description: 归档页面博客简要信息
  * @author Raxcl
- * @date 2020-09-06
+ * @date 2022-01-07 09:27:10
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class SearchBlog {
+public class ArchiveBlogVO {
 	private Long id;
 	private String title;
-	private String content;
+	private String day;
+	private String password;
+	private Boolean privacy;
 }

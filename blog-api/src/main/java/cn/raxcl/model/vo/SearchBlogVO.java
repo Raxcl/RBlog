@@ -1,4 +1,4 @@
-package cn.raxcl.model.dto;
+package cn.raxcl.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,15 +6,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 博客浏览量
+ * @Description: 关键字搜索博客
  * @author Raxcl
- * @date 2020-10-06
+ * @date 2022-01-07 09:33:52
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class BlogView {
+public class SearchBlogVO {
 	private Long id;
-	private Integer views;
+	private String title;
+	private String content;
 }

@@ -2,7 +2,7 @@ package cn.raxcl.controller.view;
 
 import cn.raxcl.annotation.AccessLimit;
 import cn.raxcl.model.dto.CommentDTO;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;

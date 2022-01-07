@@ -6,15 +6,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 受保护文章密码DTO
+ * @Description: 博客浏览量
  * @author Raxcl
- * @date 2020-09-05
+ * @date 2022-01-07 09:15:28
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class BlogPassword {
-	private Long blogId;
-	private String password;
+public class BlogViewDTO {
+	private Long id;
+	private Integer views;
 }

@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * @Description: 访客记录
  * @author Raxcl
- * @date 2021-01-31
+ * @date 2022-01-07 10:11:52
  */
 @NoArgsConstructor
 @Getter
@@ -18,14 +18,38 @@ import java.util.Date;
 @ToString
 public class Visitor {
 	private Long id;
-	private String uuid;//访客标识码
-	private String ip;//ip
-	private String ipSource;//ip来源
-	private String os;//操作系统
-	private String browser;//浏览器
-	private Date createTime;//首次访问时间
-	private Date lastTime;//最后访问时间
-	private Integer pv;//访问页数统计
+	/**
+	 * 访客标识码
+	 */
+	private String uuid;
+	/**
+	 * ip
+	 */
+	private String ip;
+	/**
+	 * ip来源
+	 */
+	private String ipSource;
+	/**
+	 * 操作系统
+	 */
+	private String os;
+	/**
+	 * 浏览器
+	 */
+	private String browser;
+	/**
+	 * 首次访问时间
+	 */
+	private Date createTime;
+	/**
+	 * 最后访问时间
+	 */
+	private Date lastTime;
+	/**
+	 * 访问页数统计
+	 */
+	private Integer pv;
 	private String userAgent;
 
 	public Visitor(String uuid, String ip, String userAgent) {

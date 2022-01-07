@@ -17,7 +17,7 @@
         select id, nickname, description, website, avatar, is_published, views, create_time from friend
     </select>
 
-    <resultMap id="friendVO" type="cn.raxcl.model.vo.Friend">
+    <resultMap id="friendVO" type="cn.raxcl.model.vo.FriendVO">
         <result property="nickname" column="nickname"/>
         <result property="description" column="description"/>
         <result property="website" column="website"/>

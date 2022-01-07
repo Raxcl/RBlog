@@ -11,14 +11,14 @@ import java.util.Date;
 /**
  * @Description: 访客更新DTO
  * @author Raxcl
- * @date 2021-02-05
+ * @date 2022-01-07 09:26:49
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class VisitLogUuidTime {
+public class VisitLogUuidTimeDTO {
 	private String uuid;
 	private Date time;
 	private Integer pv;

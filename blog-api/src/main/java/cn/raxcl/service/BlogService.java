@@ -1,8 +1,9 @@
 package cn.raxcl.service;
 
+import cn.raxcl.util.common.Result;
 import cn.raxcl.entity.Blog;
 import cn.raxcl.model.dto.BlogDTO;
-import cn.raxcl.model.dto.BlogVisibility;
+import cn.raxcl.model.dto.BlogVisibilityDTO;
 import cn.raxcl.model.vo.*;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface BlogService {
 	 * @param query 关键字字符串
 	 * @return List<SearchBlog>
 	 */
-	List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query);
+	List<SearchBlogVO> getSearchBlogListByQueryAndIsPublished(String query);
 
 	/**
 	 * 获取所有博客id和title 供评论分类的选择
@@ -38,14 +39,14 @@ public interface BlogService {
 	 * 获取博客list
 	 * @return List<NewBlog>
 	 */
-	List<NewBlog> getNewBlogListByIsPublished();
+	List<NewBlogVO> getNewBlogListByIsPublished();
 
 	/**
 	 * 按置顶、创建时间排序 分页查询博客简要信息列表
 	 * @param pageNum 页码
 	 * @return PageResult<BlogInfo>
 	 */
-	PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum);
+	PageResultVO<BlogInfoVO> getBlogInfoListByIsPublished(Integer pageNum);
 
 	/**
 	 * 根据分类name分页查询公开博客列表
@@ -53,7 +54,7 @@ public interface BlogService {
 	 * @param pageNum 页码
 	 * @return PageResult<BlogInfo>
 	 */
-	PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum);
+	PageResultVO<BlogInfoVO> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum);
 
 	/**
 	 * 根据标签name分页查询公开博客列表
@@ -62,7 +63,7 @@ public interface BlogService {
 	 * @param pageNum 页码
 	 * @return PageResult<BlogInfo>
 	 */
-	PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum);
+	PageResultVO<BlogInfoVO> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum);
 
 	/**
 	 * 按年月分组归档公开博客 统计公开博客总数
@@ -76,7 +77,7 @@ public interface BlogService {
 	 *
 	 * @return List<RandomBlog>
 	 */
-	List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
+	List<RandomBlogVO> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend();
 
 	/**
 	 * 删除博客
@@ -113,9 +114,9 @@ public interface BlogService {
 	/**
 	 * 更新博客可见性状态
 	 * @param blogId 博客id
-	 * @param blogVisibility 博客可见性DTO
+	 * @param blogVisibilityDTO 博客可见性DTO
 	 */
-	void updateBlogVisibilityById(Long blogId, BlogVisibility blogVisibility);
+	void updateBlogVisibilityById(Long blogId, BlogVisibilityDTO blogVisibilityDTO);
 
 	/**
 	 * 更新博客置顶状态
@@ -202,5 +203,5 @@ public interface BlogService {
 	 * @param jwt 密码保护文章的访问Token
 	 * @return Result
 	 */
-	BlogDetail getBlog(Long id, String jwt);
+	BlogDetailVO getBlog(Long id, String jwt);
 }

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @Description: 用户实体类
  * @author Raxcl
- * @date 2020-07-19
+ * @date 2022-01-07 10:04:41
  */
 
 @NoArgsConstructor

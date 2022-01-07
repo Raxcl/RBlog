@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.OperationLogger;
 import cn.raxcl.entity.Moment;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.MomentService;
 
 import java.util.Date;

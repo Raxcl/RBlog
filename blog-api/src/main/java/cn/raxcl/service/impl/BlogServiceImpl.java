@@ -3,6 +3,7 @@ package cn.raxcl.service.impl;
 import cn.raxcl.aspect.AopProxy;
 import cn.raxcl.constant.CommonConstant;
 import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.entity.Blog;
 import cn.raxcl.entity.Category;
 import cn.raxcl.entity.Tag;
@@ -11,8 +12,8 @@ import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.BlogMapper;
 import cn.raxcl.model.dto.BlogDTO;
-import cn.raxcl.model.dto.BlogView;
-import cn.raxcl.model.dto.BlogVisibility;
+import cn.raxcl.model.dto.BlogViewDTO;
+import cn.raxcl.model.dto.BlogVisibilityDTO;
 import cn.raxcl.model.vo.*;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.CategoryService;
@@ -85,18 +86,18 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
     }
 
     @Override
-    public List<SearchBlog> getSearchBlogListByQueryAndIsPublished(String query) {
-        List<SearchBlog> searchBlogs = blogMapper.getSearchBlogListByQueryAndIsPublished(query);
-        for (SearchBlog searchBlog : searchBlogs) {
-            String content = searchBlog.getContent();
+    public List<SearchBlogVO> getSearchBlogListByQueryAndIsPublished(String query) {
+        List<SearchBlogVO> searchBlogVOS = blogMapper.getSearchBlogListByQueryAndIsPublished(query);
+        for (SearchBlogVO searchBlogVO : searchBlogVOS) {
+            String content = searchBlogVO.getContent();
             int contentLength = content.length();
             int index = content.indexOf(query) - 10;
             index = Math.max(index, 0);
             int end = index + 21;//以关键字字符串为中心返回21个字
             end = Math.min(end, contentLength - 1);
-            searchBlog.setContent(content.substring(index, end));
+            searchBlogVO.setContent(content.substring(index, end));
         }
-        return searchBlogs;
+        return searchBlogVOS;
     }
 
     @Override
@@ -105,96 +106,96 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
     }
 
     @Override
-    public List<NewBlog> getNewBlogListByIsPublished() {
+    public List<NewBlogVO> getNewBlogListByIsPublished() {
         String redisKey = RedisKeyConstant.NEW_BLOG_LIST;
-        List<NewBlog> newBlogListFromRedis = redisService.getListByValue(redisKey);
-        if (newBlogListFromRedis != null) {
-            return newBlogListFromRedis;
+        List<NewBlogVO> newBlogVOListFromRedis = redisService.getListByValue(redisKey);
+        if (newBlogVOListFromRedis != null) {
+            return newBlogVOListFromRedis;
         }
         PageMethod.startPage(1, NEW_BLOG_PAGE_SIZE);
-        List<NewBlog> newBlogList = blogMapper.getNewBlogListByIsPublished();
-        for (NewBlog newBlog : newBlogList) {
-            if (!"".equals(newBlog.getPassword())) {
-                newBlog.setPrivacy(true);
-                newBlog.setPassword("");
+        List<NewBlogVO> newBlogVOList = blogMapper.getNewBlogListByIsPublished();
+        for (NewBlogVO newBlogVO : newBlogVOList) {
+            if (!"".equals(newBlogVO.getPassword())) {
+                newBlogVO.setPrivacy(true);
+                newBlogVO.setPassword("");
             } else {
-                newBlog.setPrivacy(false);
+                newBlogVO.setPrivacy(false);
             }
         }
-        redisService.saveListToValue(redisKey, newBlogList);
-        return newBlogList;
+        redisService.saveListToValue(redisKey, newBlogVOList);
+        return newBlogVOList;
     }
 
     @Override
-    public PageResult<BlogInfo> getBlogInfoListByIsPublished(Integer pageNum) {
+    public PageResultVO<BlogInfoVO> getBlogInfoListByIsPublished(Integer pageNum) {
         String redisKey = RedisKeyConstant.HOME_BLOG_INFO_LIST;
         //redis已有当前页缓存
-        PageResult<BlogInfo> pageResultFromRedis = redisService.getBlogInfoPageResultByHash(redisKey, pageNum);
-        if (pageResultFromRedis != null) {
-            setBlogViewsFromRedisToPageResult(pageResultFromRedis);
-            return pageResultFromRedis;
+        PageResultVO<BlogInfoVO> pageResultVOFromRedis = redisService.getBlogInfoPageResultByHash(redisKey, pageNum);
+        if (pageResultVOFromRedis != null) {
+            setBlogViewsFromRedisToPageResult(pageResultVOFromRedis);
+            return pageResultVOFromRedis;
         }
         //redis没有缓存，从数据库查询，并添加缓存
         PageMethod.startPage(pageNum, PAGE_SIZE, ORDER_BY);
-        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByIsPublished());
-        PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
-        PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-        setBlogViewsFromRedisToPageResult(pageResult);
+        List<BlogInfoVO> blogInfoVOS = processBlogInfosPassword(blogMapper.getBlogInfoListByIsPublished());
+        PageInfo<BlogInfoVO> pageInfo = new PageInfo<>(blogInfoVOS);
+        PageResultVO<BlogInfoVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
+        setBlogViewsFromRedisToPageResult(pageResultVO);
         //添加首页缓存
-        redisService.saveKVToHash(redisKey, pageNum, pageResult);
-        return pageResult;
+        redisService.saveKVToHash(redisKey, pageNum, pageResultVO);
+        return pageResultVO;
     }
 
     /**
      * 将pageResult中博客对象的浏览量设置为Redis中的最新值
      *
-     * @param pageResult pageResult
+     * @param pageResultVO pageResult
      */
-    private void setBlogViewsFromRedisToPageResult(PageResult<BlogInfo> pageResult) {
+    private void setBlogViewsFromRedisToPageResult(PageResultVO<BlogInfoVO> pageResultVO) {
         String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
-        List<BlogInfo> blogInfos = pageResult.getList();
-        for (int i = 0; i < blogInfos.size(); i++) {
-            BlogInfo blogInfo = JacksonUtils.convertValue(blogInfos.get(i), BlogInfo.class);
-            Long blogId = blogInfo.getId();
+        List<BlogInfoVO> blogInfoVOS = pageResultVO.getList();
+        for (int i = 0; i < blogInfoVOS.size(); i++) {
+            BlogInfoVO blogInfoVO = JacksonUtils.convertValue(blogInfoVOS.get(i), BlogInfoVO.class);
+            Long blogId = blogInfoVO.getId();
             int view = (int) redisService.getValueByHashKey(redisKey, blogId);
-            blogInfo.setViews(view);
-            blogInfos.set(i, blogInfo);
+            blogInfoVO.setViews(view);
+            blogInfoVOS.set(i, blogInfoVO);
         }
     }
 
     @Override
-    public PageResult<BlogInfo> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum) {
+    public PageResultVO<BlogInfoVO> getBlogInfoListByCategoryNameAndIsPublished(String categoryName, Integer pageNum) {
         PageMethod.startPage(pageNum, PAGE_SIZE, ORDER_BY);
-        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByCategoryNameAndIsPublished(categoryName));
-        PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
-        PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-        setBlogViewsFromRedisToPageResult(pageResult);
-        return pageResult;
+        List<BlogInfoVO> blogInfoVOS = processBlogInfosPassword(blogMapper.getBlogInfoListByCategoryNameAndIsPublished(categoryName));
+        PageInfo<BlogInfoVO> pageInfo = new PageInfo<>(blogInfoVOS);
+        PageResultVO<BlogInfoVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
+        setBlogViewsFromRedisToPageResult(pageResultVO);
+        return pageResultVO;
     }
 
     @Override
-    public PageResult<BlogInfo> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum) {
+    public PageResultVO<BlogInfoVO> getBlogInfoListByTagNameAndIsPublished(String tagName, Integer pageNum) {
         PageMethod.startPage(pageNum, PAGE_SIZE, ORDER_BY);
-        List<BlogInfo> blogInfos = processBlogInfosPassword(blogMapper.getBlogInfoListByTagNameAndIsPublished(tagName));
-        PageInfo<BlogInfo> pageInfo = new PageInfo<>(blogInfos);
-        PageResult<BlogInfo> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
-        setBlogViewsFromRedisToPageResult(pageResult);
-        return pageResult;
+        List<BlogInfoVO> blogInfoVOS = processBlogInfosPassword(blogMapper.getBlogInfoListByTagNameAndIsPublished(tagName));
+        PageInfo<BlogInfoVO> pageInfo = new PageInfo<>(blogInfoVOS);
+        PageResultVO<BlogInfoVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
+        setBlogViewsFromRedisToPageResult(pageResultVO);
+        return pageResultVO;
     }
 
-    private List<BlogInfo> processBlogInfosPassword(List<BlogInfo> blogInfos) {
-        for (BlogInfo blogInfo : blogInfos) {
-            if (!"".equals(blogInfo.getPassword())) {
-                blogInfo.setPrivacy(true);
-                blogInfo.setPassword("");
-                blogInfo.setDescription(PRIVATE_BLOG_DESCRIPTION);
+    private List<BlogInfoVO> processBlogInfosPassword(List<BlogInfoVO> blogInfoVOS) {
+        for (BlogInfoVO blogInfoVO : blogInfoVOS) {
+            if (!"".equals(blogInfoVO.getPassword())) {
+                blogInfoVO.setPrivacy(true);
+                blogInfoVO.setPassword("");
+                blogInfoVO.setDescription(PRIVATE_BLOG_DESCRIPTION);
             } else {
-                blogInfo.setPrivacy(false);
-                blogInfo.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogInfo.getDescription()));
+                blogInfoVO.setPrivacy(false);
+                blogInfoVO.setDescription(MarkdownUtils.markdownToHtmlExtensions(blogInfoVO.getDescription()));
             }
-            blogInfo.setTags(tagService.getTagListByBlogId(blogInfo.getId()));
+            blogInfoVO.setTags(tagService.getTagListByBlogId(blogInfoVO.getId()));
         }
-        return blogInfos;
+        return blogInfoVOS;
     }
 
     @Override
@@ -206,18 +207,18 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         }
         Map<String, Object> map = new HashMap<>();
         List<String> groupYearMonth = blogMapper.getGroupYearMonthByIsPublished();
-        Map<String, List<ArchiveBlog>> archiveBlogMap = new LinkedHashMap<>();
+        Map<String, List<ArchiveBlogVO>> archiveBlogMap = new LinkedHashMap<>();
         for (String s : groupYearMonth) {
-            List<ArchiveBlog> archiveBlogs = blogMapper.getArchiveBlogListByYearMonthAndIsPublished(s);
-            for (ArchiveBlog archiveBlog : archiveBlogs) {
-                if (!"".equals(archiveBlog.getPassword())) {
-                    archiveBlog.setPrivacy(true);
-                    archiveBlog.setPassword("");
+            List<ArchiveBlogVO> archiveBlogVOS = blogMapper.getArchiveBlogListByYearMonthAndIsPublished(s);
+            for (ArchiveBlogVO archiveBlogVO : archiveBlogVOS) {
+                if (!"".equals(archiveBlogVO.getPassword())) {
+                    archiveBlogVO.setPrivacy(true);
+                    archiveBlogVO.setPassword("");
                 } else {
-                    archiveBlog.setPrivacy(false);
+                    archiveBlogVO.setPrivacy(false);
                 }
             }
-            archiveBlogMap.put(s, archiveBlogs);
+            archiveBlogMap.put(s, archiveBlogVOS);
         }
         Integer count = countBlogByIsPublished();
         map.put("blogMap", archiveBlogMap);
@@ -227,24 +228,24 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
     }
 
     @Override
-    public List<RandomBlog> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend() {
-        List<RandomBlog> randomBlogs = blogMapper.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(RANDOM_BLOG_LIMIT_NUM);
-        for (RandomBlog randomBlog : randomBlogs) {
-            if (!"".equals(randomBlog.getPassword())) {
-                randomBlog.setPrivacy(true);
-                randomBlog.setPassword("");
+    public List<RandomBlogVO> getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend() {
+        List<RandomBlogVO> randomBlogVOS = blogMapper.getRandomBlogListByLimitNumAndIsPublishedAndIsRecommend(RANDOM_BLOG_LIMIT_NUM);
+        for (RandomBlogVO randomBlogVO : randomBlogVOS) {
+            if (!"".equals(randomBlogVO.getPassword())) {
+                randomBlogVO.setPrivacy(true);
+                randomBlogVO.setPassword("");
             } else {
-                randomBlog.setPrivacy(false);
+                randomBlogVO.setPrivacy(false);
             }
         }
-        return randomBlogs;
+        return randomBlogVOS;
     }
 
     private Map<Long, Integer> getBlogViewsMap() {
-        List<BlogView> blogViewList = blogMapper.getBlogViewsList();
+        List<BlogViewDTO> blogViewDTOList = blogMapper.getBlogViewsList();
         Map<Long, Integer> blogViewsMap = new HashMap<>();
-        for (BlogView blogView : blogViewList) {
-            blogViewsMap.put(blogView.getId(), blogView.getViews());
+        for (BlogViewDTO blogViewDTO : blogViewDTOList) {
+            blogViewsMap.put(blogViewDTO.getId(), blogViewDTO.getViews());
         }
         return blogViewsMap;
     }
@@ -295,8 +296,8 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateBlogVisibilityById(Long blogId, BlogVisibility blogVisibility) {
-        if (blogMapper.updateBlogVisibilityById(blogId, blogVisibility) != 1) {
+    public void updateBlogVisibilityById(Long blogId, BlogVisibilityDTO blogVisibilityDTO) {
+        if (blogMapper.updateBlogVisibilityById(blogId, blogVisibilityDTO) != 1) {
             throw new PersistenceException("操作失败");
         }
         redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
@@ -342,8 +343,8 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         return blogMapper.getTitleByBlogId(id);
     }
 
-    private BlogDetail getBlogByIdAndIsPublished(Long id) {
-        BlogDetail blog = blogMapper.getBlogByIdAndIsPublished(id);
+    private BlogDetailVO getBlogByIdAndIsPublished(Long id) {
+        BlogDetailVO blog = blogMapper.getBlogByIdAndIsPublished(id);
         if (blog == null) {
             throw new NotFoundException("该博客不存在");
         }
@@ -438,8 +439,8 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
     }
 
     @Override
-    public BlogDetail getBlog(Long id, String jwt) {
-        BlogDetail blog = getBlogByIdAndIsPublished(id);
+    public BlogDetailVO getBlog(Long id, String jwt) {
+        BlogDetailVO blog = getBlogByIdAndIsPublished(id);
         //对密码保护的文章校验Token
         if (!"".equals(blog.getPassword())) {
             if (!JwtUtils.judgeTokenIsExist(jwt)) {

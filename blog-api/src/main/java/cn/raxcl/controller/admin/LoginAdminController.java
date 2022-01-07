@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.entity.User;
-import cn.raxcl.model.dto.LoginInfo;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.dto.LoginInfoDTO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.UserService;
 import cn.raxcl.util.JwtUtils;
 
@@ -37,12 +37,12 @@ public class LoginAdminController {
 	/**
 	 * 登录成功后，签发博主身份Token
 	 *
-	 * @param loginInfo
+	 * @param loginInfoDTO
 	 * @return
 	 */
 	@PostMapping("/login")
-	public Result login(@RequestBody LoginInfo loginInfo) {
-		User user = userService.findUserByUsernameAndPassword(loginInfo.getUsername(), loginInfo.getPassword());
+	public Result login(@RequestBody LoginInfoDTO loginInfoDTO) {
+		User user = userService.findUserByUsernameAndPassword(loginInfoDTO.getUsername(), loginInfoDTO.getPassword());
 		if (!CommonConstant.ROLE_ADMIN.equals(user.getRole())) {
 			return Result.exception(403, "无权限");
 		}

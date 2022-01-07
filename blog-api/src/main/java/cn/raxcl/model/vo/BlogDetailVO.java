@@ -1,49 +1,35 @@
-package cn.raxcl.entity;
+package cn.raxcl.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import cn.raxcl.entity.Category;
+import cn.raxcl.entity.Tag;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 博客文章
+ * @Description: 博客详情
  * @author Raxcl
- * @date 2022-01-07 09:52:37
+ * @date 2022-01-07 09:27:58
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Blog {
+public class BlogDetailVO {
 	private Long id;
 	/**
 	 * 文章标题
 	 */
 	private String title;
 	/**
-	 * 文章首图，用于随机文章展示
-	 */
-	private String firstPicture;
-	/**
 	 * 文章正文
 	 */
 	private String content;
-	/**
-	 * 描述
-	 */
-	private String description;
-	/**
-	 * 公开或私密
-	 */
-	private Boolean published;
-	/**
-	 * 推荐开关
-	 */
-	private Boolean recommend;
 	/**
 	 * 赞赏开关
 	 */
@@ -80,10 +66,6 @@ public class Blog {
 	 * 密码保护
 	 */
 	private String password;
-	/**
-	 * 文章作者(因为是个人博客，也可以不加作者字段，暂且加上)
-	 */
-	private User user;
 	/**
 	 * 文章分类
 	 */

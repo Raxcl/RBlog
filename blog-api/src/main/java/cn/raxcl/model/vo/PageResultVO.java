@@ -10,17 +10,24 @@ import java.util.List;
 /**
  * @Description: 分页结果
  * @author Raxcl
- * @date 2020-08-08
+ * @date 2022-01-07 09:33:46
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class PageResult<T> {
-	private Integer totalPage;//总页数
-	private List<T> list;//数据
+public class PageResultVO<T> {
+	/**
+	 * 总页数
+	 */
+	private Integer totalPage;
 
-	public PageResult(Integer totalPage, List<T> list) {
+	/**
+	 * 数据
+	 */
+	private List<T> list;
+
+	public PageResultVO(Integer totalPage, List<T> list) {
 		this.totalPage = totalPage;
 		this.list = list;
 	}

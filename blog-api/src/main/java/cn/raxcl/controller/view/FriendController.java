@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
-import cn.raxcl.model.vo.Friend;
-import cn.raxcl.model.vo.FriendInfo;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.model.vo.FriendVO;
+import cn.raxcl.model.vo.FriendInfoVO;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.FriendService;
 
 import java.util.HashMap;
@@ -33,11 +33,11 @@ public class FriendController {
 	@VisitLogger(behavior = "访问页面", content = "友链")
 	@GetMapping("/friends")
 	public Result friends() {
-		List<Friend> friendList = friendService.getFriendVOList();
-		FriendInfo friendInfo = friendService.getFriendInfo(true, true);
+		List<FriendVO> friendVOList = friendService.getFriendVOList();
+		FriendInfoVO friendInfoVO = friendService.getFriendInfo(true, true);
 		Map<String, Object> map = new HashMap<>();
-		map.put("friendList", friendList);
-		map.put("friendInfo", friendInfo);
+		map.put("friendList", friendVOList);
+		map.put("friendInfo", friendInfoVO);
 		return Result.success("获取成功", map);
 	}
 

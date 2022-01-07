@@ -1,5 +1,7 @@
 package cn.raxcl.mapper;
 
+import cn.raxcl.model.dto.FriendDTO;
+import cn.raxcl.model.vo.FriendVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.Friend;
@@ -16,13 +18,13 @@ import java.util.List;
 public interface FriendMapper {
 	List<Friend> getFriendList();
 
-	List<cn.raxcl.model.vo.Friend> getFriendVOList();
+	List<FriendVO> getFriendVOList();
 
 	int updateFriendPublishedById(Long id, Boolean published);
 
 	int saveFriend(Friend friend);
 
-	int updateFriend(cn.raxcl.model.dto.Friend friend);
+	int updateFriend(FriendDTO friendDTO);
 
 	int deleteFriend(Long id);
 

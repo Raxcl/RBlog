@@ -5,8 +5,8 @@ import cn.raxcl.entity.User;
 import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.model.temp.PostCommentDTO;
-import cn.raxcl.model.vo.FriendInfo;
-import cn.raxcl.model.vo.PageResult;
+import cn.raxcl.model.vo.FriendInfoVO;
+import cn.raxcl.model.vo.PageResultVO;
 import cn.raxcl.service.*;
 import cn.raxcl.util.*;
 import com.github.pagehelper.PageInfo;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.Comment;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.CommentMapper;
-import cn.raxcl.model.vo.PageComment;
+import cn.raxcl.model.vo.PageCommentVO;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -89,12 +89,12 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         Integer openComment = countByPageAndIsPublished(page, blogId, true);
         PageMethod.startPage(pageNum, pageSize);
         Long parentCommentId = -1L;
-        PageInfo<PageComment> pageInfo = new PageInfo<>(getPageCommentList(page, blogId, parentCommentId));
-        PageResult<PageComment> pageResult = new PageResult<>(pageInfo.getPages(), pageInfo.getList());
+        PageInfo<PageCommentVO> pageInfo = new PageInfo<>(getPageCommentList(page, blogId, parentCommentId));
+        PageResultVO<PageCommentVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
         Map<String, Object> map = new HashMap<>(8);
         map.put("allComment", allComment);
         map.put("closeComment", allComment - openComment);
-        map.put("comments", pageResult);
+        map.put("comments", pageResultVO);
         return map;
     }
 
@@ -150,8 +150,8 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
             }
             //友链页面
         } else if (page == 2) {
-            FriendInfo friendInfo = friendService.getFriendInfo(true, false);
-            if (Boolean.FALSE.equals(friendInfo.getCommentEnabled())) {
+            FriendInfoVO friendInfoVO = friendService.getFriendInfo(true, false);
+            if (Boolean.FALSE.equals(friendInfoVO.getCommentEnabled())) {
                 return 1;
             }
         }
@@ -382,10 +382,10 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         return comments;
     }
 
-    private List<PageComment> getPageCommentList(Integer page, Long blogId, Long parentCommentId) {
-        List<PageComment> comments = getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
-        for (PageComment c : comments) {
-            List<PageComment> tmpComments = new ArrayList<>();
+    private List<PageCommentVO> getPageCommentList(Integer page, Long blogId, Long parentCommentId) {
+        List<PageCommentVO> comments = getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
+        for (PageCommentVO c : comments) {
+            List<PageCommentVO> tmpComments = new ArrayList<>();
             getReplyComments(tmpComments, c.getReplyComments());
             c.setReplyComments(tmpComments);
         }
@@ -405,17 +405,17 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
      *
      * @param comments comments
      */
-    private void getReplyComments(List<PageComment> tmpComments, List<PageComment> comments) {
-        for (PageComment c : comments) {
+    private void getReplyComments(List<PageCommentVO> tmpComments, List<PageCommentVO> comments) {
+        for (PageCommentVO c : comments) {
             tmpComments.add(c);
             getReplyComments(tmpComments, c.getReplyComments());
         }
     }
 
-    private List<PageComment> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
-        List<PageComment> comments = commentMapper.getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
-        for (PageComment c : comments) {
-            List<PageComment> replyComments = getPageCommentListByPageAndParentCommentId(page, blogId, c.getId());
+    private List<PageCommentVO> getPageCommentListByPageAndParentCommentId(Integer page, Long blogId, Long parentCommentId) {
+        List<PageCommentVO> comments = commentMapper.getPageCommentListByPageAndParentCommentId(page, blogId, parentCommentId);
+        for (PageCommentVO c : comments) {
+            List<PageCommentVO> replyComments = getPageCommentListByPageAndParentCommentId(page, blogId, c.getId());
             c.setReplyComments(replyComments);
         }
         return comments;

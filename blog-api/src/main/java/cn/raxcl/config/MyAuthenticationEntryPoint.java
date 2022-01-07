@@ -3,7 +3,7 @@ package cn.raxcl.config;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.util.JacksonUtils;
 
 import javax.servlet.ServletException;

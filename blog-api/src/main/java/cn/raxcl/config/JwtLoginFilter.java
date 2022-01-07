@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import cn.raxcl.entity.LoginLog;
 import cn.raxcl.entity.User;
 import cn.raxcl.exception.BadRequestException;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.LoginLogService;
 import cn.raxcl.util.IpAddressUtils;
 import cn.raxcl.util.JacksonUtils;

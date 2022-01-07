@@ -35,7 +35,7 @@
         </where>
     </select>
 
-    <resultMap id="logDTO" type="cn.raxcl.model.dto.VisitLogUuidTime">
+    <resultMap id="logDTO" type="cn.raxcl.model.dto.VisitLogUuidTimeDTO">
         <result property="uuid" column="uuid"/>
         <result property="time" column="create_time"/>
     </resultMap>

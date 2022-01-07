@@ -6,18 +6,22 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 归档页面博客简要信息
+ * @Description: 分类和博客数量
  * @author Raxcl
- * @date 2020-08-12
+ * @date 2022-01-07 09:33:29
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class ArchiveBlog {
+public class CategoryBlogCountVO {
 	private Long id;
-	private String title;
-	private String day;
-	private String password;
-	private Boolean privacy;
+	/**
+	 * 分类名
+	 */
+	private String name;
+	/**
+	 * 分类下博客数量
+	 */
+	private Integer value;
 }

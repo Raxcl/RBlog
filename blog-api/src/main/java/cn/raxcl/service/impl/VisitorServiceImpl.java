@@ -7,7 +7,7 @@ import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.entity.Visitor;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.VisitorMapper;
-import cn.raxcl.model.dto.VisitLogUuidTime;
+import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.service.VisitorService;
 import cn.raxcl.util.IpAddressUtils;
@@ -61,7 +61,7 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public void updatePVAndLastTimeByUUID(VisitLogUuidTime dto) {
+	public void updatePVAndLastTimeByUUID(VisitLogUuidTimeDTO dto) {
 		visitorMapper.updatePVAndLastTimeByUUID(dto);
 	}
 

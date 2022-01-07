@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import cn.raxcl.annotation.AccessLimit;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.util.IpAddressUtils;
 import cn.raxcl.util.JacksonUtils;

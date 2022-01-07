@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.OperationLogger;
 import cn.raxcl.entity.Tag;
-import cn.raxcl.model.vo.Result;
+import cn.raxcl.util.common.Result;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.TagService;
 import cn.raxcl.util.StringUtils;

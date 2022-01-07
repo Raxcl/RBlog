@@ -1,20 +1,22 @@
 package cn.raxcl.service;
 
 import cn.raxcl.entity.Friend;
-import cn.raxcl.model.vo.FriendInfo;
+import cn.raxcl.model.dto.FriendDTO;
+import cn.raxcl.model.vo.FriendInfoVO;
+import cn.raxcl.model.vo.FriendVO;
 
 import java.util.List;
 
 public interface FriendService {
 	List<Friend> getFriendList();
 
-	List<cn.raxcl.model.vo.Friend> getFriendVOList();
+	List<FriendVO> getFriendVOList();
 
 	void updateFriendPublishedById(Long friendId, Boolean published);
 
 	void saveFriend(Friend friend);
 
-	void updateFriend(cn.raxcl.model.dto.Friend friend);
+	void updateFriend(FriendDTO friendDTO);
 
 	void deleteFriend(Long id);
 
@@ -26,7 +28,7 @@ public interface FriendService {
 	 * @param md cache
 	 * @return FriendInfo
 	 */
-	FriendInfo getFriendInfo(boolean cache, boolean md);
+	FriendInfoVO getFriendInfo(boolean cache, boolean md);
 
 	/**
 	 * 修改友链页面信息

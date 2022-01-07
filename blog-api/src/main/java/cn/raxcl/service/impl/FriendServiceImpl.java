@@ -1,6 +1,7 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.data.redis.core.RedisTemplate;
+import cn.raxcl.model.dto.FriendDTO;
+import cn.raxcl.model.vo.FriendVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -9,7 +10,7 @@ import cn.raxcl.entity.SiteSetting;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.FriendMapper;
 import cn.raxcl.mapper.SiteSettingMapper;
-import cn.raxcl.model.vo.FriendInfo;
+import cn.raxcl.model.vo.FriendInfoVO;
 import cn.raxcl.service.FriendService;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.util.markdown.MarkdownUtils;
@@ -40,7 +41,7 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public List<cn.raxcl.model.vo.Friend> getFriendVOList() {
+	public List<FriendVO> getFriendVOList() {
 		return friendMapper.getFriendVOList();
 	}
 
@@ -64,8 +65,8 @@ public class FriendServiceImpl implements FriendService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void updateFriend(cn.raxcl.model.dto.Friend friend) {
-		if (friendMapper.updateFriend(friend) != 1) {
+	public void updateFriend(FriendDTO friendDTO) {
+		if (friendMapper.updateFriend(friendDTO) != 1) {
 			throw new PersistenceException("修改失败");
 		}
 	}
@@ -87,36 +88,36 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public FriendInfo getFriendInfo(boolean cache, boolean md) {
+	public FriendInfoVO getFriendInfo(boolean cache, boolean md) {
 		//友链页面信息key
 		String redisKey = RedisKeyConstant.FRIEND_INFO_MAP;
 		if (cache) {
-			FriendInfo friendInfoFromRedis = redisService.getObjectByValue(redisKey, FriendInfo.class);
-			if (friendInfoFromRedis != null) {
-				return friendInfoFromRedis;
+			FriendInfoVO friendInfoVOFromRedis = redisService.getObjectByValue(redisKey, FriendInfoVO.class);
+			if (friendInfoVOFromRedis != null) {
+				return friendInfoVOFromRedis;
 			}
 		}
 		List<SiteSetting> siteSettings = siteSettingMapper.getFriendInfo();
-		FriendInfo friendInfo = new FriendInfo();
+		FriendInfoVO friendInfoVO = new FriendInfoVO();
 		for (SiteSetting siteSetting : siteSettings) {
 			if ("friendContent".equals(siteSetting.getNameEn())) {
 				if (md) {
-					friendInfo.setContent(MarkdownUtils.markdownToHtmlExtensions(siteSetting.getValue()));
+					friendInfoVO.setContent(MarkdownUtils.markdownToHtmlExtensions(siteSetting.getValue()));
 				} else {
-					friendInfo.setContent(siteSetting.getValue());
+					friendInfoVO.setContent(siteSetting.getValue());
 				}
 			} else if ("friendCommentEnabled".equals(siteSetting.getNameEn())) {
 				if ("1".equals(siteSetting.getValue())) {
-					friendInfo.setCommentEnabled(true);
+					friendInfoVO.setCommentEnabled(true);
 				} else {
-					friendInfo.setCommentEnabled(false);
+					friendInfoVO.setCommentEnabled(false);
 				}
 			}
 		}
 		if (cache && md) {
-			redisService.saveObjectToValue(redisKey, friendInfo);
+			redisService.saveObjectToValue(redisKey, friendInfoVO);
 		}
-		return friendInfo;
+		return friendInfoVO;
 	}
 
 	@Transactional(rollbackFor = Exception.class)

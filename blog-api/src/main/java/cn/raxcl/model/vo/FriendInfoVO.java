@@ -6,17 +6,15 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 最新推荐博客
+ * @Description: 友链页面信息
  * @author Raxcl
- * @date 2020-09-05
+ * @date 2022-01-07 09:33:31
  */
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class NewBlog {
-	private Long id;
-	private String title;
-	private String password;
-	private Boolean privacy;
+public class FriendInfoVO {
+	private String content;
+	private Boolean commentEnabled;
 }

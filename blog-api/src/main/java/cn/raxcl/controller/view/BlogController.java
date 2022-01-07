@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
-import cn.raxcl.model.dto.BlogPassword;
-import cn.raxcl.model.vo.BlogDetail;
-import cn.raxcl.model.vo.BlogInfo;
-import cn.raxcl.model.vo.PageResult;
-import cn.raxcl.model.vo.Result;
-import cn.raxcl.model.vo.SearchBlog;
+import cn.raxcl.model.dto.BlogPasswordDTO;
+import cn.raxcl.model.vo.BlogDetailVO;
+import cn.raxcl.model.vo.BlogInfoVO;
+import cn.raxcl.model.vo.PageResultVO;
+import cn.raxcl.util.common.Result;
+import cn.raxcl.model.vo.SearchBlogVO;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.util.JwtUtils;
 import cn.raxcl.util.StringUtils;
@@ -45,8 +45,8 @@ public class BlogController {
 	@VisitLogger(behavior = "访问页面", content = "首页")
 	@GetMapping("/blogs")
 	public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
-		PageResult<BlogInfo> pageResult = blogService.getBlogInfoListByIsPublished(pageNum);
-		return Result.success("请求成功", pageResult);
+		PageResultVO<BlogInfoVO> pageResultVO = blogService.getBlogInfoListByIsPublished(pageNum);
+		return Result.success("请求成功", pageResultVO);
 	}
 
 	/**
@@ -60,23 +60,23 @@ public class BlogController {
 	@GetMapping("/blog")
 	public Result getBlog(@RequestParam Long id,
 	                      @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
-		BlogDetail blog = blogService.getBlog(id, jwt);
+		BlogDetailVO blog = blogService.getBlog(id, jwt);
 		return Result.success("获取成功", blog);
 	}
 
 	/**
 	 * 校验受保护文章密码是否正确，正确则返回jwt
 	 *
-	 * @param blogPassword 博客id、密码
+	 * @param blogPasswordDTO 博客id、密码
 	 * @return Result
 	 */
 	@VisitLogger(behavior = "校验博客密码")
 	@PostMapping("/checkBlogPassword")
-	public Result checkBlogPassword(@RequestBody BlogPassword blogPassword) {
-		String password = blogService.getBlogPassword(blogPassword.getBlogId());
-		if (password.equals(blogPassword.getPassword())) {
+	public Result checkBlogPassword(@RequestBody BlogPasswordDTO blogPasswordDTO) {
+		String password = blogService.getBlogPassword(blogPasswordDTO.getBlogId());
+		if (password.equals(blogPasswordDTO.getPassword())) {
 			//生成有效时间一个月的Token
-			String jwt = JwtUtils.generateToken(blogPassword.getBlogId().toString(), 1000 * 3600 * 24 * 30L, secretKey);
+			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, secretKey);
 			return Result.success("密码正确", jwt);
 		} else {
 			return Result.exception(403, "密码错误");
@@ -96,7 +96,7 @@ public class BlogController {
 		if (StringUtils.isEmpty(query) || StringUtils.hasSpecialChar(query) || query.trim().length() > CommonConstant.TWENTY) {
 			return Result.error("参数错误");
 		}
-		List<SearchBlog> searchBlogs = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
-		return Result.success("获取成功", searchBlogs);
+		List<SearchBlogVO> searchBlogVOS = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
+		return Result.success("获取成功", searchBlogVOS);
 	}
 }

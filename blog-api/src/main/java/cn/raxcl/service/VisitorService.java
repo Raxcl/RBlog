@@ -2,7 +2,7 @@ package cn.raxcl.service;
 
 import org.springframework.scheduling.annotation.Async;
 import cn.raxcl.entity.Visitor;
-import cn.raxcl.model.dto.VisitLogUuidTime;
+import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface VisitorService {
 	@Async
 	void saveVisitor(Visitor visitor);
 
-	void updatePVAndLastTimeByUUID(VisitLogUuidTime dto);
+	void updatePVAndLastTimeByUUID(VisitLogUuidTimeDTO dto);
 
 	void deleteVisitor(Long id, String uuid);
 }
