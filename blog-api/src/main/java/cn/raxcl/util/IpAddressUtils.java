@@ -20,7 +20,7 @@ import java.net.UnknownHostException;
 /**
  * @Description: ip记录
  * @author Raxcl
- * @date 2020-08-18
+ * @date 2022-01-07 19:49:28
  */
 @Slf4j
 @Component
@@ -28,9 +28,10 @@ public class IpAddressUtils {
 	/**
 	 * 在Nginx等代理之后获取用户真实IP地址
 	 *
-	 * @param request
-	 * @return
+	 * @param request request
+	 * @return String
 	 */
+	//TODO
 	public static String getIpAddress(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

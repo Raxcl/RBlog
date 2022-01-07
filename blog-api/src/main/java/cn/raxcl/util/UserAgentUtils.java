@@ -10,10 +10,11 @@ import java.util.Map;
 /**
  * @Description: UserAgent解析工具类
  * @author Raxcl
- * @date 2020-11-30
+ * @date 2022-01-07 19:51:58
  */
 @Component
 public class UserAgentUtils {
+	//TODO
 	private UserAgentAnalyzer uaa;
 
 	public UserAgentUtils() {
@@ -28,8 +29,8 @@ public class UserAgentUtils {
 	/**
 	 * 从User-Agent解析客户端操作系统和浏览器版本
 	 *
-	 * @param userAgent
-	 * @return
+	 * @param userAgent userAgent
+	 * @return Map<String, String>
 	 */
 	public Map<String, String> parseOsAndBrowser(String userAgent) {
 		UserAgent agent = uaa.parse(userAgent);

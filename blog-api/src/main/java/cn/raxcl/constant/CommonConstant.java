@@ -6,6 +6,8 @@ package cn.raxcl.constant;
  */
 public class CommonConstant {
 
+    public static final String IMAGE = "image";
+
     private CommonConstant(){}
 
     public static final String ROLE_ADMIN = "ROLE_admin";

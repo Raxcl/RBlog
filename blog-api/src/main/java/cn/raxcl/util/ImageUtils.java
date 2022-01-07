@@ -47,7 +47,7 @@ public class ImageUtils {
 		if(contentType == null){
 			throw new NotFoundException("getImageByRequest is null---ImageUtils.class");
 		}
-		if ("image".equals(contentType.getType())) {
+		if (CommonConstant.IMAGE.equals(contentType.getType())) {
 			return new ImageResource(responseEntity.getBody(), contentType.getSubtype());
 		}
 		throw new BadRequestException("response contentType unlike image");
@@ -56,6 +56,7 @@ public class ImageUtils {
 	public static String saveImage(ImageResource image, String serverUploadPath, String serverUrl) throws IOException {
 		File folder = new File(serverUploadPath);
 		if (!folder.exists()) {
+			//TODO
 			folder.mkdirs();
 		}
 		String fileName = UUID.randomUUID() + "." + image.getType();
@@ -79,7 +80,7 @@ public class ImageUtils {
 		HashMap<String, String> body = new HashMap<>();
 		body.put("message", "Add files via RBlog");
 		body.put("content", imgBase64);
-
+		//TODO
 		HttpEntity httpEntity = new HttpEntity(body, headers);
 		REST_TEMPLATE.put(url, httpEntity);
 

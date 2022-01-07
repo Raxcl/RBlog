@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @Description: 邮件工具类
  * @author Raxcl
- * @date 2020-10-10
+ * @date 2022-01-07 19:50:48
  */
 @Component
 @EnableAsync
@@ -30,7 +30,8 @@ public class MailUtils {
 		this.mailProperties = mailProperties;
 		this.templateEngine = templateEngine;
 	}
-
+	
+	//TODO
 	@Async
 	public void sendSimpleMail(String toAccount, String subject, String content) {
 		try {

@@ -15,12 +15,12 @@ import java.util.Map;
  * @date 2022-01-07 19:43:44
  */
 public class AopUtils {
-	//TODO
+	private AopUtils(){}
 	/**
 	 * 获取请求参数
 	 *
-	 * @param joinPoint
-	 * @return
+	 * @param joinPoint joinPoint
+	 * @return Map<String, Object>
 	 */
 	public static Map<String, Object> getRequestParams(JoinPoint joinPoint) {
 		Map<String, Object> map = new LinkedHashMap<>();

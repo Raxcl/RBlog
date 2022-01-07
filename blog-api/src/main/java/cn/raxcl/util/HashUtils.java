@@ -7,7 +7,7 @@ import org.springframework.util.DigestUtils;
 /**
  * @Description: Hash工具类
  * @author Raxcl
- * @date 2020-11-17
+ * @date 2022-01-07 19:47:33
  */
 public class HashUtils {
 
@@ -15,6 +15,7 @@ public class HashUtils {
 
 	private static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
+	//TODO
 	public static String getMd5(CharSequence str) {
 		return DigestUtils.md5DigestAsHex(str.toString().getBytes());
 	}
@@ -24,6 +25,7 @@ public class HashUtils {
 		return i < 0 ? Integer.MAX_VALUE - (long) i : i;
 	}
 
+	//TODO
 	public static String getBc(CharSequence rawPassword) {
 		return B_CRYPT_PASSWORD_ENCODER.encode(rawPassword);
 	}

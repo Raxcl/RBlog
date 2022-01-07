@@ -11,8 +11,9 @@ import java.util.Objects;
 /**
  * @Description: 获取QQ昵称头像信息
  * @author Raxcl
- * @date 2020-09-10
+ * @date 2022-01-07 19:50:43
  */
+//TODO
 public class QqInfoUtils {
 
 	/**
