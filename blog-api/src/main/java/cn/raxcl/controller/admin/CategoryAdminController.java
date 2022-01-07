@@ -100,13 +100,13 @@ public class CategoryAdminController {
 	 * 按id删除分类
 	 *
 	 * @param id 分类id
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("删除分类")
 	@DeleteMapping("/category")
 	public Result delete(@RequestParam Long id) {
 		//删除存在博客关联的分类后，该博客的查询会出异常
-		int num = blogService.countBlogByCategoryId(id);
+		int num = blogService. countBlogByCategoryId(id);
 		if (num != 0) {
 			return Result.error("已有博客与此分类关联，不可删除");
 		}

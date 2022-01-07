@@ -25,7 +25,7 @@ public class TagController {
 	 *
 	 * @param tagName 标签name
 	 * @param pageNum 页码
-	 * @return
+	 * @return Result
 	 */
 	@VisitLogger(behavior = "查看标签")
 	@GetMapping("/tag")

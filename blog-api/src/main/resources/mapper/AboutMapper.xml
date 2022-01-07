@@ -13,6 +13,6 @@
 
     <!--查询关于我页面评论开关状态-->
     <select id="getAboutCommentEnabled" resultType="java.lang.String">
-        select value from about where name_en="commentEnabled"
+        select value from about where name_en= 'commentEnabled'
     </select>
 </mapper>

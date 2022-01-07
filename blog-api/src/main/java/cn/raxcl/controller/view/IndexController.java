@@ -36,7 +36,7 @@ public class IndexController {
 	/**
 	 * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客
 	 *
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/site")
 	public Result site() {

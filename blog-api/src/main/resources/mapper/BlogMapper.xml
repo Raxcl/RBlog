@@ -33,7 +33,8 @@
             <id property="id" column="category_id"/>
             <result property="name" column="category_name"/>
         </association>
-        <collection property="tags" javaType="cn.raxcl.entity.Tag">
+        <!--javaType:该字段属性的java类型，ofType:映射进该属性的类型（常见于实体类）-->
+        <collection property="tags" ofType="cn.raxcl.entity.Tag">
             <id property="id" column="tag_id"/>
             <result property="name" column="tag_name"/>
             <result property="color" column="color"/>
@@ -133,11 +134,11 @@
 
     <!--查询公开博客年月List-->
     <select id="getGroupYearMonthByIsPublished" resultType="java.lang.String">
-        select date_format(create_time, "%Y年%m月")
+        select date_format(create_time, '%Y年%m月')
         from blog
         where is_published=true
-        group by date_format(create_time, "%Y年%m月")
-        order by date_format(create_time, "%Y年%m月") desc
+        group by date_format(create_time, '%Y年%m月')
+        order by date_format(create_time, '%Y年%m月') desc
     </select>
 
     <resultMap id="archiveBlog" type="cn.raxcl.model.vo.ArchiveBlog">
@@ -149,9 +150,9 @@
 
     <!--按年月查询公开博客简要信息List-->
     <select id="getArchiveBlogListByYearMonthAndIsPublished" resultMap="archiveBlog">
-        select id, title, password, date_format(create_time, "%d日") as create_day
+        select id, title, password, date_format(create_time, '%d日') as create_day
         from blog
-        where date_format(create_time, "%Y年%m月")=#{yearMonth} and is_published=true
+        where date_format(create_time, '%Y年%m月')=#{yearMonth} and is_published=true
         order by create_time desc
     </select>
 
@@ -192,7 +193,7 @@
     </insert>
 
     <!--添加博客-->
-    <insert id="saveBlog" parameterType="cn.raxcl.model.dto.Blog" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveBlog" parameterType="cn.raxcl.model.dto.BlogDTO" useGeneratedKeys="true" keyProperty="id">
         insert into blog (title, first_picture, content, description, is_published, is_recommend, is_appreciation, is_comment_enabled,
         is_top, create_time, update_time, views, words, read_time, category_id, user_id, password)
         values (#{title}, #{firstPicture}, #{content}, #{description}, #{published}, #{recommend}, #{appreciation}, #{commentEnabled},
@@ -252,7 +253,7 @@
         <association property="category" javaType="cn.raxcl.entity.Category">
             <result property="name" column="category_name"/>
         </association>
-        <collection property="tags" javaType="cn.raxcl.entity.Tag">
+        <collection property="tags" ofType="cn.raxcl.entity.Tag">
             <result property="name" column="tag_name"/>
             <result property="color" column="color"/>
         </collection>
