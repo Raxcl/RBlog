@@ -9,7 +9,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 /**
  * @Description: Redis序列化配置
  * @author Raxcl
- * @date 2020-09-27
+ * @date 2022-01-07 17:47:54
  */
 @Configuration
 public class RedisSerializeConfig {
@@ -17,14 +17,14 @@ public class RedisSerializeConfig {
 	/**
 	 * 使用JSON序列化方式
 	 *
-	 * @param redisConnectionFactory
-	 * @return
+	 * @param redisConnectionFactory redisConnectionFactory
+	 * @return RedisTemplate<Object, Object>
 	 */
 	@Bean
 	public RedisTemplate<Object, Object> jsonRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
-		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
+		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
 		template.setDefaultSerializer(serializer);
 		return template;
 	}

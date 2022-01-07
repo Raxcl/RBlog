@@ -1,5 +1,6 @@
 package cn.raxcl.config;
 
+import cn.raxcl.constant.CommonConstant;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * @Description: JWT请求过滤器
  * @author Raxcl
- * @date 2020-07-21
+ * @date 2022-01-07 17:39:09
  */
 public class JwtFilter extends GenericFilterBean {
 	@Value("${token.secretKey}")
@@ -35,7 +36,7 @@ public class JwtFilter extends GenericFilterBean {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		//后台管理路径外的请求直接跳过
-		if (!request.getRequestURI().startsWith("/admin")) {
+		if (!request.getRequestURI().startsWith(CommonConstant.PATH_ADMIN)) {
 			filterChain.doFilter(request, servletResponse);
 			return;
 		}

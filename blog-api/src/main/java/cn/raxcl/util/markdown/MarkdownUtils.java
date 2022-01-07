@@ -1,5 +1,7 @@
 package cn.raxcl.util.markdown;
 
+import cn.raxcl.util.markdown.ext.cover.CoverExtension;
+import cn.raxcl.util.markdown.ext.heimu.HeimuExtension;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.ext.gfm.tables.TableBlock;
@@ -10,13 +12,8 @@ import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.AttributeProvider;
-import org.commonmark.renderer.html.AttributeProviderContext;
-import org.commonmark.renderer.html.AttributeProviderFactory;
 import org.commonmark.renderer.html.HtmlRenderer;
-import cn.raxcl.util.markdown.ext.heimu.HeimuExtension;
-import cn.raxcl.util.markdown.ext.cover.CoverExtension;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,43 +22,51 @@ import java.util.Set;
 /**
  * @Description: Markdown转换
  * @author Raxcl
- * @date 2020-04-29
+ * @date 2022-01-07 19:32:33
  */
 public class MarkdownUtils {
-	//为h标签生成id 供tocbot目录生成
-	private static final Set<Extension> headingAnchorExtensions = Collections.singleton(HeadingAnchorExtension.create());
-	//转换table的HTML
-	private static final List<Extension> tableExtension = Arrays.asList(TablesExtension.create());
-	//任务列表
-	private static final Set<Extension> taskListExtension = Collections.singleton(TaskListItemsExtension.create());
-	//删除线
-	private static final Set<Extension> delExtension = Collections.singleton(StrikethroughExtension.create());
-	//黑幕
-	private static final Set<Extension> heimuExtension = Collections.singleton(HeimuExtension.create());
-	//遮盖层
-	private static final Set<Extension> coverExtension = Collections.singleton(CoverExtension.create());
+	/**
+	 * 为h标签生成id 供tocbot目录生成
+	 */
+	private static final Set<Extension> HEADING_ANCHOR_EXTENSIONS = Collections.singleton(HeadingAnchorExtension.create());
+	/**
+	 * 转换table的HTML
+	 */
+	private static final List<Extension> TABLE_EXTENSION = Collections.singletonList(TablesExtension.create());
+	private static final String JI = "#";
+	/**
+	 * 任务列表
+	 */
+	private static final Set<Extension> TASK_LIST_EXTENSION = Collections.singleton(TaskListItemsExtension.create());
+	/**
+	 * 删除线
+	 */
+	private static final Set<Extension> DEL_EXTENSION = Collections.singleton(StrikethroughExtension.create());
+	/**
+	 * 黑幕
+	 */
+	private static final Set<Extension> HEI_MU_EXTENSION = Collections.singleton(HeimuExtension.create());
+	/**
+	 * 遮盖层
+	 */
+	private static final Set<Extension> COVER_EXTENSION = Collections.singleton(CoverExtension.create());
 
-	private static final Parser parser = Parser.builder()
-			.extensions(tableExtension)
-			.extensions(taskListExtension)
-			.extensions(delExtension)
-			.extensions(heimuExtension)
-			.extensions(coverExtension)
+	private static final Parser PARSER = Parser.builder()
+			.extensions(TABLE_EXTENSION)
+			.extensions(TASK_LIST_EXTENSION)
+			.extensions(DEL_EXTENSION)
+			.extensions(HEI_MU_EXTENSION)
+			.extensions(COVER_EXTENSION)
 			.build();
 
-	private static final HtmlRenderer renderer = HtmlRenderer.builder()
-			.extensions(headingAnchorExtensions)
-			.extensions(tableExtension)
-			.extensions(taskListExtension)
-			.extensions(delExtension)
-			.extensions(heimuExtension)
-			.extensions(coverExtension)
-			.attributeProviderFactory(new AttributeProviderFactory() {
-				@Override
-				public AttributeProvider create(AttributeProviderContext context) {
-					return new CustomAttributeProvider();
-				}
-			})
+	private static final HtmlRenderer RENDERER = HtmlRenderer.builder()
+			.extensions(HEADING_ANCHOR_EXTENSIONS)
+			.extensions(TABLE_EXTENSION)
+			.extensions(TASK_LIST_EXTENSION)
+			.extensions(DEL_EXTENSION)
+			.extensions(HEI_MU_EXTENSION)
+			.extensions(COVER_EXTENSION)
+			.attributeProviderFactory(context -> new CustomAttributeProvider())
 			.build();
 
 	/**
@@ -75,7 +80,7 @@ public class MarkdownUtils {
 				Link n = (Link) node;
 				String destination = n.getDestination();
 				//判断是否页内锚点跳转
-				if (destination.startsWith("#")) {
+				if (destination.startsWith(JI)) {
 					attributes.put("class", "toc-link");//针对tocbot锚点跳转的class属性
 				} else {
 					//外部链接
@@ -92,6 +97,7 @@ public class MarkdownUtils {
 	/**
 	 * markdown格式转换成HTML格式
 	 */
+	//todo
 	public static String markdownToHtml(String markdown) {
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(markdown);
@@ -103,10 +109,11 @@ public class MarkdownUtils {
 	 * 增加扩展
 	 */
 	public static String markdownToHtmlExtensions(String markdown) {
-		Node document = parser.parse(markdown);
-		return renderer.render(document);
+		Node document = PARSER.parse(markdown);
+		return RENDERER.render(document);
 	}
 
+	//TODO
 	public static void main(String[] args) {
 		System.out.println(markdownToHtmlExtensions(""));
 	}

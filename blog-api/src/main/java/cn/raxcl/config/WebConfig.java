@@ -1,6 +1,5 @@
 package cn.raxcl.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,14 +11,17 @@ import cn.raxcl.interceptor.AccessLimitInterceptor;
 /**
  * @Description: 配置CORS跨域支持、拦截器
  * @author Raxcl
- * @date 2020-07-22
+ * @date 2022-01-07 17:59:49
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-	@Autowired
-	AccessLimitInterceptor accessLimitInterceptor;
+	private final AccessLimitInterceptor accessLimitInterceptor;
 	private String accessPath;
 	private String resourcesLocations;
+
+	public WebConfig(AccessLimitInterceptor accessLimitInterceptor) {
+		this.accessLimitInterceptor = accessLimitInterceptor;
+	}
 
 	/**
 	 * @param accessPath 请求地址映射
@@ -40,7 +42,7 @@ public class WebConfig implements WebMvcConfigurer {
 	/**
 	 * 跨域请求
 	 *
-	 * @param registry
+	 * @param registry registry
 	 */
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -54,7 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
 	/**
 	 * 请求拦截器
 	 *
-	 * @param registry
+	 * @param registry registry
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -64,7 +66,7 @@ public class WebConfig implements WebMvcConfigurer {
 	/**
 	 * 本地静态资源路径映射
 	 *
-	 * @param registry
+	 * @param registry registry
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

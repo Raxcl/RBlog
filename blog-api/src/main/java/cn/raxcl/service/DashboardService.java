@@ -32,18 +32,21 @@ public interface DashboardService {
 	 * 获取分类总数
 	 * @return Map<String, List>
 	 */
+	//TODO
 	Map<String, List> getCategoryBlogCountMap();
 
 	/**
 	 * 获取标签下总数
 	 * @return Map<String, List>
 	 */
+	//TODO
 	Map<String, List> getTagBlogCountMap();
 
 	/**
 	 * 获取访客记录
 	 * @return Map<String, List>
 	 */
+	//TODO
 	Map<String, List> getVisitRecordMap();
 
 	/**

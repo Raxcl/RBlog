@@ -15,10 +15,11 @@ import java.util.concurrent.Future;
 /**
  * @Description: 定时任务执行与结果记录
  * @author Raxcl
- * @date 2020-11-01
+ * @date 2022-01-07 19:40:53
  */
 @Slf4j
 public class ScheduleJob extends QuartzJobBean {
+	//TODO
 	private ExecutorService service = Executors.newSingleThreadExecutor();
 
 	@Override

@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.service.LoginLogService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +23,10 @@ import java.util.Map;
 public class VisitLogServiceImpl implements VisitLogService {
 	private final VisitLogMapper visitLogMapper;
 	private final UserAgentUtils userAgentUtils;
-	private final LoginLogService loginLogService;
 
-	public VisitLogServiceImpl(VisitLogMapper visitLogMapper, UserAgentUtils userAgentUtils, LoginLogService loginLogService) {
+	public VisitLogServiceImpl(VisitLogMapper visitLogMapper, UserAgentUtils userAgentUtils) {
 		this.visitLogMapper = visitLogMapper;
 		this.userAgentUtils = userAgentUtils;
-		this.loginLogService = loginLogService;
 	}
 
 	@Override

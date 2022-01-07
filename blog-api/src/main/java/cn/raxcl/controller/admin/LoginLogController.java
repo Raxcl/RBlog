@@ -38,6 +38,7 @@ public class LoginLogController {
 	public Result loginLogs(@RequestParam(defaultValue = "") String[] date,
 	                        @RequestParam(defaultValue = "1") Integer pageNum,
 	                        @RequestParam(defaultValue = "10") Integer pageSize) {
+		//TODO
 		String startDate = null;
 		String endDate = null;
 		if (date.length == CommonConstant.TWO) {

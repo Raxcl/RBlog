@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @Description: HTML节点渲染
  * @author Raxcl
- * @date 2020-05-13
+ * @date 2022-01-07 19:31:17
  */
 public class HeimuHtmlNodeRenderer extends AbstractHeimuNodeRenderer {
 	private final HtmlNodeRendererContext context;
@@ -23,7 +23,7 @@ public class HeimuHtmlNodeRenderer extends AbstractHeimuNodeRenderer {
 
 	@Override
 	public void render(Node node) {
-		Map<String, String> attributes = new HashMap<>();
+		Map<String, String> attributes = new HashMap<>(8);
 		attributes.put("class", "m-text-heimu");
 		attributes.put("title", "你知道的太多了");
 		html.tag("span", context.extendAttributes(node, "span", attributes));

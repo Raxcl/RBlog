@@ -7,7 +7,6 @@ import lombok.ToString;
 import cn.raxcl.entity.Category;
 import cn.raxcl.entity.Tag;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,5 +72,5 @@ public class BlogDetailVO {
 	/**
 	 * 文章标签
 	 */
-	private List<Tag> tags = new ArrayList<>();
+	private List<Tag> tags;
 }

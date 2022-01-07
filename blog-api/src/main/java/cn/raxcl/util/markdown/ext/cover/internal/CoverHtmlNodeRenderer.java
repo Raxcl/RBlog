@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @Description: HTML节点渲染
  * @author Raxcl
- * @date 2020-05-13
+ * @date 2022-01-07 19:24:02
  */
 public class CoverHtmlNodeRenderer extends AbstractCoverNodeRenderer {
     private final HtmlNodeRendererContext context;
@@ -23,7 +23,7 @@ public class CoverHtmlNodeRenderer extends AbstractCoverNodeRenderer {
 
     @Override
     public void render(Node node) {
-        Map<String, String> attributes = new HashMap<>();
+        Map<String, String> attributes = new HashMap<>(8);
         attributes.put("class", "m-text-cover");
         html.tag("span", context.extendAttributes(node, "span", attributes));
         renderChildren(node);

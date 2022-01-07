@@ -8,11 +8,12 @@ import org.springframework.stereotype.Component;
 /**
  * @Description:
  * @author Raxcl
- * @date 2020-11-01
+ * @date 2022-01-07 18:58:02
  */
 @Component
+//TODO
 public class SpringContextUtils implements ApplicationContextAware {
-	public static ApplicationContext applicationContext;
+	private static ApplicationContext applicationContext;
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

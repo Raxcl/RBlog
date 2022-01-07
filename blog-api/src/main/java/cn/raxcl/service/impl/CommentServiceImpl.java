@@ -321,7 +321,8 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         }
         commentDTO.setAdminComment(false);
         commentDTO.setCreateTime(new Date());
-        commentDTO.setPublished(true);//默认不需要审核
+        //默认不需要审核
+        commentDTO.setPublished(true);
         commentDTO.setWebsite(website);
         commentDTO.setEmail(commentDTO.getEmail().trim());
         commentDTO.setIp(IpAddressUtils.getIpAddress(request));

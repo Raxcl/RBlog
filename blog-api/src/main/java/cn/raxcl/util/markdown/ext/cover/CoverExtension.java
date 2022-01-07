@@ -1,22 +1,17 @@
 package cn.raxcl.util.markdown.ext.cover;
 
-import org.commonmark.Extension;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.NodeRenderer;
-import org.commonmark.renderer.html.HtmlNodeRendererContext;
-import org.commonmark.renderer.html.HtmlNodeRendererFactory;
-import org.commonmark.renderer.html.HtmlRenderer;
-import org.commonmark.renderer.text.TextContentNodeRendererContext;
-import org.commonmark.renderer.text.TextContentNodeRendererFactory;
-import org.commonmark.renderer.text.TextContentRenderer;
 import cn.raxcl.util.markdown.ext.cover.internal.CoverDelimiterProcessor;
 import cn.raxcl.util.markdown.ext.cover.internal.CoverHtmlNodeRenderer;
 import cn.raxcl.util.markdown.ext.cover.internal.CoverTextContentNodeRenderer;
+import org.commonmark.Extension;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.text.TextContentRenderer;
 
 /**
  * @Description: 自定义遮盖层拓展
  * @author Raxcl
- * @date 2020-05-13
+ * @date 2022-01-07 19:29:20
  */
 public class CoverExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
 	private CoverExtension() {
@@ -33,21 +28,11 @@ public class CoverExtension implements Parser.ParserExtension, HtmlRenderer.Html
 
 	@Override
 	public void extend(HtmlRenderer.Builder rendererBuilder) {
-		rendererBuilder.nodeRendererFactory(new HtmlNodeRendererFactory() {
-			@Override
-			public NodeRenderer create(HtmlNodeRendererContext context) {
-				return new CoverHtmlNodeRenderer(context);
-			}
-		});
+		rendererBuilder.nodeRendererFactory(CoverHtmlNodeRenderer::new);
 	}
 
 	@Override
 	public void extend(TextContentRenderer.Builder rendererBuilder) {
-		rendererBuilder.nodeRendererFactory(new TextContentNodeRendererFactory() {
-			@Override
-			public NodeRenderer create(TextContentNodeRendererContext context) {
-				return new CoverTextContentNodeRenderer(context);
-			}
-		});
+		rendererBuilder.nodeRendererFactory(CoverTextContentNodeRenderer::new);
 	}
 }

@@ -72,6 +72,7 @@ public class VisitLog {
 	private Date createTime;
 	private String userAgent;
 
+	//TODO
 	public VisitLog(String uuid, String uri, String method, String behavior, String content, String remark, String ip, Integer times, String userAgent) {
 		this.uuid = uuid;
 		this.uri = uri;

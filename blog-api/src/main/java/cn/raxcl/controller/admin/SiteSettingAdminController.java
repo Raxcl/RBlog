@@ -48,6 +48,7 @@ public class SiteSettingAdminController {
 	@OperationLogger("更新站点配置信息")
 	@PostMapping("/siteSettings")
 	public Result updateAll(@RequestBody Map<String, Object> map) {
+		//TODO
 		List<LinkedHashMap> siteSettings = (List<LinkedHashMap>) map.get("settings");
 		List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
 		siteSettingService.updateSiteSetting(siteSettings, deleteIds);

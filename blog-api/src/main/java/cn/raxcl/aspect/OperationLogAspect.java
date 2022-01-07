@@ -1,7 +1,6 @@
 package cn.raxcl.aspect;
 
 import cn.raxcl.exception.NotFoundException;
-import io.jsonwebtoken.lang.Objects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -46,7 +45,9 @@ public class OperationLogAspect {
 	 * 配置切入点
 	 */
 	@Pointcut("@annotation(operationLogger)")
-	public void logPointcut(OperationLogger operationLogger) {}
+	public void logPointcut(OperationLogger operationLogger) {
+		// 切入点
+	}
 
 	/**
 	 * 配置环绕通知
@@ -54,7 +55,7 @@ public class OperationLogAspect {
 	 * @param joinPoint 切点
 	 * @throws Throwable 异常
 	 */
-	@Around("logPointcut(operationLogger)")
+	@Around(value = "logPointcut(operationLogger)", argNames = "joinPoint,operationLogger")
 	public Object logAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
 		currentTime.set(System.currentTimeMillis());
 		Object result = joinPoint.proceed();
@@ -68,9 +69,9 @@ public class OperationLogAspect {
 	/**
 	 * 获取HttpServletRequest请求对象，并设置OperationLog对象属性
 	 *
-	 * @param operationLogger
-	 * @param times
-	 * @return
+	 * @param operationLogger operationLogger
+	 * @param times times
+	 * @return OperationLog
 	 */
 	private OperationLog handleLog(ProceedingJoinPoint joinPoint, OperationLogger operationLogger, int times) {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

@@ -1,6 +1,5 @@
 package cn.raxcl.task;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import cn.raxcl.constant.RedisKeyConstant;
 import cn.raxcl.service.BlogService;
@@ -12,20 +11,24 @@ import java.util.Set;
 /**
  * @Description: Redis相关定时任务
  * @author Raxcl
- * @date 2020-11-02
+ * @date 2022-01-07 18:53:08
  */
 @Component
 public class RedisSyncScheduleTask {
-	@Autowired
-	RedisService redisService;
-	@Autowired
-	BlogService blogService;
+	private final RedisService redisService;
+	private final BlogService blogService;
+
+	public RedisSyncScheduleTask(RedisService redisService, BlogService blogService) {
+		this.redisService = redisService;
+		this.blogService = blogService;
+	}
 
 	/**
 	 * 从Redis同步博客文章浏览量到数据库
 	 */
 	public void syncBlogViewsToDatabase() {
 		String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
+		//TODO
 		Map blogViewsMap = redisService.getMapByHash(redisKey);
 		Set<Integer> keys = blogViewsMap.keySet();
 		for (Integer key : keys) {

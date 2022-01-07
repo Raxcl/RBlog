@@ -6,12 +6,14 @@ import org.commonmark.node.Delimited;
 /**
  * @Description: A cover node containing text and other inline nodes nodes as children.
  * @author Raxcl
- * @date 2020-05-13
+ * @date 2022-01-07 19:25:35
  */
 public class Cover extends CustomNode implements Delimited {
 	private static final String DELIMITER = "%%";
 
+
 	@Override
+	//TODO 相同的方法
 	public String getOpeningDelimiter() {
 		return DELIMITER;
 	}

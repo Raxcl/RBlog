@@ -69,6 +69,7 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
+	//TODO
 	public Map<String, List> getCategoryBlogCountMap() {
 		//查询分类id对应的博客数量
 		List<CategoryBlogCountVO> categoryBlogCountVOList = blogMapper.getCategoryBlogCountList();
@@ -91,7 +92,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(c);
 			}
 		} else {
-			Map<Long, Integer> m = new HashMap<>();
+			Map<Long, Integer> m = new HashMap<>(8);
 			for (CategoryBlogCountVO c : categoryBlogCountVOList) {
 				m.put(c.getId(), c.getValue());
 			}
@@ -107,6 +108,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(categoryBlogCountVO);
 			}
 		}
+		//TODO
 		Map<String, List> map = new HashMap<>();
 		map.put("legend", legend);
 		map.put("series", series);
@@ -114,6 +116,7 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
+	//TODO
 	public Map<String, List> getTagBlogCountMap() {
 		//查询标签id对应的博客数量
 		List<TagBlogCountVO> tagBlogCountVOList = tagMapper.getTagBlogCount();
@@ -152,6 +155,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(tagBlogCountVO);
 			}
 		}
+		//TODO
 		Map<String, List> map = new HashMap<>(8);
 		map.put("legend", legend);
 		map.put("series", series);
@@ -159,6 +163,7 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
+	//TODO
 	public Map<String, List> getVisitRecordMap() {
 		List<VisitRecord> visitRecordList = visitRecordMapper.getVisitRecordListByLimit(VISIT_RECORD_LIMIT_NUM);
 		List<String> date = new ArrayList<>(visitRecordList.size());
@@ -170,6 +175,7 @@ public class DashboardServiceImpl implements DashboardService {
 			pv.add(visitRecord.getPv());
 			uv.add(visitRecord.getUv());
 		}
+		//TODO
 		Map<String, List> map = new HashMap<>(8);
 		map.put("date", date);
 		map.put("pv", pv);

@@ -5,9 +5,9 @@ import cn.raxcl.model.vo.PageResultVO;
 
 import java.util.List;
 import java.util.Map;
-
+//TODO
 public interface RedisService {
-	//TODO
+
 	PageResultVO<BlogInfoVO> getBlogInfoPageResultByHash(String hash, Integer pageNum);
 
 	void saveKVToHash(String hash, Object key, Object value);

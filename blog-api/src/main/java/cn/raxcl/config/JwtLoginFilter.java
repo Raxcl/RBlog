@@ -1,5 +1,6 @@
 package cn.raxcl.config;
 
+import cn.raxcl.constant.CommonConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,11 +30,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Description: JWT登录过滤器
  * @author Raxcl
- * @date 2020-07-21
+ * @date 2022-01-07 17:43:08
  */
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Value("${token.secretKey}")
@@ -54,14 +56,14 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException {
 		try {
-			if (!"POST".equals(request.getMethod())) {
+			if (!CommonConstant.POST.equals(request.getMethod())) {
 				throw new BadRequestException("请求方法错误");
 			}
 			User user = JacksonUtils.readValue(request.getInputStream(), User.class);
-			currentUsername.set(user.getUsername());
+			currentUsername.set(Objects.requireNonNull(user).getUsername());
 			return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 		} catch (BadRequestException exception) {
-			response.setContentType("application/json;charset=utf-8");
+			response.setContentType(CommonConstant.PATH_TOP);
 			Result result = Result.exception(400, "非法请求");
 			PrintWriter out = response.getWriter();
 			out.write(JacksonUtils.writeValueAsString(result));
@@ -75,10 +77,10 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 	                                        FilterChain chain, Authentication authResult) throws IOException {
 		String jwt = JwtUtils.generateToken(authResult.getName(), authResult.getAuthorities(),expireTime, secretKey);
-		response.setContentType("application/json;charset=utf-8");
+		response.setContentType(CommonConstant.PATH_TOP);
 		User user = (User) authResult.getPrincipal();
 		user.setPassword(null);
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(8);
 		map.put("user", user);
 		map.put("token", jwt);
 		Result result = Result.success("登录成功", map);
@@ -93,7 +95,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 	                                          AuthenticationException exception) throws IOException {
-		response.setContentType("application/json;charset=utf-8");
+		response.setContentType(CommonConstant.PATH_TOP);
 		String msg = exception.getMessage();
 		//登录不成功时，会抛出对应的异常
 		if (exception instanceof LockedException) {
@@ -121,14 +123,13 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	 * @param request     请求对象
 	 * @param status      登录状态
 	 * @param description 操作描述
-	 * @return
+	 * @return LoginLog
 	 */
 	private LoginLog handleLog(HttpServletRequest request, boolean status, String description) {
 		String username = currentUsername.get();
 		currentUsername.remove();
 		String ip = IpAddressUtils.getIpAddress(request);
 		String userAgent = request.getHeader("User-Agent");
-		LoginLog log = new LoginLog(username, ip, status, description, userAgent);
-		return log;
+		return new LoginLog(username, ip, status, description, userAgent);
 	}
 }

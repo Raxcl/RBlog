@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,23 +20,28 @@ import cn.raxcl.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Description: AOP记录异常日志
  * @author Raxcl
- * @date 2020-12-03
+ * @date 2022-01-07 17:00:37
  */
 @Component
 @Aspect
 public class ExceptionLogAspect {
-	@Autowired
-	ExceptionLogService exceptionLogService;
+	private final ExceptionLogService exceptionLogService;
+
+	public ExceptionLogAspect(ExceptionLogService exceptionLogService) {
+		this.exceptionLogService = exceptionLogService;
+	}
 
 	/**
 	 * 配置切入点
 	 */
 	@Pointcut("execution(* cn.raxcl.controller..*.*(..))")
 	public void logPointcut() {
+		// 切入点
 	}
 
 	@AfterThrowing(value = "logPointcut()", throwing = "e")
@@ -49,11 +53,11 @@ public class ExceptionLogAspect {
 	/**
 	 * 设置ExceptionLog对象属性
 	 *
-	 * @return
+	 * @return ExceptionLog
 	 */
 	private ExceptionLog handleLog(JoinPoint joinPoint, Exception e) {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		HttpServletRequest request = attributes.getRequest();
+		HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
 		String uri = request.getRequestURI();
 		String method = request.getMethod();
 		String ip = IpAddressUtils.getIpAddress(request);

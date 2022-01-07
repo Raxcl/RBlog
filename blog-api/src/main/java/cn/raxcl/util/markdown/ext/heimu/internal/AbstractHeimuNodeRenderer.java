@@ -10,6 +10,6 @@ import java.util.Set;
 abstract class AbstractHeimuNodeRenderer implements NodeRenderer {
     @Override
     public Set<Class<? extends Node>> getNodeTypes() {
-        return Collections.<Class<? extends Node>>singleton(Heimu.class);
+        return Collections.singleton(Heimu.class);
     }
 }

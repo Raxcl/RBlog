@@ -1,5 +1,6 @@
 package cn.raxcl.util.markdown.ext.heimu.internal;
 
+import cn.raxcl.constant.CommonConstant;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 import org.commonmark.parser.delimiter.DelimiterProcessor;
@@ -9,7 +10,7 @@ import cn.raxcl.util.markdown.ext.heimu.Heimu;
 /**
  * @Description: 定界
  * @author Raxcl
- * @date 2020-05-13
+ * @date 2022-01-07 19:30:40
  */
 public class HeimuDelimiterProcessor implements DelimiterProcessor {
     @Override
@@ -29,7 +30,7 @@ public class HeimuDelimiterProcessor implements DelimiterProcessor {
 
     @Override
     public int getDelimiterUse(DelimiterRun opener, DelimiterRun closer) {
-        if (opener.length() >= 2 && closer.length() >= 2) {
+        if (opener.length() >= CommonConstant.TWO && closer.length() >= CommonConstant.TWO) {
             // Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
             return 2;
         } else {

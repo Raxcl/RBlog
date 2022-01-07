@@ -1,6 +1,5 @@
 package cn.raxcl.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,16 +15,19 @@ import cn.raxcl.service.impl.UserServiceImpl;
 /**
  * @Description: Spring Security配置类
  * @author Raxcl
- * @date 2020-07-19
+ * @date 2022-01-07 17:57:58
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	UserServiceImpl userService;
-	@Autowired
-	LoginLogService loginLogService;
-	@Autowired
-	MyAuthenticationEntryPoint myAuthenticationEntryPoint;
+	private final UserServiceImpl userService;
+	private final LoginLogService loginLogService;
+	private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
+
+	public SecurityConfig(UserServiceImpl userService, LoginLogService loginLogService, MyAuthenticationEntryPoint myAuthenticationEntryPoint) {
+		this.userService = userService;
+		this.loginLogService = loginLogService;
+		this.myAuthenticationEntryPoint = myAuthenticationEntryPoint;
+	}
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -34,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		//TODO 等学完spring security后再回头解决这个提示
 		auth.userDetailsService(userService);
 	}
 

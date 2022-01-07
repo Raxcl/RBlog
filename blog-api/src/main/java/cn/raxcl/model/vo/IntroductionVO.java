@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import cn.raxcl.model.bean.Favorite;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

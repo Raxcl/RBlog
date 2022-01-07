@@ -7,7 +7,7 @@ import org.commonmark.renderer.text.TextContentWriter;
 /**
  * @Description: 文本节点渲染
  * @author Raxcl
- * @date 2020-05-13
+ * @date 2022-01-07 19:31:24
  */
 public class HeimuTextContentNodeRenderer extends AbstractHeimuNodeRenderer {
     private final TextContentNodeRendererContext context;

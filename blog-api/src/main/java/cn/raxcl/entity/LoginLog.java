@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * @Description: 登录日志
  * @author Raxcl
- * @date 2020-12-03
+ * @date 2022-01-07 18:04:08
  */
 @NoArgsConstructor
 @Getter
@@ -19,14 +19,38 @@ import java.util.Date;
 public class LoginLog {
 	private Long id;
 
-	private String username;//用户名称
-	private String ip;//ip
-	private String ipSource;//ip来源
-	private String os;//操作系统
-	private String browser;//浏览器
-	private Boolean status;//登录状态
-	private String description;//操作信息
-	private Date createTime;//操作时间
+	/**
+	 * 用户名称
+	 */
+	private String username;
+	/**
+	 * ip
+	 */
+	private String ip;
+	/**
+	 * ip来源
+	 */
+	private String ipSource;
+	/**
+	 * 操作系统
+	 */
+	private String os;
+	/**
+	 * 浏览器
+	 */
+	private String browser;
+	/**
+	 * 登录状态
+	 */
+	private Boolean status;
+	/**
+	 * 操作信息
+	 */
+	private String description;
+	/**
+	 * 操作时间
+	 */
+	private Date createTime;
 	private String userAgent;
 
 	public LoginLog(String username, String ip, boolean status, String description, String userAgent) {

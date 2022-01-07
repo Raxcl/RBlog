@@ -1,6 +1,5 @@
 package cn.raxcl.interceptor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -17,12 +16,15 @@ import java.io.PrintWriter;
 /**
  * @Description: 访问控制拦截器
  * @author Raxcl
- * @date 2021-04-04
+ * @date 2022-01-07 18:41:25
  */
 @Component
 public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
-	@Autowired
-	RedisService redisService;
+	private final RedisService redisService;
+
+	public AccessLimitInterceptor(RedisService redisService) {
+		this.redisService = redisService;
+	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -37,8 +39,8 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 			int maxCount = accessLimit.maxCount();
 			String ip = IpAddressUtils.getIpAddress(request);
 			String method = request.getMethod();
-			String requestURI = request.getRequestURI();
-			String redisKey = ip + ":" + method + ":" + requestURI;
+			String requestUri = request.getRequestURI();
+			String redisKey = ip + ":" + method + ":" + requestUri;
 			Integer count = redisService.getObjectByValue(redisKey, Integer.class);
 			if (count == null) {
 				//在规定周期内第一次访问，存入redis

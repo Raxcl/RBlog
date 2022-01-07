@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 /**
  * @Description: 站点设置业务层实现
  * @author Raxcl
- * @date 2020-08-09
+ * @date 2022-01-07 18:48:13
  */
 @Service
 public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<SiteSettingServiceImpl> {
@@ -63,6 +63,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	}
 
 	@Override
+	//TODO 降低复杂度
 	public Map<String, Object> getSiteInfo() {
 		String redisKey = RedisKeyConstant.SITE_INFO_MAP;
 		Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
@@ -128,6 +129,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	}
 
 	@Override
+	//TODO
 	public void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds) {
 		//删除
 		for (Integer id : deleteIds) {
@@ -138,7 +140,8 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 			//修改
 			if (siteSetting.getId() != null) {
 				self().updateOneSiteSetting(siteSetting);
-			} else {//添加
+			} else {
+				//TODO 事务处理
 				saveOneSiteSetting(siteSetting);
 			}
 		}
