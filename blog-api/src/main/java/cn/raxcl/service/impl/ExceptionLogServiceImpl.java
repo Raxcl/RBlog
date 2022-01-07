@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.ExceptionLog;
@@ -16,14 +16,17 @@ import java.util.Map;
 /**
  * @Description: 异常日志业务层实现
  * @author Raxcl
- * @date 2020-12-03
+ * @date 2022-01-07 15:58:16
  */
 @Service
 public class ExceptionLogServiceImpl implements ExceptionLogService {
-	@Autowired
-	ExceptionLogMapper exceptionLogMapper;
-	@Autowired
-	UserAgentUtils userAgentUtils;
+	private final ExceptionLogMapper exceptionLogMapper;
+	private final UserAgentUtils userAgentUtils;
+
+	public ExceptionLogServiceImpl(ExceptionLogMapper exceptionLogMapper, UserAgentUtils userAgentUtils) {
+		this.exceptionLogMapper = exceptionLogMapper;
+		this.userAgentUtils = userAgentUtils;
+	}
 
 	@Override
 	public List<ExceptionLog> getExceptionLogListByDate(String startDate, String endDate) {
@@ -32,7 +35,9 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	@Async
 	public void saveExceptionLog(ExceptionLog log) {
+		//TODO
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
 		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		String os = userAgentMap.get("os");

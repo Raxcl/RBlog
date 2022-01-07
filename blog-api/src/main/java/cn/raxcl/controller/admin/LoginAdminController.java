@@ -37,8 +37,8 @@ public class LoginAdminController {
 	/**
 	 * 登录成功后，签发博主身份Token
 	 *
-	 * @param loginInfoDTO
-	 * @return
+	 * @param loginInfoDTO loginInfoDTO
+	 * @return Result
 	 */
 	@PostMapping("/login")
 	public Result login(@RequestBody LoginInfoDTO loginInfoDTO) {

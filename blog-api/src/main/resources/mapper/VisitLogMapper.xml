@@ -21,7 +21,7 @@
     </resultMap>
 
     <!--查询日志-->
-    <select id="getVisitLogListByUUIDAndDate" resultMap="log">
+    <select id="getVisitLogListByUuidAndDate" resultMap="log">
         <bind name="uuidPattern" value="'%' + uuid + '%'"/>
         select id, uuid, uri, method, param, behavior, content, remark, ip, ip_source, os, browser, times, create_time
         from visit_log
@@ -41,7 +41,7 @@
     </resultMap>
 
     <!--查询昨天的所有访问日志-->
-    <select id="getUUIDAndCreateTimeByYesterday" resultMap="logDTO">
+    <select id="getUuidAndCreateTimeByYesterday" resultMap="logDTO">
         select uuid, create_time from visit_log where date(create_time)=date_sub(curdate(), interval 1 day) order by create_time desc
     </select>
 

@@ -2,7 +2,6 @@ package cn.raxcl.service.impl;
 
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.ScheduleJob;
@@ -19,16 +18,19 @@ import java.util.List;
 /**
  * @Description: 定时任务业务层实现
  * @author Raxcl
- * @date 2020-11-01
+ * @date 2022-01-07 15:12:46
  */
 @Service
 public class ScheduleJobServiceImpl implements ScheduleJobService {
-	@Autowired
-	Scheduler scheduler;
-	@Autowired
-	ScheduleJobMapper schedulerJobMapper;
-	@Autowired
-	ScheduleJobLogMapper scheduleJobLogMapper;
+	private final Scheduler scheduler;
+	private final ScheduleJobMapper schedulerJobMapper;
+	private final ScheduleJobLogMapper scheduleJobLogMapper;
+
+	public ScheduleJobServiceImpl(Scheduler scheduler, ScheduleJobMapper schedulerJobMapper, ScheduleJobLogMapper scheduleJobLogMapper) {
+		this.scheduler = scheduler;
+		this.schedulerJobMapper = schedulerJobMapper;
+		this.scheduleJobLogMapper = scheduleJobLogMapper;
+	}
 
 	/**
 	 * 项目启动时，初始化定时器
@@ -87,7 +89,7 @@ public class ScheduleJobServiceImpl implements ScheduleJobService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void updateJobStatusById(Long jobId, Boolean status) {
-		if (status) {
+		if (Boolean.TRUE.equals(status)) {
 			ScheduleUtils.resumeJob(scheduler, jobId);
 		} else {
 			ScheduleUtils.pauseJob(scheduler, jobId);

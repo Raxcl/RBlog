@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * @author c-long.chan
- * 2022-01-07 08:53:58
+ * @date 2022-01-07 08:53:58
  */
 public interface AboutService {
 	/**

@@ -1,8 +1,8 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
+import cn.raxcl.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +15,16 @@ import cn.raxcl.service.LoginLogService;
 /**
  * @Description: 登录日志后台管理
  * @author Raxcl
- * @date 2020-12-03
+ * @date 2022-01-07 12:29:13
  */
 @RestController
 @RequestMapping("/admin")
 public class LoginLogController {
-	@Autowired
-	LoginLogService loginLogService;
+	private final LoginLogService loginLogService;
+
+	public LoginLogController(LoginLogService loginLogService) {
+		this.loginLogService = loginLogService;
+	}
 
 	/**
 	 * 分页查询登录日志列表
@@ -29,7 +32,7 @@ public class LoginLogController {
 	 * @param date     按操作时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/loginLogs")
 	public Result loginLogs(@RequestParam(defaultValue = "") String[] date,
@@ -37,12 +40,12 @@ public class LoginLogController {
 	                        @RequestParam(defaultValue = "10") Integer pageSize) {
 		String startDate = null;
 		String endDate = null;
-		if (date.length == 2) {
+		if (date.length == CommonConstant.TWO) {
 			startDate = date[0];
 			endDate = date[1];
 		}
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<LoginLog> pageInfo = new PageInfo<>(loginLogService.getLoginLogListByDate(startDate, endDate));
 		return Result.success("请求成功", pageInfo);
 	}
@@ -51,7 +54,7 @@ public class LoginLogController {
 	 * 按id删除登录日志
 	 *
 	 * @param id 日志id
-	 * @return
+	 * @return Result
 	 */
 	@DeleteMapping("/loginLog")
 	public Result delete(@RequestParam Long id) {

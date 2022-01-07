@@ -1,8 +1,7 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +14,16 @@ import cn.raxcl.service.VisitorService;
 /**
  * @Description: 访客统计
  * @author Raxcl
- * @date 2021-02-02
+ * @date 2022-01-07 15:17:19
  */
 @RestController
 @RequestMapping("/admin")
 public class VisitorAdminController {
-	@Autowired
-	VisitorService visitorService;
+	private final VisitorService visitorService;
+
+	public VisitorAdminController(VisitorService visitorService) {
+		this.visitorService = visitorService;
+	}
 
 	/**
 	 * 分页查询访客列表
@@ -29,12 +31,13 @@ public class VisitorAdminController {
 	 * @param date     按最后访问时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/visitors")
 	public Result visitors(@RequestParam(defaultValue = "") String[] date,
 	                       @RequestParam(defaultValue = "1") Integer pageNum,
 	                       @RequestParam(defaultValue = "10") Integer pageSize) {
+		//TODO 重复代码
 		String startDate = null;
 		String endDate = null;
 		if (date.length == 2) {
@@ -42,7 +45,7 @@ public class VisitorAdminController {
 			endDate = date[1];
 		}
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Visitor> pageInfo = new PageInfo<>(visitorService.getVisitorListByDate(startDate, endDate));
 		return Result.success("请求成功", pageInfo);
 	}
@@ -53,7 +56,7 @@ public class VisitorAdminController {
 	 *
 	 * @param id   访客id
 	 * @param uuid 访客uuid
-	 * @return
+	 * @return Result
 	 */
 	@DeleteMapping("/visitor")
 	public Result delete(@RequestParam Long id, @RequestParam String uuid) {

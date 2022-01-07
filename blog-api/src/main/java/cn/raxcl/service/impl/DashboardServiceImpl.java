@@ -2,7 +2,6 @@ package cn.raxcl.service.impl;
 
 import cn.raxcl.model.vo.CategoryBlogCountVO;
 import cn.raxcl.model.vo.TagBlogCountVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.raxcl.entity.Category;
 import cn.raxcl.entity.CityVisitor;
@@ -25,26 +24,34 @@ import java.util.Map;
 /**
  * @Description: 仪表盘业务层实现
  * @author Raxcl
- * @date 2020-10-08
+ * @date 2022-01-07 15:47:29
  */
 @Service
 public class DashboardServiceImpl implements DashboardService {
-	@Autowired
-	BlogMapper blogMapper;
-	@Autowired
-	CommentMapper commentMapper;
-	@Autowired
-	CategoryMapper categoryMapper;
-	@Autowired
-	TagMapper tagMapper;
-	@Autowired
-	VisitLogMapper visitLogMapper;
-	@Autowired
-	VisitRecordMapper visitRecordMapper;
-	@Autowired
-	CityVisitorMapper cityVisitorMapper;
-	//查询最近30天的记录
-	private static final int visitRecordLimitNum = 30;
+	private final BlogMapper blogMapper;
+	private final CommentMapper commentMapper;
+	private final CategoryMapper categoryMapper;
+	private final TagMapper tagMapper;
+	private final VisitLogMapper visitLogMapper;
+	private final VisitRecordMapper visitRecordMapper;
+	private final CityVisitorMapper cityVisitorMapper;
+
+	/**
+	 * 查询最近30天的记录
+	 */
+	private static final int VISIT_RECORD_LIMIT_NUM = 30;
+
+	public DashboardServiceImpl(BlogMapper blogMapper, CommentMapper commentMapper, CategoryMapper categoryMapper,
+								TagMapper tagMapper, VisitLogMapper visitLogMapper, VisitRecordMapper visitRecordMapper,
+								CityVisitorMapper cityVisitorMapper) {
+		this.blogMapper = blogMapper;
+		this.commentMapper = commentMapper;
+		this.categoryMapper = categoryMapper;
+		this.tagMapper = tagMapper;
+		this.visitLogMapper = visitLogMapper;
+		this.visitRecordMapper = visitRecordMapper;
+		this.cityVisitorMapper = cityVisitorMapper;
+	}
 
 	@Override
 	public int countVisitLogByToday() {
@@ -75,7 +82,7 @@ public class DashboardServiceImpl implements DashboardService {
 		//分类对应的博客数量List
 		List<CategoryBlogCountVO> series = new ArrayList<>();
 		if (categoryBlogCountVOList.size() == categoryList.size()) {
-			Map<Long, String> m = new HashMap<>();
+			Map<Long, String> m = new HashMap<>(8);
 			for (Category c : categoryList) {
 				m.put(c.getId(), c.getName());
 			}
@@ -120,7 +127,7 @@ public class DashboardServiceImpl implements DashboardService {
 		//标签对应的博客数量List
 		List<TagBlogCountVO> series = new ArrayList<>();
 		if (tagBlogCountVOList.size() == tagList.size()) {
-			Map<Long, String> m = new HashMap<>();
+			Map<Long, String> m = new HashMap<>(8);
 			for (Tag t : tagList) {
 				m.put(t.getId(), t.getName());
 			}
@@ -129,7 +136,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(t);
 			}
 		} else {
-			Map<Long, Integer> m = new HashMap<>();
+			Map<Long, Integer> m = new HashMap<>(8);
 			for (TagBlogCountVO t : tagBlogCountVOList) {
 				m.put(t.getId(), t.getValue());
 			}
@@ -145,7 +152,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(tagBlogCountVO);
 			}
 		}
-		Map<String, List> map = new HashMap<>();
+		Map<String, List> map = new HashMap<>(8);
 		map.put("legend", legend);
 		map.put("series", series);
 		return map;
@@ -153,7 +160,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 	@Override
 	public Map<String, List> getVisitRecordMap() {
-		List<VisitRecord> visitRecordList = visitRecordMapper.getVisitRecordListByLimit(visitRecordLimitNum);
+		List<VisitRecord> visitRecordList = visitRecordMapper.getVisitRecordListByLimit(VISIT_RECORD_LIMIT_NUM);
 		List<String> date = new ArrayList<>(visitRecordList.size());
 		List<Integer> pv = new ArrayList<>(visitRecordList.size());
 		List<Integer> uv = new ArrayList<>(visitRecordList.size());
@@ -163,7 +170,7 @@ public class DashboardServiceImpl implements DashboardService {
 			pv.add(visitRecord.getPv());
 			uv.add(visitRecord.getUv());
 		}
-		Map<String, List> map = new HashMap<>();
+		Map<String, List> map = new HashMap<>(8);
 		map.put("date", date);
 		map.put("pv", pv);
 		map.put("uv", uv);

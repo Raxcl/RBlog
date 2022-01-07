@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -16,14 +15,17 @@ import java.util.List;
 /**
  * @Description: 博客标签业务层实现
  * @author Raxcl
- * @date 2020-07-30
+ * @date 2022-01-07 15:23:46
  */
 @Service
 public class TagServiceImpl implements TagService {
-	@Autowired
-	TagMapper tagMapper;
-	@Autowired
-	RedisService redisService;
+	private final TagMapper tagMapper;
+	private final RedisService redisService;
+
+	public TagServiceImpl(TagMapper tagMapper, RedisService redisService) {
+		this.tagMapper = tagMapper;
+		this.redisService = redisService;
+	}
 
 	@Override
 	public List<Tag> getTagList() {

@@ -1,7 +1,6 @@
 package cn.raxcl.controller.view;
 
 import cn.raxcl.model.vo.NewBlogVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.entity.Category;
@@ -19,19 +18,22 @@ import java.util.Map;
 /**
  * @Description: 站点相关
  * @author Raxcl
- * @date 2020-08-09
+ * @date 2022-01-07 15:42:18
  */
 
 @RestController
 public class IndexController {
-	@Autowired
-	SiteSettingService siteSettingService;
-	@Autowired
-	BlogService blogService;
-	@Autowired
-	CategoryService categoryService;
-	@Autowired
-	TagService tagService;
+	private final SiteSettingService siteSettingService;
+	private final BlogService blogService;
+	private final CategoryService categoryService;
+	private final TagService tagService;
+
+	public IndexController(SiteSettingService siteSettingService, BlogService blogService, CategoryService categoryService, TagService tagService) {
+		this.siteSettingService = siteSettingService;
+		this.blogService = blogService;
+		this.categoryService = categoryService;
+		this.tagService = tagService;
+	}
 
 	/**
 	 * 获取站点配置信息、最新推荐博客、分类列表、标签云、随机博客

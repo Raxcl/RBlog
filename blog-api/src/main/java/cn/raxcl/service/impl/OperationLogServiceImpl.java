@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.OperationLog;
@@ -16,14 +16,17 @@ import java.util.Map;
 /**
  * @Description: 操作日志业务层实现
  * @author Raxcl
- * @date 2020-11-30
+ * @date 2022-01-07 15:02:36
  */
 @Service
 public class OperationLogServiceImpl implements OperationLogService {
-	@Autowired
-	OperationLogMapper operationLogMapper;
-	@Autowired
-	UserAgentUtils userAgentUtils;
+	private final OperationLogMapper operationLogMapper;
+	private final UserAgentUtils userAgentUtils;
+
+	public OperationLogServiceImpl(OperationLogMapper operationLogMapper, UserAgentUtils userAgentUtils) {
+		this.operationLogMapper = operationLogMapper;
+		this.userAgentUtils = userAgentUtils;
+	}
 
 	@Override
 	public List<OperationLog> getOperationLogListByDate(String startDate, String endDate) {
@@ -32,7 +35,9 @@ public class OperationLogServiceImpl implements OperationLogService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	@Async
 	public void saveOperationLog(OperationLog log) {
+		//TODO 重复代码
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
 		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		String os = userAgentMap.get("os");

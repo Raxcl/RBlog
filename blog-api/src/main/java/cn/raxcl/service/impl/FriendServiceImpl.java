@@ -107,11 +107,7 @@ public class FriendServiceImpl implements FriendService {
 					friendInfoVO.setContent(siteSetting.getValue());
 				}
 			} else if ("friendCommentEnabled".equals(siteSetting.getNameEn())) {
-				if ("1".equals(siteSetting.getValue())) {
-					friendInfoVO.setCommentEnabled(true);
-				} else {
-					friendInfoVO.setCommentEnabled(false);
-				}
+				friendInfoVO.setCommentEnabled("1".equals(siteSetting.getValue()));
 			}
 		}
 		if (cache && md) {

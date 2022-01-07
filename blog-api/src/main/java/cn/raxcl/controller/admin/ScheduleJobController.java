@@ -1,8 +1,7 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,25 +22,28 @@ import java.util.Date;
 /**
  * @Description: 定时任务动态管理
  * @author Raxcl
- * @date 2020-11-01
+ * @date 2022-01-07 15:04:17
  */
 @RestController
 @RequestMapping("/admin")
 public class ScheduleJobController {
-	@Autowired
-	private ScheduleJobService scheduleJobService;
+	private final ScheduleJobService scheduleJobService;
+
+	public ScheduleJobController(ScheduleJobService scheduleJobService) {
+		this.scheduleJobService = scheduleJobService;
+	}
 
 	/**
 	 * 分页查询定时任务列表
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/jobs")
 	public Result jobs(@RequestParam(defaultValue = "1") Integer pageNum,
 	                   @RequestParam(defaultValue = "10") Integer pageSize) {
-		PageHelper.startPage(pageNum, pageSize);
+		PageMethod.startPage(pageNum, pageSize);
 		PageInfo<ScheduleJob> pageInfo = new PageInfo<>(scheduleJobService.getJobList());
 		return Result.success("请求成功", pageInfo);
 	}
@@ -49,8 +51,8 @@ public class ScheduleJobController {
 	/**
 	 * 新建定时任务
 	 *
-	 * @param scheduleJob
-	 * @return
+	 * @param scheduleJob scheduleJob
+	 * @return Result
 	 */
 	@OperationLogger("新建定时任务")
 	@PostMapping("/job")
@@ -65,8 +67,8 @@ public class ScheduleJobController {
 	/**
 	 * 修改定时任务
 	 *
-	 * @param scheduleJob
-	 * @return
+	 * @param scheduleJob scheduleJob
+	 * @return Result
 	 */
 	@OperationLogger("修改定时任务")
 	@PutMapping("/job")
@@ -81,7 +83,7 @@ public class ScheduleJobController {
 	 * 删除定时任务
 	 *
 	 * @param jobId 任务id
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("删除定时任务")
 	@DeleteMapping("/job")
@@ -94,7 +96,7 @@ public class ScheduleJobController {
 	 * 立即执行任务
 	 *
 	 * @param jobId 任务id
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("立即执行定时任务")
 	@PostMapping("/job/run")
@@ -108,7 +110,7 @@ public class ScheduleJobController {
 	 *
 	 * @param jobId  任务id
 	 * @param status 状态
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("更新任务状态")
 	@PutMapping("/job/status")
@@ -123,12 +125,13 @@ public class ScheduleJobController {
 	 * @param date     按执行时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/job/logs")
 	public Result logs(@RequestParam(defaultValue = "") String[] date,
 	                   @RequestParam(defaultValue = "1") Integer pageNum,
 	                   @RequestParam(defaultValue = "10") Integer pageSize) {
+		//TODO 重复代码
 		String startDate = null;
 		String endDate = null;
 		if (date.length == 2) {
@@ -136,7 +139,7 @@ public class ScheduleJobController {
 			endDate = date[1];
 		}
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<ScheduleJobLog> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
 		return Result.success("请求成功", pageInfo);
 	}
@@ -145,7 +148,7 @@ public class ScheduleJobController {
 	 * 按id删除任务日志
 	 *
 	 * @param logId 日志id
-	 * @return
+	 * @return Result
 	 */
 	@DeleteMapping("/job/log")
 	public Result delete(@RequestParam Long logId) {

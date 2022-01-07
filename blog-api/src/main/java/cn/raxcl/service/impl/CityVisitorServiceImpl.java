@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.raxcl.entity.CityVisitor;
 import cn.raxcl.mapper.CityVisitorMapper;
@@ -9,12 +8,15 @@ import cn.raxcl.service.CityVisitorService;
 /**
  * @Description: 城市访客数量统计业务层实现
  * @author Raxcl
- * @date 2021-02-26
+ * @date 2022-01-07 15:54:12
  */
 @Service
 public class CityVisitorServiceImpl implements CityVisitorService {
-	@Autowired
-	CityVisitorMapper cityVisitorMapper;
+	private final CityVisitorMapper cityVisitorMapper;
+
+	public CityVisitorServiceImpl(CityVisitorMapper cityVisitorMapper) {
+		this.cityVisitorMapper = cityVisitorMapper;
+	}
 
 	@Override
 	public void saveCityVisitor(CityVisitor cityVisitor) {

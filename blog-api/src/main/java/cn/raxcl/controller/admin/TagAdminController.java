@@ -1,8 +1,8 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
+import cn.raxcl.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,27 +21,30 @@ import cn.raxcl.util.StringUtils;
 /**
  * @Description: 博客标签后台管理
  * @author Raxcl
- * @date 2020-08-02
+ * @date 2022-01-07 15:16:50
  */
 @RestController
 @RequestMapping("/admin")
 public class TagAdminController {
-	@Autowired
-	BlogService blogService;
-	@Autowired
-	TagService tagService;
+	private final BlogService blogService;
+	private final TagService tagService;
+
+	public TagAdminController(BlogService blogService, TagService tagService) {
+		this.blogService = blogService;
+		this.tagService = tagService;
+	}
 
 	/**
 	 * 获取博客标签列表
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/tags")
 	public Result tags(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
 		String orderBy = "id desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Tag> pageInfo = new PageInfo<>(tagService.getTagList());
 		return Result.success("请求成功", pageInfo);
 	}
@@ -50,7 +53,7 @@ public class TagAdminController {
 	 * 添加新标签
 	 *
 	 * @param tag 标签实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("添加标签")
 	@PostMapping("/tag")
@@ -62,7 +65,7 @@ public class TagAdminController {
 	 * 修改标签
 	 *
 	 * @param tag 标签实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("修改标签")
 	@PutMapping("/tag")
@@ -75,7 +78,7 @@ public class TagAdminController {
 	 *
 	 * @param tag  标签实体
 	 * @param type 添加或更新
-	 * @return
+	 * @return Result
 	 */
 	private Result getResult(Tag tag, String type) {
 		if (StringUtils.isEmpty(tag.getName())) {
@@ -87,7 +90,7 @@ public class TagAdminController {
 		if (tag1 != null && !tag1.getId().equals(tag.getId())) {
 			return Result.error("该标签已存在");
 		}
-		if ("save".equals(type)) {
+		if (CommonConstant.SAVE.equals(type)) {
 			tagService.saveTag(tag);
 			return Result.success("添加成功");
 		} else {
@@ -100,7 +103,7 @@ public class TagAdminController {
 	 * 按id删除标签
 	 *
 	 * @param id 标签id
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("删除标签")
 	@DeleteMapping("/tag")

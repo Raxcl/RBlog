@@ -4,7 +4,7 @@ import cn.raxcl.entity.User;
 
 /**
  * @author c-long.chan
- * 2022-01-04 19:05:36
+ * @date 2022-01-04 19:05:36
  */
 public interface UserService {
 	/**

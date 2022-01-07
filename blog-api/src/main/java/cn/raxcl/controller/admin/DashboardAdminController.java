@@ -1,6 +1,5 @@
 package cn.raxcl.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,30 +16,34 @@ import java.util.Map;
 /**
  * @Description: 后台管理仪表盘
  * @author Raxcl
- * @date 2020-10-08
+ * @date 2022-01-07 15:43:53
  */
 @RestController
 @RequestMapping("/admin")
 public class DashboardAdminController {
-	@Autowired
-	DashboardService dashboardService;
-	@Autowired
-	RedisService redisService;
+	private final DashboardService dashboardService;
+	private final RedisService redisService;
+
+	public DashboardAdminController(DashboardService dashboardService, RedisService redisService) {
+		this.dashboardService = dashboardService;
+		this.redisService = redisService;
+	}
 
 	@GetMapping("/dashboard")
 	public Result dashboard() {
-		int todayPV = dashboardService.countVisitLogByToday();
-		int todayUV = redisService.countBySet(RedisKeyConstant.IDENTIFICATION_SET);
+		int todayPv = dashboardService.countVisitLogByToday();
+		int todayUv = redisService.countBySet(RedisKeyConstant.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
+		//TODO 未加泛型
 		Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
 		Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
 		Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
 		List<CityVisitor> cityVisitorList = dashboardService.getCityVisitorList();
 
 		Map<String, Object> map = new HashMap<>();
-		map.put("pv", todayPV);
-		map.put("uv", todayUV);
+		map.put("pv", todayPv);
+		map.put("uv", todayUv);
 		map.put("blogCount", blogCount);
 		map.put("commentCount", commentCount);
 		map.put("category", categoryBlogCountMap);

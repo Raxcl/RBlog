@@ -1,6 +1,5 @@
 package cn.raxcl.controller.view;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,12 +12,15 @@ import cn.raxcl.service.BlogService;
 /**
  * @Description: 标签
  * @author Raxcl
- * @date 2020-08-17
+ * @date 2022-01-07 15:43:11
  */
 @RestController
 public class TagController {
-	@Autowired
-	BlogService blogService;
+	private final BlogService blogService;
+
+	public TagController(BlogService blogService) {
+		this.blogService = blogService;
+	}
 
 	/**
 	 * 根据标签name分页查询公开博客列表

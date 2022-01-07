@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.LoginLog;
@@ -16,14 +16,17 @@ import java.util.Map;
 /**
  * @Description: 登录日志业务层实现
  * @author Raxcl
- * @date 2020-12-03
+ * @date 2022-01-07 12:33:13
  */
 @Service
 public class LoginLogServiceImpl implements LoginLogService {
-	@Autowired
-	LoginLogMapper loginLogMapper;
-	@Autowired
-	UserAgentUtils userAgentUtils;
+	private final LoginLogMapper loginLogMapper;
+	private final UserAgentUtils userAgentUtils;
+
+	public LoginLogServiceImpl(LoginLogMapper loginLogMapper, UserAgentUtils userAgentUtils) {
+		this.loginLogMapper = loginLogMapper;
+		this.userAgentUtils = userAgentUtils;
+	}
 
 	@Override
 	public List<LoginLog> getLoginLogListByDate(String startDate, String endDate) {
@@ -32,7 +35,9 @@ public class LoginLogServiceImpl implements LoginLogService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	@Async
 	public void saveLoginLog(LoginLog log) {
+		//TODO 重复代码 尝试提取失败
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
 		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		String os = userAgentMap.get("os");

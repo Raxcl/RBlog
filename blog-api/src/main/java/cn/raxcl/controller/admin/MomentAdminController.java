@@ -1,8 +1,7 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,26 +20,29 @@ import java.util.Date;
 /**
  * @Description: 博客动态后台管理
  * @author Raxcl
- * @date 2020-08-24
+ * @date 2022-01-07 13:07:17
  */
 @RestController
 @RequestMapping("/admin")
 public class MomentAdminController {
-	@Autowired
-	MomentService momentService;
+	private final MomentService momentService;
+
+	public MomentAdminController(MomentService momentService) {
+		this.momentService = momentService;
+	}
 
 	/**
 	 * 分页查询动态列表
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页条数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/moments")
 	public Result moments(@RequestParam(defaultValue = "1") Integer pageNum,
 	                      @RequestParam(defaultValue = "10") Integer pageSize) {
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Moment> pageInfo = new PageInfo<>(momentService.getMomentList());
 		return Result.success("请求成功", pageInfo);
 	}
@@ -50,7 +52,7 @@ public class MomentAdminController {
 	 *
 	 * @param id        动态id
 	 * @param published 是否公开
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("更新动态公开状态")
 	@PutMapping("/moment/published")
@@ -63,7 +65,7 @@ public class MomentAdminController {
 	 * 根据id查询动态
 	 *
 	 * @param id 动态id
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/moment")
 	public Result moment(@RequestParam Long id) {
@@ -74,7 +76,7 @@ public class MomentAdminController {
 	 * 删除动态
 	 *
 	 * @param id 动态id
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("删除动态")
 	@DeleteMapping("/moment")
@@ -87,7 +89,7 @@ public class MomentAdminController {
 	 * 发布动态
 	 *
 	 * @param moment 动态实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("发布动态")
 	@PostMapping("/moment")
@@ -103,7 +105,7 @@ public class MomentAdminController {
 	 * 更新动态
 	 *
 	 * @param moment 动态实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("更新动态")
 	@PutMapping("/moment")

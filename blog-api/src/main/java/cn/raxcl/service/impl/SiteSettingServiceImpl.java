@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.raxcl.aspect.AopProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -29,13 +29,16 @@ import java.util.regex.Pattern;
  * @date 2020-08-09
  */
 @Service
-public class SiteSettingServiceImpl implements SiteSettingService {
-	@Autowired
-	SiteSettingMapper siteSettingMapper;
-	@Autowired
-	RedisService redisService;
+public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<SiteSettingServiceImpl> {
+	private final SiteSettingMapper siteSettingMapper;
+	private final RedisService redisService;
 
 	private static final Pattern PATTERN = Pattern.compile("\"(.*?)\"");
+
+	public SiteSettingServiceImpl(SiteSettingMapper siteSettingMapper, RedisService redisService) {
+		this.siteSettingMapper = siteSettingMapper;
+		this.redisService = redisService;
+	}
 
 	@Override
 	public Map<String, List<SiteSetting>> getList() {
@@ -126,13 +129,15 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 
 	@Override
 	public void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds) {
-		for (Integer id : deleteIds) {//删除
-			deleteOneSiteSettingById(id);
+		//删除
+		for (Integer id : deleteIds) {
+			self().deleteOneSiteSettingById(id);
 		}
 		for (LinkedHashMap s : siteSettings) {
 			SiteSetting siteSetting = JacksonUtils.convertValue(s, SiteSetting.class);
-			if (siteSetting.getId() != null) {//修改
-				updateOneSiteSetting(siteSetting);
+			//修改
+			if (siteSetting.getId() != null) {
+				self().updateOneSiteSetting(siteSetting);
 			} else {//添加
 				saveOneSiteSetting(siteSetting);
 			}
@@ -147,6 +152,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 		}
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void updateOneSiteSetting(SiteSetting siteSetting) {
 		if (siteSettingMapper.updateSiteSetting(siteSetting) != 1) {
@@ -155,6 +161,7 @@ public class SiteSettingServiceImpl implements SiteSettingService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void deleteOneSiteSettingById(Integer id) {
 		if (siteSettingMapper.deleteSiteSettingById(id) != 1) {
 			throw new PersistenceException("配置删除失败");

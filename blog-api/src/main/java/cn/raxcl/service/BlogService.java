@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @author c-long.chan
- * 2022-01-06 19:26:40
+ * @date 2022-01-06 19:26:40
  */
 public interface BlogService {
 	/**

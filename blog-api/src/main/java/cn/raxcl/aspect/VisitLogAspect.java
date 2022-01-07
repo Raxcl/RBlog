@@ -93,7 +93,7 @@ public class VisitLogAspect {
 			//Redis中不存在uuid
 			if (!redisHas) {
 				//校验数据库中是否存在uuid
-				boolean mysqlHas = visitorService.hasUUID(identification);
+				boolean mysqlHas = visitorService.hasUuid(identification);
 				if (mysqlHas) {
 					//数据库存在，保存至Redis
 					redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, identification);

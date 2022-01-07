@@ -1,6 +1,5 @@
 package cn.raxcl.controller.view;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,24 +17,26 @@ import java.util.Map;
 /**
  * @Description: 友链
  * @author Raxcl
- * @date 2020-09-08
+ * @date 2022-01-07 10:17:43
  */
 @RestController
 public class FriendController {
-	@Autowired
-	FriendService friendService;
+	private final FriendService friendService;
+
+	public FriendController(FriendService friendService) {
+		this.friendService = friendService;
+	}
 
 	/**
 	 * 获取友链页面
-	 *
-	 * @return
+	 * @return Result
 	 */
 	@VisitLogger(behavior = "访问页面", content = "友链")
 	@GetMapping("/friends")
 	public Result friends() {
 		List<FriendVO> friendVOList = friendService.getFriendVOList();
 		FriendInfoVO friendInfoVO = friendService.getFriendInfo(true, true);
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(8);
 		map.put("friendList", friendVOList);
 		map.put("friendInfo", friendInfoVO);
 		return Result.success("获取成功", map);
@@ -45,7 +46,7 @@ public class FriendController {
 	 * 按昵称增加友链浏览次数
 	 *
 	 * @param nickname 友链昵称
-	 * @return
+	 * @return Result
 	 */
 	@VisitLogger(behavior = "点击友链")
 	@PostMapping("/friend")

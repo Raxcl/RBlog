@@ -1,9 +1,9 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
+import cn.raxcl.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.page.PageMethod;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +16,16 @@ import cn.raxcl.service.VisitLogService;
 /**
  * @Description: 访问日志后台管理
  * @author Raxcl
- * @date 2020-12-04
+ * @date 2022-01-07 15:17:23
  */
 @RestController
 @RequestMapping("/admin")
 public class VisitLogController {
-	@Autowired
-	VisitLogService visitLogService;
+	private final VisitLogService visitLogService;
+
+	public VisitLogController(VisitLogService visitLogService) {
+		this.visitLogService = visitLogService;
+	}
 
 	/**
 	 * 分页查询访问日志列表
@@ -31,22 +34,23 @@ public class VisitLogController {
 	 * @param date     按访问时间查询
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/visitLogs")
 	public Result visitLogs(@RequestParam(defaultValue = "") String uuid,
 	                        @RequestParam(defaultValue = "") String[] date,
 	                        @RequestParam(defaultValue = "1") Integer pageNum,
 	                        @RequestParam(defaultValue = "10") Integer pageSize) {
+		//TODO 重复代码
 		String startDate = null;
 		String endDate = null;
-		if (date.length == 2) {
+		if (date.length == CommonConstant.TWO) {
 			startDate = date[0];
 			endDate = date[1];
 		}
 		String orderBy = "create_time desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
-		PageInfo<VisitLog> pageInfo = new PageInfo<>(visitLogService.getVisitLogListByUUIDAndDate(StringUtils.trim(uuid), startDate, endDate));
+		PageMethod.startPage(pageNum, pageSize, orderBy);
+		PageInfo<VisitLog> pageInfo = new PageInfo<>(visitLogService.getVisitLogListByUuidAndDate(StringUtils.trim(uuid), startDate, endDate));
 		return Result.success("请求成功", pageInfo);
 	}
 
@@ -54,7 +58,7 @@ public class VisitLogController {
 	 * 按id删除访问日志
 	 *
 	 * @param id 日志id
-	 * @return
+	 * @return Result
 	 */
 	@DeleteMapping("/visitLog")
 	public Result delete(@RequestParam Long id) {

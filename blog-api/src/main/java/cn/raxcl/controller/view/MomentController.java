@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ import cn.raxcl.util.JwtUtils;
 /**
  * @Description: 动态
  * @author Raxcl
- * @date 2020-08-25
+ * @date 2022-01-07 15:43:03
  */
 @RestController
 public class MomentController {
@@ -41,7 +42,7 @@ public class MomentController {
 	 *
 	 * @param pageNum 页码
 	 * @param jwt     博主访问Token
-	 * @return
+	 * @return Result
 	 */
 	@VisitLogger(behavior = "访问页面", content = "动态")
 	@GetMapping("/moments")
@@ -51,7 +52,8 @@ public class MomentController {
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
 				String subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
-				if (subject.startsWith("admin:")) {//博主身份Token
+				//博主身份Token
+				if (subject.startsWith(CommonConstant.ADMIN)) {
 					String username = subject.replace("admin:", "");
 					User admin = (User) userService.loadUserByUsername(username);
 					if (admin != null) {
@@ -72,7 +74,7 @@ public class MomentController {
 	 * 简单限制一下点赞
 	 *
 	 * @param id 动态id
-	 * @return
+	 * @return Result
 	 */
 	@AccessLimit(seconds = 86400, maxCount = 1, msg = "不可以重复点赞哦")
 	@VisitLogger(behavior = "点赞动态")

@@ -1,13 +1,11 @@
 package cn.raxcl.service;
 
 import cn.raxcl.model.dto.CommentDTO;
-import org.springframework.stereotype.Service;
-
 import java.util.Map;
 
 /**
  * @author c-long.chan
- * 2022-01-06 12:58:03
+ * @date 2022-01-06 12:58:03
  */
 public interface MailService {
     /**

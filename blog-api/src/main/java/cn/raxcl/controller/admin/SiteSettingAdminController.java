@@ -1,6 +1,5 @@
 package cn.raxcl.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,18 +17,21 @@ import java.util.Map;
 /**
  * @Description: 站点设置后台管理
  * @author Raxcl
- * @date 2020-08-09
+ * @date 2022-01-07 10:33:36
  */
 @RestController
 @RequestMapping("/admin")
 public class SiteSettingAdminController {
-	@Autowired
-	SiteSettingService siteSettingService;
+	private final SiteSettingService siteSettingService;
+
+	public SiteSettingAdminController(SiteSettingService siteSettingService) {
+		this.siteSettingService = siteSettingService;
+	}
 
 	/**
 	 * 获取所有站点配置信息
 	 *
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/siteSettings")
 	public Result siteSettings() {
@@ -41,7 +43,7 @@ public class SiteSettingAdminController {
 	 * 修改、删除(部分配置可为空，但不可删除)、添加(只能添加部分)站点配置
 	 *
 	 * @param map 包含所有站点信息更新后的数据 map => {settings=[更新后的所有配置List], deleteIds=[要删除的配置id List]}
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("更新站点配置信息")
 	@PostMapping("/siteSettings")
@@ -55,7 +57,7 @@ public class SiteSettingAdminController {
 	/**
 	 * 查询网页标题后缀
 	 *
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/webTitleSuffix")
 	public Result getWebTitleSuffix() {

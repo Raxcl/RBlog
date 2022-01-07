@@ -1,6 +1,7 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.raxcl.service.LoginLogService;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.VisitLog;
@@ -17,28 +18,35 @@ import java.util.Map;
 /**
  * @Description: 访问日志业务层实现
  * @author Raxcl
- * @date 2020-12-04
+ * @date 2022-01-07 12:38:25
  */
 @Service
 public class VisitLogServiceImpl implements VisitLogService {
-	@Autowired
-	VisitLogMapper visitLogMapper;
-	@Autowired
-	UserAgentUtils userAgentUtils;
+	private final VisitLogMapper visitLogMapper;
+	private final UserAgentUtils userAgentUtils;
+	private final LoginLogService loginLogService;
 
-	@Override
-	public List<VisitLog> getVisitLogListByUUIDAndDate(String uuid, String startDate, String endDate) {
-		return visitLogMapper.getVisitLogListByUUIDAndDate(uuid, startDate, endDate);
+	public VisitLogServiceImpl(VisitLogMapper visitLogMapper, UserAgentUtils userAgentUtils, LoginLogService loginLogService) {
+		this.visitLogMapper = visitLogMapper;
+		this.userAgentUtils = userAgentUtils;
+		this.loginLogService = loginLogService;
 	}
 
 	@Override
-	public List<VisitLogUuidTimeDTO> getUUIDAndCreateTimeByYesterday() {
-		return visitLogMapper.getUUIDAndCreateTimeByYesterday();
+	public List<VisitLog> getVisitLogListByUuidAndDate(String uuid, String startDate, String endDate) {
+		return visitLogMapper.getVisitLogListByUuidAndDate(uuid, startDate, endDate);
+	}
+
+	@Override
+	public List<VisitLogUuidTimeDTO> getUuidAndCreateTimeByYesterday() {
+		return visitLogMapper.getUuidAndCreateTimeByYesterday();
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	@Async
 	public void saveVisitLog(VisitLog log) {
+		//TODO 重复代码 尝试提取失败
 		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
 		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
 		String os = userAgentMap.get("os");

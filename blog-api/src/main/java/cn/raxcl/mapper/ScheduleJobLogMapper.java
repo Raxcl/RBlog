@@ -9,14 +9,30 @@ import java.util.List;
 /**
  * @Description: 定时任务日志持久层接口
  * @author Raxcl
- * @date 2020-11-01
+ * @date 2022-01-07 15:11:09
  */
 @Mapper
 @Repository
 public interface ScheduleJobLogMapper {
+	/**
+	 * 分页查询定时任务日志列表
+	 * @param startDate startDate
+	 * @param endDate endDate
+	 * @return List<ScheduleJobLog>
+	 */
 	List<ScheduleJobLog> getJobLogListByDate(String startDate, String endDate);
 
+	/**
+	 * 保存任务日志
+	 * @param jobLog jobLog
+	 * @return int
+	 */
 	int saveJobLog(ScheduleJobLog jobLog);
 
+	/**
+	 * 按id删除任务日志
+	 * @param logId logId
+	 * @return int
+	 */
 	int deleteJobLogByLogId(Long logId);
 }

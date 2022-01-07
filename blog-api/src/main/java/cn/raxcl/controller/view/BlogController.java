@@ -96,7 +96,7 @@ public class BlogController {
 		if (StringUtils.isEmpty(query) || StringUtils.hasSpecialChar(query) || query.trim().length() > CommonConstant.TWENTY) {
 			return Result.error("参数错误");
 		}
-		List<SearchBlogVO> searchBlogVOS = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
-		return Result.success("获取成功", searchBlogVOS);
+		List<SearchBlogVO> searchBlogVOList = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());
+		return Result.success("获取成功", searchBlogVOList);
 	}
 }

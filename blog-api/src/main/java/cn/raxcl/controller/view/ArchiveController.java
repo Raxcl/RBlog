@@ -1,6 +1,5 @@
 package cn.raxcl.controller.view;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
@@ -12,12 +11,15 @@ import java.util.Map;
 /**
  * @Description: 归档页面
  * @author Raxcl
- * @date 2020-08-12
+ * @date 2022-01-07 10:15:29
  */
 @RestController
 public class ArchiveController {
-	@Autowired
-	BlogService blogService;
+	private final BlogService blogService;
+
+	public ArchiveController(BlogService blogService) {
+		this.blogService = blogService;
+	}
 
 	/**
 	 * 按年月分组归档公开博客 统计公开博客总数

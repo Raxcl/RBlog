@@ -1,7 +1,6 @@
 package cn.raxcl.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.entity.Moment;
@@ -16,18 +15,27 @@ import java.util.List;
 /**
  * @Description: 博客动态业务层实现
  * @author Raxcl
- * @date 2020-08-24
+ * @date 2022-01-07 13:20:06
  */
 @Service
 public class MomentServiceImpl implements MomentService {
-	@Autowired
-	MomentMapper momentMapper;
-	//每页显示5条动态
-	private static final int pageSize = 5;
-	//动态列表排序方式
-	private static final String orderBy = "create_time desc";
-	//私密动态提示
+	private final MomentMapper momentMapper;
+	/**
+	 * 每页显示5条动态
+	 */
+	private static final int PAGE_SIZE = 5;
+	/**
+	 * 动态列表排序方式
+	 */
+	private static final String ORDER_BY = "create_time desc";
+	/**
+	 * 私密动态提示
+	 */
 	private static final String PRIVATE_MOMENT_CONTENT = "<p>此条为私密动态，仅发布者可见！</p>";
+
+	public MomentServiceImpl(MomentMapper momentMapper) {
+		this.momentMapper = momentMapper;
+	}
 
 	@Override
 	public List<Moment> getMomentList() {
@@ -36,10 +44,10 @@ public class MomentServiceImpl implements MomentService {
 
 	@Override
 	public List<Moment> getMomentVOList(Integer pageNum, boolean adminIdentity) {
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, PAGE_SIZE, ORDER_BY);
 		List<Moment> moments = momentMapper.getMomentList();
 		for (Moment moment : moments) {
-			if (adminIdentity || moment.getPublished()) {
+			if (adminIdentity || Boolean.TRUE.equals(moment.getPublished())) {
 				moment.setContent(MarkdownUtils.markdownToHtmlExtensions(moment.getContent()));
 			} else {
 				moment.setContent(PRIVATE_MOMENT_CONTENT);

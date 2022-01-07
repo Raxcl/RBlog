@@ -9,7 +9,7 @@ import cn.raxcl.service.AboutService;
 /**
  * @Description: 关于我页面
  * @author Raxcl
- * @date 2020-08-31
+ * @date 2022-01-07 10:15:25
  */
 @RestController
 public class AboutController {

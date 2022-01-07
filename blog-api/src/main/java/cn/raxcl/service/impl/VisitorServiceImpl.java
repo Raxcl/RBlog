@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -19,16 +19,19 @@ import java.util.Map;
 /**
  * @Description: 访客统计业务层实现
  * @author Raxcl
- * @date 2021-01-31
+ * @date 2022-01-07 13:01:42
  */
 @Service
 public class VisitorServiceImpl implements VisitorService {
-	@Autowired
-	VisitorMapper visitorMapper;
-	@Autowired
-	RedisService redisService;
-	@Autowired
-	UserAgentUtils userAgentUtils;
+	private final VisitorMapper visitorMapper;
+	private final RedisService redisService;
+	private final UserAgentUtils userAgentUtils;
+
+	public VisitorServiceImpl(VisitorMapper visitorMapper, RedisService redisService, UserAgentUtils userAgentUtils) {
+		this.visitorMapper = visitorMapper;
+		this.redisService = redisService;
+		this.userAgentUtils = userAgentUtils;
+	}
 
 	@Override
 	public List<Visitor> getVisitorListByDate(String startDate, String endDate) {
@@ -41,13 +44,15 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public boolean hasUUID(String uuid) {
-		return visitorMapper.hasUUID(uuid) == 0 ? false : true;
+	public boolean hasUuid(String uuid) {
+		return visitorMapper.hasUuid(uuid) != 0;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	@Async
 	public void saveVisitor(Visitor visitor) {
+		//TODO 重复代码
 		String ipSource = IpAddressUtils.getCityInfo(visitor.getIp());
 		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(visitor.getUserAgent());
 		String os = userAgentMap.get("os");
@@ -61,8 +66,8 @@ public class VisitorServiceImpl implements VisitorService {
 	}
 
 	@Override
-	public void updatePVAndLastTimeByUUID(VisitLogUuidTimeDTO dto) {
-		visitorMapper.updatePVAndLastTimeByUUID(dto);
+	public void updatePvAndLastTimeByUuid(VisitLogUuidTimeDTO dto) {
+		visitorMapper.updatePvAndLastTimeByUuid(dto);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
