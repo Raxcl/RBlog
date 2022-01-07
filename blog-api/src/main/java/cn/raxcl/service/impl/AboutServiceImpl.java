@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.raxcl.aspect.AopProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -19,14 +19,18 @@ import java.util.Set;
 /**
  * @Description: 关于我页面业务层实现
  * @author Raxcl
- * @date 2020-08-31
+ * @date 2022-01-07 08:54:13
  */
 @Service
-public class AboutServiceImpl implements AboutService {
-	@Autowired
-	AboutMapper aboutMapper;
-	@Autowired
-	RedisService redisService;
+public class AboutServiceImpl implements AboutService, AopProxy<AboutServiceImpl> {
+
+	private final AboutMapper aboutMapper;
+	private final RedisService redisService;
+
+	public AboutServiceImpl(AboutMapper aboutMapper, RedisService redisService) {
+		this.aboutMapper = aboutMapper;
+		this.redisService = redisService;
+	}
 
 	@Override
 	public Map<String, String> getAboutInfo() {
@@ -36,7 +40,7 @@ public class AboutServiceImpl implements AboutService {
 			return aboutInfoMapFromRedis;
 		}
 		List<About> abouts = aboutMapper.getList();
-		Map<String, String> aboutInfoMap = new HashMap<>();
+		Map<String, String> aboutInfoMap = new HashMap<>(8);
 		for (About about : abouts) {
 			if ("content".equals(about.getNameEn())) {
 				about.setValue(MarkdownUtils.markdownToHtmlExtensions(about.getValue()));
@@ -50,7 +54,7 @@ public class AboutServiceImpl implements AboutService {
 	@Override
 	public Map<String, String> getAboutSetting() {
 		List<About> abouts = aboutMapper.getList();
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>(8);
 		for (About about : abouts) {
 			map.put(about.getNameEn(), about.getValue());
 		}
@@ -61,12 +65,13 @@ public class AboutServiceImpl implements AboutService {
 	public void updateAbout(Map<String, String> map) {
 		Set<String> keySet = map.keySet();
 		for (String key : keySet) {
-			updateOneAbout(key, map.get(key));
+			self().updateOneAbout(key, map.get(key));
 		}
 		deleteAboutRedisCache();
 	}
 
 	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void updateOneAbout(String nameEn, String value) {
 		if (aboutMapper.updateAbout(nameEn, value) != 1) {
 			throw new PersistenceException("修改失败");

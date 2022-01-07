@@ -1,8 +1,8 @@
 package cn.raxcl.controller.admin;
 
-import com.github.pagehelper.PageHelper;
+import cn.raxcl.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,27 +21,30 @@ import cn.raxcl.util.StringUtils;
 /**
  * @Description: 博客分类后台管理
  * @author Raxcl
- * @date 2020-08-02
+ * @date 2022-01-07 08:59:32
  */
 @RestController
 @RequestMapping("/admin")
 public class CategoryAdminController {
-	@Autowired
-	BlogService blogService;
-	@Autowired
-	CategoryService categoryService;
+	private final BlogService blogService;
+	private final CategoryService categoryService;
+
+	public CategoryAdminController(BlogService blogService, CategoryService categoryService) {
+		this.blogService = blogService;
+		this.categoryService = categoryService;
+	}
 
 	/**
 	 * 获取博客分类列表
 	 *
 	 * @param pageNum  页码
 	 * @param pageSize 每页个数
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/categories")
 	public Result categories(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
 		String orderBy = "id desc";
-		PageHelper.startPage(pageNum, pageSize, orderBy);
+		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Category> pageInfo = new PageInfo<>(categoryService.getCategoryList());
 		return Result.success("请求成功", pageInfo);
 	}
@@ -50,7 +53,7 @@ public class CategoryAdminController {
 	 * 添加新分类
 	 *
 	 * @param category 分类实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("添加分类")
 	@PostMapping("/category")
@@ -62,7 +65,7 @@ public class CategoryAdminController {
 	 * 修改分类名称
 	 *
 	 * @param category 分类实体
-	 * @return
+	 * @return Result
 	 */
 	@OperationLogger("修改分类")
 	@PutMapping("/category")
@@ -75,7 +78,7 @@ public class CategoryAdminController {
 	 *
 	 * @param category 分类实体
 	 * @param type     添加或更新
-	 * @return
+	 * @return Result
 	 */
 	private Result getResult(Category category, String type) {
 		if (StringUtils.isEmpty(category.getName())) {
@@ -87,7 +90,7 @@ public class CategoryAdminController {
 		if (category1 != null && !category1.getId().equals(category.getId())) {
 			return Result.error("该分类已存在");
 		}
-		if ("save".equals(type)) {
+		if (CommonConstant.SAVE.equals(type)) {
 			categoryService.saveCategory(category);
 			return Result.success("分类添加成功");
 		} else {

@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -10,23 +9,23 @@ import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.CategoryMapper;
 import cn.raxcl.service.CategoryService;
 import cn.raxcl.service.RedisService;
-import cn.raxcl.service.TagService;
 
 import java.util.List;
 
 /**
  * @Description: 博客分类业务层实现
  * @author Raxcl
- * @date 2020-07-29
+ * @date 2022-01-07 09:09:27
  */
 @Service
 public class CategoryServiceImpl implements CategoryService {
-	@Autowired
-	CategoryMapper categoryMapper;
-	@Autowired
-	TagService tagService;
-	@Autowired
-	RedisService redisService;
+	private final CategoryMapper categoryMapper;
+	private final RedisService redisService;
+
+	public CategoryServiceImpl(CategoryMapper categoryMapper, RedisService redisService) {
+		this.categoryMapper = categoryMapper;
+		this.redisService = redisService;
+	}
 
 	@Override
 	public List<Category> getCategoryList() {

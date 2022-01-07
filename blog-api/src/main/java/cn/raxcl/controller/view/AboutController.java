@@ -1,6 +1,5 @@
 package cn.raxcl.controller.view;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
@@ -14,13 +13,16 @@ import cn.raxcl.service.AboutService;
  */
 @RestController
 public class AboutController {
-	@Autowired
-	AboutService aboutService;
+	private final AboutService aboutService;
+
+	public AboutController(AboutService aboutService) {
+		this.aboutService = aboutService;
+	}
 
 	/**
 	 * 获取关于我页面信息
 	 *
-	 * @return
+	 * @return Result
 	 */
 	@VisitLogger(behavior = "访问页面", content = "关于我")
 	@GetMapping("/about")

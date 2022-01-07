@@ -1,6 +1,5 @@
 package cn.raxcl.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,18 +14,21 @@ import java.util.Map;
 /**
  * @Description: 关于我页面后台管理
  * @author Raxcl
- * @date 2020-09-01
+ * @date 2022-01-07 08:51:09
  */
 @RestController
 @RequestMapping("/admin")
 public class AboutAdminController {
-	@Autowired
-	AboutService aboutService;
+	private final AboutService aboutService;
+
+	public AboutAdminController(AboutService aboutService) {
+		this.aboutService = aboutService;
+	}
 
 	/**
 	 * 获取关于我页面配置
 	 *
-	 * @return
+	 * @return Result
 	 */
 	@GetMapping("/about")
 	public Result about() {
@@ -36,8 +38,8 @@ public class AboutAdminController {
 	/**
 	 * 修改关于我页面
 	 *
-	 * @param map
-	 * @return
+	 * @param map map
+	 * @return Result
 	 */
 	@OperationLogger("修改关于我页面")
 	@PutMapping("/about")
