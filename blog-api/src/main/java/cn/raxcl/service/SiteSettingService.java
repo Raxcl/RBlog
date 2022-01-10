@@ -34,8 +34,13 @@ public interface SiteSettingService {
 	 * @param siteSettings siteSettings
 	 * @param deleteIds deleteIds
 	 */
-	//TODO
-	void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds);
+	void updateSiteSetting(List<LinkedHashMap<String,Object>> siteSettings, List<Integer> deleteIds);
+
+	/**
+	 * 保存站点配置
+	 * @param siteSetting siteSetting
+	 */
+	void saveOneSiteSetting(SiteSetting siteSetting);
 
 	/**
 	 * 根据id删除站点信息

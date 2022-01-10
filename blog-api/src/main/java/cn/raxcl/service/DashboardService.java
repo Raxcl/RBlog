@@ -30,24 +30,21 @@ public interface DashboardService {
 
 	/**
 	 * 获取分类总数
-	 * @return Map<String, List>
+	 * @return Map<String, Object>
 	 */
-	//TODO
-	Map<String, List> getCategoryBlogCountMap();
+	Map<String, Object> getCategoryBlogCountMap();
 
 	/**
 	 * 获取标签下总数
-	 * @return Map<String, List>
+	 * @return Map<String, Object>
 	 */
-	//TODO
-	Map<String, List> getTagBlogCountMap();
+	Map<String, Object> getTagBlogCountMap();
 
 	/**
 	 * 获取访客记录
-	 * @return Map<String, List>
+	 * @return Map<String, Object>
 	 */
-	//TODO
-	Map<String, List> getVisitRecordMap();
+	Map<String, Object> getVisitRecordMap();
 
 	/**
 	 * 获取城市访问list

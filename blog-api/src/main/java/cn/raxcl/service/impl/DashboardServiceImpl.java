@@ -69,8 +69,7 @@ public class DashboardServiceImpl implements DashboardService {
 	}
 
 	@Override
-	//TODO
-	public Map<String, List> getCategoryBlogCountMap() {
+	public Map<String, Object> getCategoryBlogCountMap() {
 		//查询分类id对应的博客数量
 		List<CategoryBlogCountVO> categoryBlogCountVOList = blogMapper.getCategoryBlogCountList();
 		//查询所有分类的id和名称
@@ -108,16 +107,14 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(categoryBlogCountVO);
 			}
 		}
-		//TODO
-		Map<String, List> map = new HashMap<>(16);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("legend", legend);
 		map.put("series", series);
 		return map;
 	}
 
 	@Override
-	//TODO
-	public Map<String, List> getTagBlogCountMap() {
+	public Map<String, Object> getTagBlogCountMap() {
 		//查询标签id对应的博客数量
 		List<TagBlogCountVO> tagBlogCountVOList = tagMapper.getTagBlogCount();
 		//查询所有标签的id和名称
@@ -155,16 +152,14 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(tagBlogCountVO);
 			}
 		}
-		//TODO
-		Map<String, List> map = new HashMap<>(16);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("legend", legend);
 		map.put("series", series);
 		return map;
 	}
 
 	@Override
-	//TODO
-	public Map<String, List> getVisitRecordMap() {
+	public Map<String, Object> getVisitRecordMap() {
 		List<VisitRecord> visitRecordList = visitRecordMapper.getVisitRecordListByLimit(VISIT_RECORD_LIMIT_NUM);
 		List<String> date = new ArrayList<>(visitRecordList.size());
 		List<Integer> pv = new ArrayList<>(visitRecordList.size());
@@ -176,7 +171,7 @@ public class DashboardServiceImpl implements DashboardService {
 			uv.add(visitRecord.getUv());
 		}
 		//TODO
-		Map<String, List> map = new HashMap<>(16);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("date", date);
 		map.put("pv", pv);
 		map.put("uv", uv);

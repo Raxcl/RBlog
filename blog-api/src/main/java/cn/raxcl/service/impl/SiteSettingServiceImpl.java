@@ -129,25 +129,24 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	}
 
 	@Override
-	//TODO
-	public void updateSiteSetting(List<LinkedHashMap> siteSettings, List<Integer> deleteIds) {
+	public void updateSiteSetting(List<LinkedHashMap<String,Object>> siteSettings, List<Integer> deleteIds) {
 		//删除
 		for (Integer id : deleteIds) {
 			self().deleteOneSiteSettingById(id);
 		}
-		for (LinkedHashMap s : siteSettings) {
+		for (LinkedHashMap<String,Object> s : siteSettings) {
 			SiteSetting siteSetting = JacksonUtils.convertValue(s, SiteSetting.class);
 			//修改
 			if (siteSetting.getId() != null) {
 				self().updateOneSiteSetting(siteSetting);
 			} else {
-				//TODO 事务处理
-				saveOneSiteSetting(siteSetting);
+				self().saveOneSiteSetting(siteSetting);
 			}
 		}
 		deleteSiteInfoRedisCache();
 	}
 
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void saveOneSiteSetting(SiteSetting siteSetting) {
 		if (siteSettingMapper.saveSiteSetting(siteSetting) != 1) {

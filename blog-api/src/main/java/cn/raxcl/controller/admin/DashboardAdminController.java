@@ -35,10 +35,9 @@ public class DashboardAdminController {
 		int todayUv = redisService.countBySet(RedisKeyConstant.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
-		//TODO 未加泛型
-		Map<String, List> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
-		Map<String, List> tagBlogCountMap = dashboardService.getTagBlogCountMap();
-		Map<String, List> visitRecordMap = dashboardService.getVisitRecordMap();
+		Map<String, Object> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();
+		Map<String, Object> tagBlogCountMap = dashboardService.getTagBlogCountMap();
+		Map<String, Object> visitRecordMap = dashboardService.getVisitRecordMap();
 		List<CityVisitor> cityVisitorList = dashboardService.getCityVisitorList();
 
 		Map<String, Object> map = new HashMap<>(16);

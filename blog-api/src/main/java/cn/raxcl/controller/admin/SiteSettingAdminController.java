@@ -1,5 +1,7 @@
 package cn.raxcl.controller.admin;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,9 +12,7 @@ import cn.raxcl.entity.SiteSetting;
 import cn.raxcl.util.common.Result;
 import cn.raxcl.service.SiteSettingService;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description: 站点设置后台管理
@@ -48,8 +48,8 @@ public class SiteSettingAdminController {
 	@OperationLogger("更新站点配置信息")
 	@PostMapping("/siteSettings")
 	public Result updateAll(@RequestBody Map<String, Object> map) {
-		//TODO
-		List<LinkedHashMap> siteSettings = (List<LinkedHashMap>) map.get("settings");
+		//TODO 类型转换失败，待后期解决
+		List<LinkedHashMap<String,Object>> siteSettings = (List<LinkedHashMap<String,Object>>) map.get("settings");
 		List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
 		siteSettingService.updateSiteSetting(siteSettings, deleteIds);
 		return Result.success("更新成功");
