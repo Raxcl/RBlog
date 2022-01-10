@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.common.LogService;
+import cn.raxcl.common.CommonService;
 import cn.raxcl.model.temp.LogDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -25,12 +25,12 @@ import java.util.List;
 public class VisitorServiceImpl implements VisitorService {
 	private final VisitorMapper visitorMapper;
 	private final RedisService redisService;
-	private final LogService logService;
+	private final CommonService commonService;
 
-	public VisitorServiceImpl(VisitorMapper visitorMapper, RedisService redisService, LogService logService) {
+	public VisitorServiceImpl(VisitorMapper visitorMapper, RedisService redisService, CommonService commonService) {
 		this.visitorMapper = visitorMapper;
 		this.redisService = redisService;
-		this.logService = logService;
+		this.commonService = commonService;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class VisitorServiceImpl implements VisitorService {
 	@Override
 	@Async
 	public void saveVisitor(Visitor visitor) {
-		LogDTO logDTO = logService.saveLog(visitor.getIp(), visitor.getUserAgent());
+		LogDTO logDTO = commonService.saveLog(visitor.getIp(), visitor.getUserAgent());
 		BeanUtils.copyProperties(logDTO, visitor);
 		if (visitorMapper.saveVisitor(visitor) != 1) {
 			throw new PersistenceException("访客添加失败");

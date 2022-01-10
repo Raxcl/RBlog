@@ -1,5 +1,7 @@
 package cn.raxcl.controller.admin;
 
+import cn.raxcl.common.CommonService;
+import cn.raxcl.model.temp.PageDTO;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +22,11 @@ import cn.raxcl.service.ExceptionLogService;
 @RequestMapping("/admin")
 public class ExceptionLogController {
 	private final ExceptionLogService exceptionLogService;
+	private final CommonService commonService;
 
-	public ExceptionLogController(ExceptionLogService exceptionLogService) {
+	public ExceptionLogController(ExceptionLogService exceptionLogService, CommonService commonService) {
 		this.exceptionLogService = exceptionLogService;
+		this.commonService = commonService;
 	}
 
 	/**
@@ -37,16 +41,9 @@ public class ExceptionLogController {
 	public Result exceptionLogs(@RequestParam(defaultValue = "") String[] date,
 	                            @RequestParam(defaultValue = "1") Integer pageNum,
 	                            @RequestParam(defaultValue = "10") Integer pageSize) {
-		//TODO
-		String startDate = null;
-		String endDate = null;
-		if (date.length == 2) {
-			startDate = date[0];
-			endDate = date[1];
-		}
-		String orderBy = "create_time desc";
-		PageMethod.startPage(pageNum, pageSize, orderBy);
-		PageInfo<ExceptionLog> pageInfo = new PageInfo<>(exceptionLogService.getExceptionLogListByDate(startDate, endDate));
+		PageDTO pageDTO = commonService.pageBefore(date);
+		PageMethod.startPage(pageNum, pageSize, pageDTO.getOrderBy());
+		PageInfo<ExceptionLog> pageInfo = new PageInfo<>(exceptionLogService.getExceptionLogListByDate(pageDTO.getStartDate(), pageDTO.getEndDate()));
 		return Result.success("请求成功", pageInfo);
 	}
 

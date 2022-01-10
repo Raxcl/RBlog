@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.common.LogService;
+import cn.raxcl.common.CommonService;
 import cn.raxcl.model.temp.LogDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -21,12 +21,12 @@ import java.util.List;
 @Service
 public class LoginLogServiceImpl implements LoginLogService {
 	private final LoginLogMapper loginLogMapper;
-	private final LogService logService;
+	private final CommonService commonService;
 
 
-	public LoginLogServiceImpl(LoginLogMapper loginLogMapper, LogService logService) {
+	public LoginLogServiceImpl(LoginLogMapper loginLogMapper, CommonService commonService) {
 		this.loginLogMapper = loginLogMapper;
-		this.logService = logService;
+		this.commonService = commonService;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class LoginLogServiceImpl implements LoginLogService {
 	@Override
 	@Async
 	public void saveLoginLog(LoginLog log) {
-		LogDTO logDTO = logService.saveLog(log.getIp(), log.getUserAgent());
+		LogDTO logDTO = commonService.saveLog(log.getIp(), log.getUserAgent());
 		BeanUtils.copyProperties(logDTO, log);
 		if (loginLogMapper.saveLoginLog(log) != 1) {
 			throw new PersistenceException("日志添加失败");

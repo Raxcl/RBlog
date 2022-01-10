@@ -1,6 +1,7 @@
 package cn.raxcl.controller.admin;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.common.CommonService;
+import cn.raxcl.model.temp.PageDTO;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +23,11 @@ import cn.raxcl.service.VisitLogService;
 @RequestMapping("/admin")
 public class VisitLogController {
 	private final VisitLogService visitLogService;
+	private final CommonService commonService;
 
-	public VisitLogController(VisitLogService visitLogService) {
+	public VisitLogController(VisitLogService visitLogService, CommonService commonService) {
 		this.visitLogService = visitLogService;
+		this.commonService = commonService;
 	}
 
 	/**
@@ -41,16 +44,11 @@ public class VisitLogController {
 	                        @RequestParam(defaultValue = "") String[] date,
 	                        @RequestParam(defaultValue = "1") Integer pageNum,
 	                        @RequestParam(defaultValue = "10") Integer pageSize) {
-		//TODO 重复代码
-		String startDate = null;
-		String endDate = null;
-		if (date.length == CommonConstant.TWO) {
-			startDate = date[0];
-			endDate = date[1];
-		}
-		String orderBy = "create_time desc";
-		PageMethod.startPage(pageNum, pageSize, orderBy);
-		PageInfo<VisitLog> pageInfo = new PageInfo<>(visitLogService.getVisitLogListByUuidAndDate(StringUtils.trim(uuid), startDate, endDate));
+		PageDTO pageDTO = commonService.pageBefore(date);
+		PageMethod.startPage(pageNum, pageSize, pageDTO.getOrderBy());
+		PageInfo<VisitLog> pageInfo = new PageInfo<>(
+				visitLogService.getVisitLogListByUuidAndDate(StringUtils.trim(uuid),
+						pageDTO.getStartDate(), pageDTO.getEndDate()));
 		return Result.success("请求成功", pageInfo);
 	}
 

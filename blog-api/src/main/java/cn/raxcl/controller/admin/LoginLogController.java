@@ -1,6 +1,7 @@
 package cn.raxcl.controller.admin;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.common.CommonService;
+import cn.raxcl.model.temp.PageDTO;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,9 +22,11 @@ import cn.raxcl.service.LoginLogService;
 @RequestMapping("/admin")
 public class LoginLogController {
 	private final LoginLogService loginLogService;
+	private final CommonService commonService;
 
-	public LoginLogController(LoginLogService loginLogService) {
+	public LoginLogController(LoginLogService loginLogService, CommonService commonService) {
 		this.loginLogService = loginLogService;
+		this.commonService = commonService;
 	}
 
 	/**
@@ -38,16 +41,9 @@ public class LoginLogController {
 	public Result loginLogs(@RequestParam(defaultValue = "") String[] date,
 	                        @RequestParam(defaultValue = "1") Integer pageNum,
 	                        @RequestParam(defaultValue = "10") Integer pageSize) {
-		//TODO
-		String startDate = null;
-		String endDate = null;
-		if (date.length == CommonConstant.TWO) {
-			startDate = date[0];
-			endDate = date[1];
-		}
-		String orderBy = "create_time desc";
-		PageMethod.startPage(pageNum, pageSize, orderBy);
-		PageInfo<LoginLog> pageInfo = new PageInfo<>(loginLogService.getLoginLogListByDate(startDate, endDate));
+		PageDTO pageDTO = commonService.pageBefore(date);
+		PageMethod.startPage(pageNum, pageSize, pageDTO.getOrderBy());
+		PageInfo<LoginLog> pageInfo = new PageInfo<>(loginLogService.getLoginLogListByDate(pageDTO.getStartDate(), pageDTO.getEndDate()));
 		return Result.success("请求成功", pageInfo);
 	}
 

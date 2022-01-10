@@ -1,7 +1,9 @@
 package cn.raxcl.common.impl;
 
-import cn.raxcl.common.LogService;
+import cn.raxcl.common.CommonService;
+import cn.raxcl.constant.CommonConstant;
 import cn.raxcl.model.temp.LogDTO;
+import cn.raxcl.model.temp.PageDTO;
 import cn.raxcl.util.IpAddressUtils;
 import cn.raxcl.util.UserAgentUtils;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,10 @@ import java.util.Map;
  * 2022-01-10 08:52:24
  */
 @Service
-public class LogServiceImpl implements LogService {
+public class CommonServiceImpl implements CommonService {
     private final UserAgentUtils userAgentUtils;
 
-    public LogServiceImpl(UserAgentUtils userAgentUtils) {
+    public CommonServiceImpl(UserAgentUtils userAgentUtils) {
         this.userAgentUtils = userAgentUtils;
     }
 
@@ -30,5 +32,15 @@ public class LogServiceImpl implements LogService {
         String browser = userAgentMap.get("browser");
         logDTO.setIpSource(ipSource).setOs(os).setBrowser(browser);
         return logDTO;
+    }
+
+    @Override
+    public PageDTO pageBefore(String[] date) {
+        PageDTO pageDTO = new PageDTO();
+        if (date.length == CommonConstant.TWO) {
+            pageDTO.setStartDate(date[0]).setEndDate(date[1]);
+        }
+        pageDTO.setOrderBy("create_time desc");
+        return null;
     }
 }

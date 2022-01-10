@@ -1,5 +1,7 @@
 package cn.raxcl.controller.admin;
 
+import cn.raxcl.common.CommonService;
+import cn.raxcl.model.temp.PageDTO;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,9 +30,11 @@ import java.util.Date;
 @RequestMapping("/admin")
 public class ScheduleJobController {
 	private final ScheduleJobService scheduleJobService;
+	private final CommonService commonService;
 
-	public ScheduleJobController(ScheduleJobService scheduleJobService) {
+	public ScheduleJobController(ScheduleJobService scheduleJobService, CommonService commonService) {
 		this.scheduleJobService = scheduleJobService;
+		this.commonService = commonService;
 	}
 
 	/**
@@ -131,16 +135,11 @@ public class ScheduleJobController {
 	public Result logs(@RequestParam(defaultValue = "") String[] date,
 	                   @RequestParam(defaultValue = "1") Integer pageNum,
 	                   @RequestParam(defaultValue = "10") Integer pageSize) {
-		//TODO 重复代码
-		String startDate = null;
-		String endDate = null;
-		if (date.length == 2) {
-			startDate = date[0];
-			endDate = date[1];
-		}
-		String orderBy = "create_time desc";
-		PageMethod.startPage(pageNum, pageSize, orderBy);
-		PageInfo<ScheduleJobLog> pageInfo = new PageInfo<>(scheduleJobService.getJobLogListByDate(startDate, endDate));
+		PageDTO pageDTO = commonService.pageBefore(date);
+		PageMethod.startPage(pageNum, pageSize, pageDTO.getOrderBy());
+		PageInfo<ScheduleJobLog> pageInfo = new PageInfo<>(
+				scheduleJobService.getJobLogListByDate(pageDTO.getStartDate(), pageDTO.getEndDate())
+		);
 		return Result.success("请求成功", pageInfo);
 	}
 
