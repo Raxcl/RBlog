@@ -1,9 +1,6 @@
 package cn.raxcl.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
@@ -13,9 +10,11 @@ import java.util.Date;
  * @date 2022-01-07 10:04:44
  */
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
+@Builder
 public class VisitLog {
 	private Long id;
 	/**
@@ -72,17 +71,4 @@ public class VisitLog {
 	private Date createTime;
 	private String userAgent;
 
-	//TODO
-	public VisitLog(String uuid, String uri, String method, String behavior, String content, String remark, String ip, Integer times, String userAgent) {
-		this.uuid = uuid;
-		this.uri = uri;
-		this.method = method;
-		this.behavior = behavior;
-		this.content = content;
-		this.remark = remark;
-		this.ip = ip;
-		this.times = times;
-		this.createTime = new Date();
-		this.userAgent = userAgent;
-	}
 }

@@ -155,15 +155,20 @@ public class VisitLogAspect {
 	 */
 	private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Object result,
 	                           int times, String identification) {
-		String uri = request.getRequestURI();
-		String method = request.getMethod();
 		String behavior = visitLogger.behavior();
-		String content = visitLogger.content();
-		String ip = IpAddressUtils.getIpAddress(request);
-		String userAgent = request.getHeader("User-Agent");
 		Map<String, Object> requestParams = AopUtils.getRequestParams(joinPoint);
-		Map<String, String> map = judgeBehavior(behavior, content, requestParams, result);
-		VisitLog log = new VisitLog(identification, uri, method, behavior, map.get("content"), map.get("remark"), ip, times, userAgent);
+		Map<String, String> map = judgeBehavior(behavior, visitLogger.content(), requestParams, result);
+		VisitLog log = VisitLog.builder()
+				.uuid(identification)
+				.uri(request.getRequestURI())
+				.method(request.getMethod())
+				.behavior(behavior)
+				.content(map.get("content"))
+				.remark(map.get("remark"))
+				.ip(IpAddressUtils.getIpAddress(request))
+				.times(times)
+				.userAgent(request.getHeader("User-Agent"))
+				.build();
 		log.setParam(StringUtils.substring(JacksonUtils.writeValueAsString(requestParams), 0, 2000));
 		return log;
 	}
