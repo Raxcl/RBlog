@@ -88,7 +88,7 @@ public class VisitLogAspect {
 		String identification = request.getHeader(CommonConstant.IDENTIFICATION);
 		if (identification == null) {
 			//请求头没有uuid，签发uuid并保存到数据库和Redis
-			identification = saveUUID(request);
+			identification = saveUuid(request);
 		} else {
 			//校验Redis中是否存在uuid
 			boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
@@ -101,7 +101,7 @@ public class VisitLogAspect {
 					redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
 				} else {
 					//数据库不存在，签发新的uuid
-					identification = saveUUID(request);
+					identification = saveUuid(request);
 				}
 			}
 		}
@@ -114,7 +114,7 @@ public class VisitLogAspect {
 	 * @param request request
 	 * @return String
 	 */
-	private String saveUUID(HttpServletRequest request) {
+	private String saveUuid(HttpServletRequest request) {
 		//获取响应对象
 		HttpServletResponse response = Objects.requireNonNull(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())).getResponse();
 		//获取当前时间戳，精确到小时，防刷访客数据

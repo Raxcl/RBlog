@@ -1,5 +1,8 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.common.LogService;
+import cn.raxcl.model.temp.LogDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +13,8 @@ import cn.raxcl.mapper.VisitorMapper;
 import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.service.VisitorService;
-import cn.raxcl.util.IpAddressUtils;
-import cn.raxcl.util.UserAgentUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 访客统计业务层实现
@@ -25,12 +25,12 @@ import java.util.Map;
 public class VisitorServiceImpl implements VisitorService {
 	private final VisitorMapper visitorMapper;
 	private final RedisService redisService;
-	private final UserAgentUtils userAgentUtils;
+	private final LogService logService;
 
-	public VisitorServiceImpl(VisitorMapper visitorMapper, RedisService redisService, UserAgentUtils userAgentUtils) {
+	public VisitorServiceImpl(VisitorMapper visitorMapper, RedisService redisService, LogService logService) {
 		this.visitorMapper = visitorMapper;
 		this.redisService = redisService;
-		this.userAgentUtils = userAgentUtils;
+		this.logService = logService;
 	}
 
 	@Override
@@ -52,14 +52,8 @@ public class VisitorServiceImpl implements VisitorService {
 	@Override
 	@Async
 	public void saveVisitor(Visitor visitor) {
-		//TODO 重复代码
-		String ipSource = IpAddressUtils.getCityInfo(visitor.getIp());
-		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(visitor.getUserAgent());
-		String os = userAgentMap.get("os");
-		String browser = userAgentMap.get("browser");
-		visitor.setIpSource(ipSource);
-		visitor.setOs(os);
-		visitor.setBrowser(browser);
+		LogDTO logDTO = logService.saveLog(visitor.getIp(), visitor.getUserAgent());
+		BeanUtils.copyProperties(logDTO, visitor);
 		if (visitorMapper.saveVisitor(visitor) != 1) {
 			throw new PersistenceException("访客添加失败");
 		}

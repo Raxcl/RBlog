@@ -1,5 +1,8 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.common.LogService;
+import cn.raxcl.model.temp.LogDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,11 +10,8 @@ import cn.raxcl.entity.OperationLog;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.OperationLogMapper;
 import cn.raxcl.service.OperationLogService;
-import cn.raxcl.util.IpAddressUtils;
-import cn.raxcl.util.UserAgentUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 操作日志业务层实现
@@ -21,11 +21,11 @@ import java.util.Map;
 @Service
 public class OperationLogServiceImpl implements OperationLogService {
 	private final OperationLogMapper operationLogMapper;
-	private final UserAgentUtils userAgentUtils;
+	private final LogService logService;
 
-	public OperationLogServiceImpl(OperationLogMapper operationLogMapper, UserAgentUtils userAgentUtils) {
+	public OperationLogServiceImpl(OperationLogMapper operationLogMapper, LogService logService) {
 		this.operationLogMapper = operationLogMapper;
-		this.userAgentUtils = userAgentUtils;
+		this.logService = logService;
 	}
 
 	@Override
@@ -37,14 +37,8 @@ public class OperationLogServiceImpl implements OperationLogService {
 	@Override
 	@Async
 	public void saveOperationLog(OperationLog log) {
-		//TODO 重复代码
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
-		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
-		String os = userAgentMap.get("os");
-		String browser = userAgentMap.get("browser");
-		log.setIpSource(ipSource);
-		log.setOs(os);
-		log.setBrowser(browser);
+		LogDTO logDTO = logService.saveLog(log.getIp(), log.getUserAgent());
+		BeanUtils.copyProperties(logDTO, log);
 		if (operationLogMapper.saveOperationLog(log) != 1) {
 			throw new PersistenceException("日志添加失败");
 		}
