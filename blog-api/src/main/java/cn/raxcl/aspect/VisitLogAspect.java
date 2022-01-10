@@ -167,6 +167,7 @@ public class VisitLogAspect {
 				.remark(map.get("remark"))
 				.ip(IpAddressUtils.getIpAddress(request))
 				.times(times)
+				.createTime(new Date())
 				.userAgent(request.getHeader("User-Agent"))
 				.build();
 		log.setParam(StringUtils.substring(JacksonUtils.writeValueAsString(requestParams), 0, 2000));
