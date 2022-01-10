@@ -1,6 +1,7 @@
 package cn.raxcl.service.impl;
 
 import cn.raxcl.aspect.AopProxy;
+import cn.raxcl.constant.CommonConstant;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstant;
@@ -63,7 +64,6 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	}
 
 	@Override
-	//TODO 降低复杂度
 	public Map<String, Object> getSiteInfo() {
 		String redisKey = RedisKeyConstant.SITE_INFO_MAP;
 		Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
@@ -89,31 +89,11 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 				Badge badge = JacksonUtils.readValue(s.getValue(), Badge.class);
 				badges.add(badge);
 			} else if (s.getType() == 3) {
-				if ("avatar".equals(s.getNameEn())) {
-					introductionVO.setAvatar(s.getValue());
-				} else if ("name".equals(s.getNameEn())) {
-					introductionVO.setName(s.getValue());
-				} else if ("github".equals(s.getNameEn())) {
-					introductionVO.setGithub(s.getValue());
-				} else if ("qq".equals(s.getNameEn())) {
-					introductionVO.setQq(s.getValue());
-				} else if ("bilibili".equals(s.getNameEn())) {
-					introductionVO.setBilibili(s.getValue());
-				} else if ("netease".equals(s.getNameEn())) {
-					introductionVO.setNetease(s.getValue());
-				} else if ("email".equals(s.getNameEn())) {
-					introductionVO.setEmail(s.getValue());
-				} else if ("favorite".equals(s.getNameEn())) {
-					Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
-					favorites.add(favorite);
-				} else if ("rollText".equals(s.getNameEn())) {
-					Matcher m = PATTERN.matcher(s.getValue());
-					while (m.find()) {
-						rollTexts.add(m.group(1));
-					}
-				}
+				siteInfoDispose(s, introductionVO, favorites, rollTexts);
+
 			}
 		}
+
 		introductionVO.setFavorites(favorites);
 		introductionVO.setRollText(rollTexts);
 		map.put("introduction", introductionVO);
@@ -121,6 +101,32 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 		map.put("badges", badges);
 		redisService.saveMapToValue(redisKey, map);
 		return map;
+	}
+
+	private void siteInfoDispose(SiteSetting s, IntroductionVO introductionVO, List<Favorite> favorites, List<String> rollTexts) {
+		if (CommonConstant.AVATAR.equals(s.getNameEn())) {
+			introductionVO.setAvatar(s.getValue());
+		} else if (CommonConstant.NAME.equals(s.getNameEn())) {
+			introductionVO.setName(s.getValue());
+		} else if (CommonConstant.GITHUB.equals(s.getNameEn())) {
+			introductionVO.setGithub(s.getValue());
+		} else if (CommonConstant.QQ.equals(s.getNameEn())) {
+			introductionVO.setQq(s.getValue());
+		} else if (CommonConstant.BILIBILI.equals(s.getNameEn())) {
+			introductionVO.setBilibili(s.getValue());
+		} else if (CommonConstant.NETEASE.equals(s.getNameEn())) {
+			introductionVO.setNetease(s.getValue());
+		} else if (CommonConstant.EMAIL.equals(s.getNameEn())) {
+			introductionVO.setEmail(s.getValue());
+		} else if (CommonConstant.FAVORITE.equals(s.getNameEn())) {
+			Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
+			favorites.add(favorite);
+		} else if (CommonConstant.ROLL_TEXT.equals(s.getNameEn())) {
+			Matcher m = PATTERN.matcher(s.getValue());
+			while (m.find()) {
+				rollTexts.add(m.group(1));
+			}
+		}
 	}
 
 	@Override
