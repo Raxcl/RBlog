@@ -48,7 +48,7 @@ public class LoginAdminController {
 		}
 		user.setPassword(null);
 		String jwt = JwtUtils.generateToken("admin:" + user.getUsername(),expireTime, secretKey);
-		Map<String, Object> map = new HashMap<>(8);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("user", user);
 		map.put("token", jwt);
 		return Result.success("登录成功", map);

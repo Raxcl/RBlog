@@ -184,7 +184,7 @@ public class VisitLogAspect {
 	 * @return Map<String, String>
 	 */
 	private Map<String, String> judgeBehavior(String behavior, String content, Map<String, Object> requestParams, Object result) {
-		Map<String, String> map = new HashMap<>(8);
+		Map<String, String> map = new HashMap<>(16);
 		String remark = "";
 		boolean isViewAndIsFirstPage = CommonConstant.VIEW_PAGE.equals(behavior) && CommonConstant.FIRST_PAGE.equals(content);
 		if ( isViewAndIsFirstPage || CommonConstant.DO_NEW.equals(content)) {

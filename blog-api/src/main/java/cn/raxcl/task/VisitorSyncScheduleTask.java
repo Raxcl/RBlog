@@ -60,8 +60,8 @@ public class VisitorSyncScheduleTask {
 		//为避免缓存击穿导致第二天的数据统计不准确，以数据库访问日志为准，而不从Redis中获取这个Set
 		//比如在这个定时任务执行期间，产生大量访客的请求，而这些访客的uuid都在任务执行结束后被清空了，没有被第二天的定时任务记录到
 		Set<String> uuidSet = new HashSet<>();
-		Map<String, Integer> pvMap = new HashMap<>(8);
-		Map<String, Date> lastTimeMap = new HashMap<>(8);
+		Map<String, Integer> pvMap = new HashMap<>(16);
+		Map<String, Date> lastTimeMap = new HashMap<>(16);
 		yesterdayLogList.forEach(log -> {
 			String uuid = log.getUuid();
 			Date createTime = log.getTime();
@@ -85,7 +85,7 @@ public class VisitorSyncScheduleTask {
 		});
 		//查询当天新增访客的ip来源
 		List<String> ipSource = visitorService.getNewVisitorIpSourceByYesterday();
-		Map<String, Integer> cityVisitorMap = new HashMap<>(8);
+		Map<String, Integer> cityVisitorMap = new HashMap<>(16);
 		ipSource.forEach(i -> {
 			if (i.startsWith("中国")) {
 				String[] split = i.split("\\|");

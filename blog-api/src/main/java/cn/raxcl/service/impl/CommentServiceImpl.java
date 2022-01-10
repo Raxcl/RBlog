@@ -91,7 +91,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         Long parentCommentId = -1L;
         PageInfo<PageCommentVO> pageInfo = new PageInfo<>(getPageCommentList(page, blogId, parentCommentId));
         PageResultVO<PageCommentVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
-        Map<String, Object> map = new HashMap<>(8);
+        Map<String, Object> map = new HashMap<>(16);
         map.put("allComment", allComment);
         map.put("closeComment", allComment - openComment);
         map.put("comments", pageResultVO);
@@ -490,7 +490,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
             title = "友人帐";
             path = CommonConstant.FRIENDS;
         }
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(16);
         map.put("parentNickname", parentComment.getNickname());
         map.put("nickname", commentDTO.getNickname());
         map.put("title", title);

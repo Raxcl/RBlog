@@ -58,7 +58,7 @@ public class MailServiceImpl implements MailService {
             title = "友人帐";
             path = CommonConstant.FRIENDS;
         }
-        Map<String, Object> map = new HashMap<>(8);
+        Map<String, Object> map = new HashMap<>(16);
         map.put("title", title);
         map.put("time", commentDTO.getCreateTime());
         map.put("nickname", commentDTO.getNickname());

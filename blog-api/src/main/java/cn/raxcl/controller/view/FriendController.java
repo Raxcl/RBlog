@@ -36,7 +36,7 @@ public class FriendController {
 	public Result friends() {
 		List<FriendVO> friendVOList = friendService.getFriendVOList();
 		FriendInfoVO friendInfoVO = friendService.getFriendInfo(true, true);
-		Map<String, Object> map = new HashMap<>(8);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("friendList", friendVOList);
 		map.put("friendInfo", friendInfoVO);
 		return Result.success("获取成功", map);

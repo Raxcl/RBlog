@@ -205,7 +205,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         if (mapFromRedis != null) {
             return mapFromRedis;
         }
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(16);
         List<String> groupYearMonth = blogMapper.getGroupYearMonthByIsPublished();
         Map<String, List<ArchiveBlogVO>> archiveBlogMap = new LinkedHashMap<>();
         for (String s : groupYearMonth) {
@@ -243,7 +243,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
 
     private Map<Long, Integer> getBlogViewsMap() {
         List<BlogViewDTO> blogViewDTOList = blogMapper.getBlogViewsList();
-        Map<Long, Integer> blogViewsMap = new HashMap<>();
+        Map<Long, Integer> blogViewsMap = new HashMap<>(16);
         for (BlogViewDTO blogViewDTO : blogViewDTOList) {
             blogViewsMap.put(blogViewDTO.getId(), blogViewDTO.getViews());
         }

@@ -43,7 +43,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	@Override
 	public Map<String, List<SiteSetting>> getList() {
 		List<SiteSetting> siteSettings = siteSettingMapper.getList();
-		Map<String, List<SiteSetting>> map = new HashMap<>();
+		Map<String, List<SiteSetting>> map = new HashMap<>(16);
 		List<SiteSetting> type1 = new ArrayList<>();
 		List<SiteSetting> type2 = new ArrayList<>();
 		List<SiteSetting> type3 = new ArrayList<>();
@@ -71,8 +71,8 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 			return siteInfoMapFromRedis;
 		}
 		List<SiteSetting> siteSettings = siteSettingMapper.getList();
-		Map<String, Object> map = new HashMap<>();
-		Map<String, Object> siteInfo = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(16);
+		Map<String, Object> siteInfo = new HashMap<>(16);
 		List<Badge> badges = new ArrayList<>();
 		IntroductionVO introductionVO = new IntroductionVO();
 		List<Favorite> favorites = new ArrayList<>();

@@ -77,7 +77,7 @@ public class ImageUtils {
 		HttpHeaders headers = new HttpHeaders();
 		headers.put("Authorization", Collections.singletonList("token " + githubToken));
 
-		HashMap<String, String> body = new HashMap<>();
+		HashMap<String, String> body = new HashMap<>(16);
 		body.put("message", "Add files via RBlog");
 		body.put("content", imgBase64);
 		//TODO

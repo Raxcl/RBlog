@@ -83,7 +83,7 @@ public class DashboardServiceImpl implements DashboardService {
 		//分类对应的博客数量List
 		List<CategoryBlogCountVO> series = new ArrayList<>();
 		if (categoryBlogCountVOList.size() == categoryList.size()) {
-			Map<Long, String> m = new HashMap<>(8);
+			Map<Long, String> m = new HashMap<>(16);
 			for (Category c : categoryList) {
 				m.put(c.getId(), c.getName());
 			}
@@ -92,7 +92,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(c);
 			}
 		} else {
-			Map<Long, Integer> m = new HashMap<>(8);
+			Map<Long, Integer> m = new HashMap<>(16);
 			for (CategoryBlogCountVO c : categoryBlogCountVOList) {
 				m.put(c.getId(), c.getValue());
 			}
@@ -109,7 +109,7 @@ public class DashboardServiceImpl implements DashboardService {
 			}
 		}
 		//TODO
-		Map<String, List> map = new HashMap<>();
+		Map<String, List> map = new HashMap<>(16);
 		map.put("legend", legend);
 		map.put("series", series);
 		return map;
@@ -130,7 +130,7 @@ public class DashboardServiceImpl implements DashboardService {
 		//标签对应的博客数量List
 		List<TagBlogCountVO> series = new ArrayList<>();
 		if (tagBlogCountVOList.size() == tagList.size()) {
-			Map<Long, String> m = new HashMap<>(8);
+			Map<Long, String> m = new HashMap<>(16);
 			for (Tag t : tagList) {
 				m.put(t.getId(), t.getName());
 			}
@@ -139,7 +139,7 @@ public class DashboardServiceImpl implements DashboardService {
 				series.add(t);
 			}
 		} else {
-			Map<Long, Integer> m = new HashMap<>(8);
+			Map<Long, Integer> m = new HashMap<>(16);
 			for (TagBlogCountVO t : tagBlogCountVOList) {
 				m.put(t.getId(), t.getValue());
 			}
@@ -156,7 +156,7 @@ public class DashboardServiceImpl implements DashboardService {
 			}
 		}
 		//TODO
-		Map<String, List> map = new HashMap<>(8);
+		Map<String, List> map = new HashMap<>(16);
 		map.put("legend", legend);
 		map.put("series", series);
 		return map;
@@ -176,7 +176,7 @@ public class DashboardServiceImpl implements DashboardService {
 			uv.add(visitRecord.getUv());
 		}
 		//TODO
-		Map<String, List> map = new HashMap<>(8);
+		Map<String, List> map = new HashMap<>(16);
 		map.put("date", date);
 		map.put("pv", pv);
 		map.put("uv", uv);

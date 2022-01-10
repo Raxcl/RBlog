@@ -56,7 +56,7 @@ public class BlogAdminController {
 		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Blog> pageInfo = new PageInfo<>(blogService.getListByTitleAndCategoryId(title, categoryId));
 		List<Category> categories = categoryService.getCategoryList();
-		Map<String, Object> map = new HashMap<>(8);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("blogs", pageInfo);
 		map.put("categories", categories);
 		return Result.success("请求成功", map);
@@ -86,7 +86,7 @@ public class BlogAdminController {
 	public Result categoryAndTag() {
 		List<Category> categories = categoryService.getCategoryList();
 		List<Tag> tags = tagService.getTagList();
-		Map<String, Object> map = new HashMap<>(8);
+		Map<String, Object> map = new HashMap<>(16);
 		map.put("categories", categories);
 		map.put("tags", tags);
 		return Result.success("请求成功", map);
