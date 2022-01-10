@@ -1,5 +1,8 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.common.LogService;
+import cn.raxcl.model.temp.LogDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,11 +11,8 @@ import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.VisitLogMapper;
 import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 import cn.raxcl.service.VisitLogService;
-import cn.raxcl.util.IpAddressUtils;
-import cn.raxcl.util.UserAgentUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 访问日志业务层实现
@@ -22,11 +22,11 @@ import java.util.Map;
 @Service
 public class VisitLogServiceImpl implements VisitLogService {
 	private final VisitLogMapper visitLogMapper;
-	private final UserAgentUtils userAgentUtils;
+	private final LogService logService;
 
-	public VisitLogServiceImpl(VisitLogMapper visitLogMapper, UserAgentUtils userAgentUtils) {
+	public VisitLogServiceImpl(VisitLogMapper visitLogMapper, LogService logService) {
 		this.visitLogMapper = visitLogMapper;
-		this.userAgentUtils = userAgentUtils;
+		this.logService = logService;
 	}
 
 	@Override
@@ -43,14 +43,8 @@ public class VisitLogServiceImpl implements VisitLogService {
 	@Override
 	@Async
 	public void saveVisitLog(VisitLog log) {
-		//TODO 重复代码 尝试提取失败
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
-		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
-		String os = userAgentMap.get("os");
-		String browser = userAgentMap.get("browser");
-		log.setIpSource(ipSource);
-		log.setOs(os);
-		log.setBrowser(browser);
+		LogDTO logDTO = logService.saveLog(log.getIp(), log.getUserAgent());
+		BeanUtils.copyProperties(logDTO, log);
 		if (visitLogMapper.saveVisitLog(log) != 1) {
 			throw new PersistenceException("日志添加失败");
 		}
