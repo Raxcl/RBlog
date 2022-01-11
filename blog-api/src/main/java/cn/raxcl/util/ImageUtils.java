@@ -53,22 +53,6 @@ public class ImageUtils {
 		throw new BadRequestException("response contentType unlike image");
 	}
 
-	public static String saveImage(ImageResource image, String serverUploadPath, String serverUrl) throws IOException {
-		File folder = new File(serverUploadPath);
-		if (!folder.exists()) {
-			//TODO
-			folder.mkdirs();
-		}
-		String fileName = UUID.randomUUID() + "." + image.getType();
-
-		try (FileOutputStream fileOutputStream = new FileOutputStream(serverUploadPath + fileName)) {
-			fileOutputStream.write(image.getData());
-		} catch (IOException e) {
-			throw new PersistenceException("saveImage is error---ImageUtils.class");
-		}
-		return serverUrl + "/image/" + fileName;
-	}
-
 	public static String push2Github(ImageResource image, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
 		String fileName = UUID.randomUUID() + "." + image.getType();
 		String url = String.format(CommonConstant.GITHUB_UPLOAD_API, githubUsername, githubRepos, githubReposPath, fileName);
