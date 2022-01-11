@@ -1,18 +1,18 @@
-package cn.raxcl.util.markdown.ext.heimu.internal;
+package cn.raxcl.util.markdown.ext.curtain.internal;
 
 import cn.raxcl.constant.CommonConstant;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
 import org.commonmark.parser.delimiter.DelimiterProcessor;
 import org.commonmark.parser.delimiter.DelimiterRun;
-import cn.raxcl.util.markdown.ext.heimu.Heimu;
+import cn.raxcl.util.markdown.ext.curtain.Curtain;
 
 /**
  * @Description: 定界
  * @author Raxcl
  * @date 2022-01-07 19:30:40
  */
-public class HeimuDelimiterProcessor implements DelimiterProcessor {
+public class CurtainDelimiterProcessor implements DelimiterProcessor {
     @Override
     public char getOpeningCharacter() {
         return '@';
@@ -41,7 +41,7 @@ public class HeimuDelimiterProcessor implements DelimiterProcessor {
     @Override
     public void process(Text opener, Text closer, int delimiterCount) {
         // Wrap nodes between delimiters in heimu.
-        Node heimu = new Heimu();
+        Node heimu = new Curtain();
 
         Node tmp = opener.getNext();
         while (tmp != null && tmp != closer) {

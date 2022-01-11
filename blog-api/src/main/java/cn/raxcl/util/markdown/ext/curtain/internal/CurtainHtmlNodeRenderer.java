@@ -1,4 +1,4 @@
-package cn.raxcl.util.markdown.ext.heimu.internal;
+package cn.raxcl.util.markdown.ext.curtain.internal;
 
 import org.commonmark.node.Node;
 import org.commonmark.renderer.html.HtmlNodeRendererContext;
@@ -12,11 +12,11 @@ import java.util.Map;
  * @author Raxcl
  * @date 2022-01-07 19:31:17
  */
-public class HeimuHtmlNodeRenderer extends AbstractHeimuNodeRenderer {
+public class CurtainHtmlNodeRenderer extends AbstractCurtainNodeRenderer {
 	private final HtmlNodeRendererContext context;
 	private final HtmlWriter html;
 
-	public HeimuHtmlNodeRenderer(HtmlNodeRendererContext context) {
+	public CurtainHtmlNodeRenderer(HtmlNodeRendererContext context) {
 		this.context = context;
 		this.html = context.getWriter();
 	}

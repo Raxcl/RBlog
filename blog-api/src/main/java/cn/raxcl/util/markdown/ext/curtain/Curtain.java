@@ -1,4 +1,4 @@
-package cn.raxcl.util.markdown.ext.heimu;
+package cn.raxcl.util.markdown.ext.curtain;
 
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Delimited;
@@ -8,7 +8,7 @@ import org.commonmark.node.Delimited;
  * @author Raxcl
  * @date 2022-01-07 19:31:28
  */
-public class Heimu extends CustomNode implements Delimited {
+public class Curtain extends CustomNode implements Delimited {
 	private static final String DELIMITER = "@@";
 
 	@Override
@@ -16,8 +16,8 @@ public class Heimu extends CustomNode implements Delimited {
 		return DELIMITER;
 	}
 
+	//TODO markdown 方法内部实现相同（怀疑是用的切面）， 后续有能力了再解决
 	@Override
-	//TODO
 	public String getClosingDelimiter() {
 		return DELIMITER;
 	}

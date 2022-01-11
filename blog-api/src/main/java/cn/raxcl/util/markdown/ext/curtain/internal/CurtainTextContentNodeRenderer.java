@@ -1,4 +1,4 @@
-package cn.raxcl.util.markdown.ext.heimu.internal;
+package cn.raxcl.util.markdown.ext.curtain.internal;
 
 import org.commonmark.node.Node;
 import org.commonmark.renderer.text.TextContentNodeRendererContext;
@@ -9,11 +9,11 @@ import org.commonmark.renderer.text.TextContentWriter;
  * @author Raxcl
  * @date 2022-01-07 19:31:24
  */
-public class HeimuTextContentNodeRenderer extends AbstractHeimuNodeRenderer {
+public class CurtainTextContentNodeRenderer extends AbstractCurtainNodeRenderer {
     private final TextContentNodeRendererContext context;
     private final TextContentWriter textContent;
 
-    public HeimuTextContentNodeRenderer(TextContentNodeRendererContext context) {
+    public CurtainTextContentNodeRenderer(TextContentNodeRendererContext context) {
         this.context = context;
         this.textContent = context.getWriter();
     }

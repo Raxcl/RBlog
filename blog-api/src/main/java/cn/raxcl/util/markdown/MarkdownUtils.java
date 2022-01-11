@@ -1,7 +1,7 @@
 package cn.raxcl.util.markdown;
 
 import cn.raxcl.util.markdown.ext.cover.CoverExtension;
-import cn.raxcl.util.markdown.ext.heimu.HeimuExtension;
+import cn.raxcl.util.markdown.ext.curtain.CurtainExtension;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.ext.gfm.tables.TableBlock;
@@ -25,6 +25,7 @@ import java.util.Set;
  * @date 2022-01-07 19:32:33
  */
 public class MarkdownUtils {
+	private MarkdownUtils(){}
 	/**
 	 * 为h标签生成id 供tocbot目录生成
 	 */
@@ -45,7 +46,7 @@ public class MarkdownUtils {
 	/**
 	 * 黑幕
 	 */
-	private static final Set<Extension> HEI_MU_EXTENSION = Collections.singleton(HeimuExtension.create());
+	private static final Set<Extension> HEI_MU_EXTENSION = Collections.singleton(CurtainExtension.create());
 	/**
 	 * 遮盖层
 	 */
@@ -97,7 +98,7 @@ public class MarkdownUtils {
 	/**
 	 * markdown格式转换成HTML格式
 	 */
-	//todo
+	//todo markdown markdown格式转换成HTML格式
 	public static String markdownToHtml(String markdown) {
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(markdown);
@@ -111,10 +112,5 @@ public class MarkdownUtils {
 	public static String markdownToHtmlExtensions(String markdown) {
 		Node document = PARSER.parse(markdown);
 		return RENDERER.render(document);
-	}
-
-	//TODO
-	public static void main(String[] args) {
-		System.out.println(markdownToHtmlExtensions(""));
 	}
 }
