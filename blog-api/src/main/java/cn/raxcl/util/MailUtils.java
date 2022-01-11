@@ -1,7 +1,6 @@
 package cn.raxcl.util;
 
 import org.springframework.boot.autoconfigure.mail.MailProperties;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -29,21 +28,6 @@ public class MailUtils {
 		this.javaMailSender = javaMailSender;
 		this.mailProperties = mailProperties;
 		this.templateEngine = templateEngine;
-	}
-	
-	//TODO
-	@Async
-	public void sendSimpleMail(String toAccount, String subject, String content) {
-		try {
-			SimpleMailMessage message = new SimpleMailMessage();
-			message.setFrom(mailProperties.getUsername());
-			message.setTo(toAccount);
-			message.setSubject(subject);
-			message.setText(content);
-			javaMailSender.send(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Async
