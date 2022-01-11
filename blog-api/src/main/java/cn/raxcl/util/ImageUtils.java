@@ -1,22 +1,17 @@
 package cn.raxcl.util;
 
 import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.exception.BadRequestException;
 import cn.raxcl.exception.NotFoundException;
-import cn.raxcl.exception.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import cn.raxcl.exception.BadRequestException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -53,7 +48,7 @@ public class ImageUtils {
 		throw new BadRequestException("response contentType unlike image");
 	}
 
-	public static String push2Github(ImageResource image, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
+	public static String pushGithub(ImageResource image, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
 		String fileName = UUID.randomUUID() + "." + image.getType();
 		String url = String.format(CommonConstant.GITHUB_UPLOAD_API, githubUsername, githubRepos, githubReposPath, fileName);
 		String imgBase64 = Base64.getEncoder().encodeToString(image.getData());
@@ -64,8 +59,7 @@ public class ImageUtils {
 		HashMap<String, String> body = new HashMap<>(16);
 		body.put("message", "Add files via RBlog");
 		body.put("content", imgBase64);
-		//TODO
-		HttpEntity httpEntity = new HttpEntity(body, headers);
+		HttpEntity<HashMap<String, String>> httpEntity = new HttpEntity<>(body, headers);
 		REST_TEMPLATE.put(url, httpEntity);
 
 		return String.format(CommonConstant.CDN_URL4_GITHUB, githubUsername, githubRepos, githubReposPath, fileName);

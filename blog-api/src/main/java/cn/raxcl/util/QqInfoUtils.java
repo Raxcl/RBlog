@@ -44,7 +44,7 @@ public class QqInfoUtils {
 	 * @return 指向该图片的jsDelivr CDN链接
 	 */
 	public static String getQqAvatarUrlByGithubUpload(String qq, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
-		return ImageUtils.push2Github(getImageResourceByQq(qq), githubToken, githubUsername, githubRepos, githubReposPath);
+		return ImageUtils.pushGithub(getImageResourceByQq(qq), githubToken, githubUsername, githubRepos, githubReposPath);
 	}
 
 	public static boolean isQqNumber(String nickname) {

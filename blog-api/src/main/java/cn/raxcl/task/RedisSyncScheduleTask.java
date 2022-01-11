@@ -23,12 +23,12 @@ public class RedisSyncScheduleTask {
 		this.blogService = blogService;
 	}
 
+	//TODO 数据持久化，后期优化
 	/**
 	 * 从Redis同步博客文章浏览量到数据库
 	 */
 	public void syncBlogViewsToDatabase() {
 		String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
-		//TODO
 		Map blogViewsMap = redisService.getMapByHash(redisKey);
 		Set<Integer> keys = blogViewsMap.keySet();
 		for (Integer key : keys) {
