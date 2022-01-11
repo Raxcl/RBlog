@@ -1,37 +1,18 @@
 package cn.raxcl.util;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
- * @Description: 获取QQ昵称头像信息
+ * 获取QQ昵称头像信息
  * @author Raxcl
  * @date 2022-01-07 19:50:43
  */
-//TODO
 public class QqInfoUtils {
-
-	/**
-	 * 服务访问地址，用于返回图片url
-	 */
-	@Value("${upload.path}")
-	private String serverUploadPath;
-
-	/**
-	 * 服务器文件上传路径
-	 */
-	@Value("${custom.url.api}")
-	private String serverUrl;
-
-
-
-
-
+	private QqInfoUtils(){}
 	private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 	private static final String QQ_NICKNAME_URL = "https://r.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={1}";
 	private static final String QQ_AVATAR_URL = "https://q.qlogo.cn/g?b=qq&nk=%s&s=100";
@@ -54,17 +35,6 @@ public class QqInfoUtils {
 
 	private static ImageUtils.ImageResource getImageResourceByQq(String qq) {
 		return ImageUtils.getImageByRequest(String.format(QQ_AVATAR_URL, qq));
-	}
-
-	/**
-	 * 将QQ头像下载到本地，并返回访问本地图片的URL
-	 *
-	 * @param qq qq
-	 * @return 访问本地图片的URL
-	 * @throws IOException
-	 */
-	public static String getQQAvatarURLByServerUpload(String qq, String serverUploadPath, String serverUrl) throws IOException {
-		return ImageUtils.saveImage(getImageResourceByQq(qq), serverUploadPath, serverUrl);
 	}
 
 	/**
