@@ -1,5 +1,7 @@
 package cn.raxcl.util.common;
 
+import cn.raxcl.exception.NotFoundException;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -8,14 +10,14 @@ import java.util.Set;
 /**
  * @Description:
  * @author Raxcl
- * @date 2022-01-07 19:06:34
+ * @date 2022-01-11 10:36:19
  */
-//TODO
 public class ValidatorUtils {
-	private static Validator validator;
+	private ValidatorUtils(){}
+	private static final Validator VALIDATOR;
 
 	static {
-		validator = Validation.buildDefaultValidatorFactory().getValidator();
+		VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 	}
 
 	/**
@@ -25,11 +27,11 @@ public class ValidatorUtils {
 	 * @param groups 待校验的组
 	 * @throws RuntimeException 校验不通过，则报BusinessException异常
 	 */
-	public static void validateEntity(Object object, Class<?>... groups) throws RuntimeException {
-		Set<ConstraintViolation<Object>> constraintViolations = validator.validate(object, groups);
+	public static void validateEntity(Object object, Class<?>... groups) throws NotFoundException {
+		Set<ConstraintViolation<Object>> constraintViolations = VALIDATOR.validate(object, groups);
 		if (!constraintViolations.isEmpty()) {
 			ConstraintViolation<Object> constraint = constraintViolations.iterator().next();
-			throw new RuntimeException(constraint.getMessage());
+			throw new NotFoundException(constraint.getMessage());
 		}
 	}
 }

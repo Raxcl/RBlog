@@ -7,9 +7,6 @@ package cn.raxcl.exception;
  */
 
 public class NotFoundException extends RuntimeException {
-	//TODO
-	public NotFoundException() {
-	}
 
 	public NotFoundException(String message) {
 		super(message);
@@ -18,4 +15,6 @@ public class NotFoundException extends RuntimeException {
 	public NotFoundException(String message, Throwable cause) {
 		super(message, cause);
 	}
+
+
 }

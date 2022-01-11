@@ -7,15 +7,12 @@ package cn.raxcl.exception;
  */
 
 public class BadRequestException extends RuntimeException {
-	//TODO
-	public BadRequestException() {
-	}
 
 	public BadRequestException(String message) {
 		super(message);
 	}
 
-	public BadRequestException(String message, Throwable cause) {
-		super(message, cause);
-	}
+
+
+
 }
