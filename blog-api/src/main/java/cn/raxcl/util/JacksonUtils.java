@@ -1,7 +1,6 @@
 package cn.raxcl.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -12,13 +11,14 @@ import java.io.InputStream;
  * @author Raxcl
  * @date 2022-01-07 19:50:00
  */
-//TODO
 public class JacksonUtils {
-	private static ObjectMapper objectMapper = new ObjectMapper();
+	private JacksonUtils(){}
+
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	public static String writeValueAsString(Object value) {
 		try {
-			return objectMapper.writeValueAsString(value);
+			return OBJECT_MAPPER.writeValueAsString(value);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			return "";
@@ -27,16 +27,7 @@ public class JacksonUtils {
 
 	public static <T> T readValue(String content, Class<T> valueType) {
 		try {
-			return objectMapper.readValue(content, valueType);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static <T> T readValue(String content, TypeReference<T> valueTypeRef) {
-		try {
-			return objectMapper.readValue(content, valueTypeRef);
+			return OBJECT_MAPPER.readValue(content, valueType);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -45,7 +36,7 @@ public class JacksonUtils {
 
 	public static <T> T readValue(InputStream src, Class<T> valueType) {
 		try {
-			return objectMapper.readValue(src, valueType);
+			return OBJECT_MAPPER.readValue(src, valueType);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -53,6 +44,6 @@ public class JacksonUtils {
 	}
 
 	public static <T> T convertValue(Object fromValue, Class<T> toValueType) {
-		return objectMapper.convertValue(fromValue, toValueType);
+		return OBJECT_MAPPER.convertValue(fromValue, toValueType);
 	}
 }
