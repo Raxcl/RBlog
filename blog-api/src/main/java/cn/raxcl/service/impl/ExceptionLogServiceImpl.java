@@ -1,5 +1,8 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.common.CommonService;
+import cn.raxcl.model.temp.LogDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +25,12 @@ import java.util.Map;
 public class ExceptionLogServiceImpl implements ExceptionLogService {
 	private final ExceptionLogMapper exceptionLogMapper;
 	private final UserAgentUtils userAgentUtils;
+	private final CommonService commonService;
 
-	public ExceptionLogServiceImpl(ExceptionLogMapper exceptionLogMapper, UserAgentUtils userAgentUtils) {
+	public ExceptionLogServiceImpl(ExceptionLogMapper exceptionLogMapper, UserAgentUtils userAgentUtils, CommonService commonService) {
 		this.exceptionLogMapper = exceptionLogMapper;
 		this.userAgentUtils = userAgentUtils;
+		this.commonService = commonService;
 	}
 
 	@Override
@@ -37,14 +42,8 @@ public class ExceptionLogServiceImpl implements ExceptionLogService {
 	@Override
 	@Async
 	public void saveExceptionLog(ExceptionLog log) {
-		//TODO
-		String ipSource = IpAddressUtils.getCityInfo(log.getIp());
-		Map<String, String> userAgentMap = userAgentUtils.parseOsAndBrowser(log.getUserAgent());
-		String os = userAgentMap.get("os");
-		String browser = userAgentMap.get("browser");
-		log.setIpSource(ipSource);
-		log.setOs(os);
-		log.setBrowser(browser);
+		LogDTO logDTO = commonService.saveLog(log.getIp(), log.getUserAgent());
+		BeanUtils.copyProperties(logDTO, log);
 		if (exceptionLogMapper.saveExceptionLog(log) != 1) {
 			throw new PersistenceException("日志添加失败");
 		}
