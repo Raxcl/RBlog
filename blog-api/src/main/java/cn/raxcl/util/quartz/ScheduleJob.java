@@ -19,8 +19,8 @@ import java.util.concurrent.Future;
  */
 @Slf4j
 public class ScheduleJob extends QuartzJobBean {
-	//TODO
-	private ExecutorService service = Executors.newSingleThreadExecutor();
+	//TODO 学习后优化 定时任务，后期学习之后回来优化
+	private final ExecutorService service = Executors.newSingleThreadExecutor();
 
 	@Override
 	protected void executeInternal(JobExecutionContext context) {
@@ -48,7 +48,10 @@ public class ScheduleJob extends QuartzJobBean {
 			//任务执行结果
 			jobLog.setStatus(true);
 			log.info("任务执行成功，任务ID：{}，总共耗时：{} 毫秒", scheduleJob.getJobId(), times);
-		} catch (Exception e) {
+		}catch(InterruptedException e){
+			log.error("线程中断:{}", scheduleJob.getJobId(), e);
+			Thread.currentThread().interrupt();
+		}catch (Exception e) {
 			//任务执行总时长
 			long times = System.currentTimeMillis() - startTime;
 			jobLog.setTimes((int) times);

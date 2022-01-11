@@ -46,7 +46,7 @@ public class SiteSettingAdminController {
 	@OperationLogger("更新站点配置信息")
 	@PostMapping("/siteSettings")
 	public Result updateAll(@RequestBody Map<String, Object> map) {
-		//TODO 类型转换失败，待后期解决
+		//TODO 学习后优化 类型转换失败，待后期解决
 		List<LinkedHashMap<String,Object>> siteSettings = (List<LinkedHashMap<String,Object>>) map.get("settings");
 		List<Integer> deleteIds = (List<Integer>) map.get("deleteIds");
 		siteSettingService.updateSiteSetting(siteSettings, deleteIds);

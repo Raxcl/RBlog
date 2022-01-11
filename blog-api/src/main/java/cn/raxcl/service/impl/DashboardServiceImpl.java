@@ -170,7 +170,6 @@ public class DashboardServiceImpl implements DashboardService {
 			pv.add(visitRecord.getPv());
 			uv.add(visitRecord.getUv());
 		}
-		//TODO
 		Map<String, Object> map = new HashMap<>(16);
 		map.put("date", date);
 		map.put("pv", pv);

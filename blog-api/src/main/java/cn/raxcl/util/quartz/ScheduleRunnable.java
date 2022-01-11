@@ -1,5 +1,6 @@
 package cn.raxcl.util.quartz;
 
+import cn.raxcl.exception.NotFoundException;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import cn.raxcl.util.common.SpringContextUtils;
@@ -12,10 +13,9 @@ import java.lang.reflect.Method;
  * @date 2022-01-07 19:43:01
  */
 public class ScheduleRunnable implements Runnable {
-	//TODO
-	private Object target;
-	private Method method;
-	private String params;
+	private final Object target;
+	private final Method method;
+	private final String params;
 
 	public ScheduleRunnable(String beanName, String methodName, String params) throws NoSuchMethodException, SecurityException {
 		this.target = SpringContextUtils.getBean(beanName);
@@ -34,10 +34,11 @@ public class ScheduleRunnable implements Runnable {
 			if (StringUtils.hasText(params)) {
 				method.invoke(target, params);
 			} else {
+				//TODO 学习后优化 学习定时任务后回头优化
 				method.invoke(target);
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("执行定时任务失败", e);
+			throw new NotFoundException("执行定时任务失败", e);
 		}
 	}
 }

@@ -10,12 +10,11 @@ import java.util.Map;
 /**
  * @Description: UserAgent解析工具类
  * @author Raxcl
- * @date 2022-01-07 19:51:58
+ * @date 2022-01-11 12:45:47
  */
 @Component
 public class UserAgentUtils {
-	//TODO
-	private UserAgentAnalyzer uaa;
+	private final UserAgentAnalyzer uaa;
 
 	public UserAgentUtils() {
 		this.uaa = UserAgentAnalyzer
