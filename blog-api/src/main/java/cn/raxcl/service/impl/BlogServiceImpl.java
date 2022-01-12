@@ -142,7 +142,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         PageResultVO<BlogInfoVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
         setBlogViewsFromRedisToPageResult(pageResultVO);
         //添加首页缓存
-        redisService.saveKVToHash(redisKey, pageNum, pageResultVO);
+        redisService.saveKvToHash(redisKey, pageNum, pageResultVO);
         return pageResultVO;
     }
 
@@ -274,7 +274,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         if (blogMapper.saveBlog(blogDTO) != 1) {
             throw new PersistenceException("添加博客失败");
         }
-        redisService.saveKVToHash(RedisKeyConstant.BLOG_VIEWS_MAP, blogDTO.getId(), 0);
+        redisService.saveKvToHash(RedisKeyConstant.BLOG_VIEWS_MAP, blogDTO.getId(), 0);
         deleteBlogRedisCache();
     }
 
@@ -367,7 +367,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
             throw new PersistenceException("更新博客失败");
         }
         deleteBlogRedisCache();
-        redisService.saveKVToHash(RedisKeyConstant.BLOG_VIEWS_MAP, blogDTO.getId(), blogDTO.getViews());
+        redisService.saveKvToHash(RedisKeyConstant.BLOG_VIEWS_MAP, blogDTO.getId(), blogDTO.getViews());
     }
 
     private int countBlogByIsPublished() {

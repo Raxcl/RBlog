@@ -1,5 +1,6 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.model.vo.BlogInfoVO;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -7,8 +8,10 @@ import cn.raxcl.model.vo.PageResultVO;
 import cn.raxcl.service.RedisService;
 import cn.raxcl.util.JacksonUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,36 +21,33 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class RedisServiceImpl implements RedisService {
-	//TODO
-	private final RedisTemplate jsonRedisTemplate;
+	@Resource
+	private RedisTemplate<String,Object> jsonRedisTemplate;
 
-	public RedisServiceImpl(RedisTemplate jsonRedisTemplate) {
-		this.jsonRedisTemplate = jsonRedisTemplate;
-	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public PageResultVO<BlogInfoVO> getBlogInfoPageResultByHash(String hash, Integer pageNum) {
-		if (jsonRedisTemplate.opsForHash().hasKey(hash, pageNum)) {
+		if (Boolean.TRUE.equals(jsonRedisTemplate.opsForHash().hasKey(hash, pageNum))) {
 			Object redisResult = jsonRedisTemplate.opsForHash().get(hash, pageNum);
-			PageResultVO<BlogInfoVO> pageResultVO = JacksonUtils.convertValue(redisResult, PageResultVO.class);
-			return pageResultVO;
+			return JacksonUtils.convertValue(redisResult, PageResultVO.class);
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public void saveKVToHash(String hash, Object key, Object value) {
+	public void saveKvToHash(String hash, Object key, Object value) {
 		jsonRedisTemplate.opsForHash().put(hash, key, value);
 	}
 
 	@Override
-	public void saveMapToHash(String hash, Map map) {
+	public void saveMapToHash(String hash, Map<Long, Integer> map) {
 		jsonRedisTemplate.opsForHash().putAll(hash, map);
 	}
 
 	@Override
-	public Map getMapByHash(String hash) {
+	public Map<Object, Object> getMapByHash(String hash) {
 		return jsonRedisTemplate.opsForHash().entries(hash);
 	}
 
@@ -59,7 +59,7 @@ public class RedisServiceImpl implements RedisService {
 	@Override
 	public void incrementByHashKey(String hash, Object key, int increment) {
 		if (increment < 0) {
-			throw new RuntimeException("递增因子必须大于0");
+			throw new NotFoundException("递增因子必须大于0");
 		}
 		jsonRedisTemplate.opsForHash().increment(hash, key, increment);
 	}
@@ -70,9 +70,9 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> List<T> getListByValue(String key) {
-		List<T> redisResult = (List<T>) jsonRedisTemplate.opsForValue().get(key);
-		return redisResult;
+		return (List<T>) jsonRedisTemplate.opsForValue().get(key);
 	}
 
 	@Override
@@ -81,9 +81,9 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T> Map<String, T> getMapByValue(String key) {
-		Map<String, T> redisResult = (Map<String, T>) jsonRedisTemplate.opsForValue().get(key);
-		return redisResult;
+		return (Map<String, T>) jsonRedisTemplate.opsForValue().get(key);
 	}
 
 	@Override
@@ -92,16 +92,16 @@ public class RedisServiceImpl implements RedisService {
 	}
 
 	@Override
-	public <T> T getObjectByValue(String key, Class t) {
+	@SuppressWarnings("unchecked")
+	public <T> T getObjectByValue(String key, Class<?> t) {
 		Object redisResult = jsonRedisTemplate.opsForValue().get(key);
-		T object = (T) JacksonUtils.convertValue(redisResult, t);
-		return object;
+		return (T) JacksonUtils.convertValue(redisResult, t);
 	}
 
 	@Override
 	public void incrementByKey(String key, int increment) {
 		if (increment < 0) {
-			throw new RuntimeException("递增因子必须大于0");
+			throw new NotFoundException("递增因子必须大于0");
 		}
 		jsonRedisTemplate.opsForValue().increment(key, increment);
 	}
@@ -118,7 +118,7 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	public int countBySet(String key) {
-		return jsonRedisTemplate.opsForSet().size(key).intValue();
+		return Objects.requireNonNull(jsonRedisTemplate.opsForSet().size(key)).intValue();
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	public boolean hasValueInSet(String key, Object value) {
-		return jsonRedisTemplate.opsForSet().isMember(key, value);
+		return Boolean.TRUE.equals(jsonRedisTemplate.opsForSet().isMember(key, value));
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class RedisServiceImpl implements RedisService {
 
 	@Override
 	public boolean hasKey(String key) {
-		return jsonRedisTemplate.hasKey(key);
+		return Boolean.TRUE.equals(jsonRedisTemplate.hasKey(key));
 	}
 
 	@Override

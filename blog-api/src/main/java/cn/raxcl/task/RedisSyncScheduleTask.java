@@ -29,9 +29,13 @@ public class RedisSyncScheduleTask {
 	 */
 	public void syncBlogViewsToDatabase() {
 		String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
-		Map blogViewsMap = redisService.getMapByHash(redisKey);
-		Set<Integer> keys = blogViewsMap.keySet();
-		for (Integer key : keys) {
+		Map<Object, Object> blogViewsMap = redisService.getMapByHash(redisKey);
+		Set<Object> keys = blogViewsMap.keySet();
+		for (Object keyObj : keys) {
+			Integer key = 0;
+			if(keyObj instanceof Integer){
+				key = (Integer)keyObj;
+			}
 			Integer views = (Integer) blogViewsMap.get(key);
 			blogService.updateViews(key.longValue(), views);
 		}
