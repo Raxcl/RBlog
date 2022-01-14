@@ -1,8 +1,7 @@
 package cn.raxcl.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import cn.raxcl.exception.NotFoundException;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -82,6 +81,12 @@ public class JwtUtils {
 	 * @param token token
 	 */
 	public static Claims getTokenBody(String token, String secretKey) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.replace("Bearer", "")).getBody();
+		Claims bearer = null;
+		try {
+			bearer = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token.replace("Bearer", "")).getBody();
+		} catch (Exception e) {
+			throw new NotFoundException("token过期，请重新登录");
+		}
+		return bearer;
 	}
 }

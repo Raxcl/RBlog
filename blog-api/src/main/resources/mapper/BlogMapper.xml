@@ -207,13 +207,13 @@
 
     <!--更新博客置顶状态-->
     <update id="updateBlogTopById">
-        update blog set is_top=#{cn} where id=#{blogId}
+        update blog set is_top=#{top} where id=#{blogId}
     </update>
 
     <!--更新博客可见性状态-->
     <update id="updateBlogVisibilityById">
         update blog set is_appreciation=#{bv.appreciation}, is_recommend=#{bv.recommend}, is_comment_enabled=#{bv.commentEnabled},
-        is_top=#{bv.cn}, is_published=#{bv.published}, password=#{bv.password}
+        is_top=#{bv.top}, is_published=#{bv.published}, password=#{bv.password}
         where id=#{blogId}
     </update>
 
