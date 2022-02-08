@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().permitAll()
 				.and()
 				//自定义JWT过滤器
-				.addFilterBefore(new JwtLoginFilter("/admin/login", authenticationManager(), loginLogService), UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(new JwtLoginFilter("/RBlog/admin/login", authenticationManager(), loginLogService), UsernamePasswordAuthenticationFilter.class)
 				.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
 				//未登录时，返回json，在前端执行重定向
 				.exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint);

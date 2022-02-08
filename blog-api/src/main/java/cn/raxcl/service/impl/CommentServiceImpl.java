@@ -1,5 +1,6 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.constant.CodeConstant;
 import cn.raxcl.constant.CommonConstant;
 import cn.raxcl.entity.User;
 import cn.raxcl.exception.NotFoundException;
@@ -55,8 +56,6 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
     public String cmsUrl;
     @Value("${custom.url.website}")
     public String websiteUrl;
-    @Value("${token.secretKey}")
-    private String secretKey;
 
     private final CommentMapper commentMapper;
     private final BlogService blogService;
@@ -239,7 +238,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
     private void checkCommentToken(String jwt) {
         String subject;
         try {
-            subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
+            subject = JwtUtils.getTokenBody(jwt, CodeConstant.SECRET_KEY).getSubject();
             postCommentDTO.setSubject(subject);
         } catch (Exception e) {
             throw new NotFoundException("Token已失效，请重新验证密码！",e);

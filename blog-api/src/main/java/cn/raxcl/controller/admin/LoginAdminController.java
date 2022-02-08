@@ -1,5 +1,6 @@
 package cn.raxcl.controller.admin;
 
+import cn.raxcl.constant.CodeConstant;
 import cn.raxcl.constant.CommonConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,10 +24,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class LoginAdminController {
-	@Value("${token.secretKey}")
-	private String secretKey;
-	@Value("${token.expireTime}")
-	private Long expireTime;
 
 	private final UserService userService;
 
@@ -47,7 +44,7 @@ public class LoginAdminController {
 			return Result.exception(403, "无权限");
 		}
 		user.setPassword(null);
-		String jwt = JwtUtils.generateToken("admin:" + user.getUsername(),expireTime, secretKey);
+		String jwt = JwtUtils.generateToken("admin:" + user.getUsername(), CodeConstant.EXPIRE_TIME, CodeConstant.SECRET_KEY);
 		Map<String, Object> map = new HashMap<>(16);
 		map.put("user", user);
 		map.put("token", jwt);

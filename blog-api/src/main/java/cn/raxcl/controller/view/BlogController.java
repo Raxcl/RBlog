@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.constant.CodeConstant;
 import cn.raxcl.constant.CommonConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,6 @@ import java.util.List;
  */
 @RestController
 public class BlogController {
-	@Value("${token.secretKey}")
-	private String secretKey;
 
 	private final BlogService blogService;
 
@@ -76,7 +75,7 @@ public class BlogController {
 		String password = blogService.getBlogPassword(blogPasswordDTO.getBlogId());
 		if (password.equals(blogPasswordDTO.getPassword())) {
 			//生成有效时间一个月的Token
-			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, secretKey);
+			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, CodeConstant.SECRET_KEY);
 			return Result.success("密码正确", jwt);
 		} else {
 			return Result.exception(403, "密码错误");

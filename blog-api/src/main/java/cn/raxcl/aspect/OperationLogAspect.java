@@ -1,5 +1,6 @@
 package cn.raxcl.aspect;
 
+import cn.raxcl.constant.CodeConstant;
 import cn.raxcl.exception.NotFoundException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -29,9 +30,6 @@ import java.util.Map;
 @Component
 @Aspect
 public class OperationLogAspect {
-
-	@Value("${token.secretKey}")
-	private String secretKey;
 
 	ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
@@ -79,7 +77,7 @@ public class OperationLogAspect {
 			throw new NotFoundException("attributes为空 ---OperationLogAspect.class");
 		}
 		HttpServletRequest request = attributes.getRequest();
-		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), secretKey).getSubject();
+		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), CodeConstant.SECRET_KEY).getSubject();
 		String uri = request.getRequestURI();
 		String method = request.getMethod();
 		String description = operationLogger.value();

@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.constant.CodeConstant;
 import cn.raxcl.constant.CommonConstant;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +27,6 @@ import cn.raxcl.util.JwtUtils;
  */
 @RestController
 public class MomentController {
-	@Value("${token.secretKey}")
-	private String secretKey;
 
 	private final MomentService momentService;
 	private final UserServiceImpl userService;
@@ -51,7 +50,7 @@ public class MomentController {
 		boolean adminIdentity = false;
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
-				String subject = JwtUtils.getTokenBody(jwt, secretKey).getSubject();
+				String subject = JwtUtils.getTokenBody(jwt, CodeConstant.SECRET_KEY).getSubject();
 				//博主身份Token
 				if (subject.startsWith(CommonConstant.ADMIN)) {
 					String username = subject.replace("admin:", "");
