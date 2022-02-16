@@ -34,7 +34,7 @@ public class ScheduleRunnable implements Runnable {
 			if (StringUtils.hasText(params)) {
 				method.invoke(target, params);
 			} else {
-				//TODO 学习后优化 学习定时任务后回头优化
+				//todo 无法解决：少参数提示，暂时无法解决
 				method.invoke(target);
 			}
 		} catch (Exception e) {

@@ -44,7 +44,6 @@ public class VisitorSyncScheduleTask {
 		this.cityVisitorService = cityVisitorService;
 	}
 
-	//TODO 数据持久化，后期优化
 	/**
 	 * 清空当天Redis访客标识
 	 * 记录当天的PV和UV

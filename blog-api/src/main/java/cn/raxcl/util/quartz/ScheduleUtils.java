@@ -53,7 +53,7 @@ public class ScheduleUtils {
 	public static void createScheduleJob(Scheduler scheduler, ScheduleJob scheduleJob) {
 		try {
 			//构建job信息
-			JobDetail jobDetail = JobBuilder.newJob(cn.raxcl.util.quartz.ScheduleJob.class).withIdentity(getJobKey(scheduleJob.getJobId())).build();
+			JobDetail jobDetail = JobBuilder.newJob(QuartzJob.class).withIdentity(getJobKey(scheduleJob.getJobId())).build();
 			//表达式调度构建器
 			CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCron()).withMisfireHandlingInstructionDoNothing();
 			//按新的cronExpression表达式构建一个新的trigger

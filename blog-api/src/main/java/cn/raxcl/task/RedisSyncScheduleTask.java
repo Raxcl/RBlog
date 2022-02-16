@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @Description: Redis相关定时任务
  * @author Raxcl
- * @date 2022-01-07 18:53:08
+ * @date 2022-02-16 17:30:34
  */
 @Component
 public class RedisSyncScheduleTask {
@@ -23,9 +23,8 @@ public class RedisSyncScheduleTask {
 		this.blogService = blogService;
 	}
 
-	//TODO 数据持久化，后期优化
 	/**
-	 * 从Redis同步博客文章浏览量到数据库
+	 * 从Redis同步博客文章浏览量到数据库   定时任务反射调用
 	 */
 	public void syncBlogViewsToDatabase() {
 		String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;

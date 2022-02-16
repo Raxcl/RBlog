@@ -1,30 +1,31 @@
 package cn.raxcl.util.quartz;
 
-import lombok.extern.slf4j.Slf4j;
-import org.quartz.JobExecutionContext;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import cn.raxcl.entity.ScheduleJob;
 import cn.raxcl.entity.ScheduleJobLog;
 import cn.raxcl.service.ScheduleJobService;
 import cn.raxcl.util.common.SpringContextUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.quartz.JobExecutionContext;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
  * @Description: 定时任务执行与结果记录
  * @author Raxcl
- * @date 2022-01-07 19:40:53
+ * @date 2022-02-15 09:52:05
  */
 @Slf4j
-public class ScheduleJob extends QuartzJobBean {
-	//TODO 学习后优化 定时任务，后期学习之后回来优化
-	private final ExecutorService service = Executors.newSingleThreadExecutor();
+public class QuartzJob extends QuartzJobBean {
+
+	private final ThreadPoolTaskExecutor service = new ThreadPoolTaskExecutor();
 
 	@Override
-	protected void executeInternal(JobExecutionContext context) {
-		cn.raxcl.entity.ScheduleJob scheduleJob = (cn.raxcl.entity.ScheduleJob) context.getMergedJobDataMap().get(cn.raxcl.entity.ScheduleJob.JOB_PARAM_KEY);
+	protected void executeInternal(JobExecutionContext jobExecutionContext) {
+
+		ScheduleJob scheduleJob = (ScheduleJob) jobExecutionContext.getMergedJobDataMap().get(ScheduleJob.JOB_PARAM_KEY);
 		//获取spring bean
 		ScheduleJobService scheduleJobService = (ScheduleJobService) SpringContextUtils.getBean("scheduleJobServiceImpl");
 		//数据库保存任务执行记录
@@ -40,6 +41,8 @@ public class ScheduleJob extends QuartzJobBean {
 		log.info("任务准备执行，任务ID：{}", scheduleJob.getJobId());
 		try {
 			ScheduleRunnable task = new ScheduleRunnable(scheduleJob.getBeanName(), scheduleJob.getMethodName(), scheduleJob.getParams());
+			//线程初始化
+			service.initialize();
 			Future<?> future = service.submit(task);
 			future.get();
 			//任务执行总时长
