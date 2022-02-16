@@ -98,7 +98,6 @@ public class MarkdownUtils {
 	/**
 	 * markdown格式转换成HTML格式
 	 */
-	//todo markdown markdown格式转换成HTML格式
 	public static String markdownToHtml(String markdown) {
 		Parser parser = Parser.builder().build();
 		Node document = parser.parse(markdown);

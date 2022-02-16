@@ -16,7 +16,7 @@ public class Curtain extends CustomNode implements Delimited {
 		return DELIMITER;
 	}
 
-	//TODO markdown 方法内部实现相同（怀疑是用的切面）， 后续有能力了再解决
+	//TODO 暂时无法解决 markdown 方法内部实现相同（怀疑是用的切面）
 	@Override
 	public String getClosingDelimiter() {
 		return DELIMITER;
