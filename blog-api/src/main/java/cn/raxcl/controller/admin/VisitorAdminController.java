@@ -42,6 +42,7 @@ public class VisitorAdminController {
 	                       @RequestParam(defaultValue = "1") Integer pageNum,
 	                       @RequestParam(defaultValue = "10") Integer pageSize) {
 		PageDTO pageDTO = commonService.pageBefore(date);
+		pageDTO.setOrderBy("last_time desc");
 		PageMethod.startPage(pageNum, pageSize, pageDTO.getOrderBy());
 		PageInfo<Visitor> pageInfo = new PageInfo<>(visitorService.getVisitorListByDate(pageDTO.getStartDate(), pageDTO.getEndDate()));
 		return Result.success("请求成功", pageInfo);
