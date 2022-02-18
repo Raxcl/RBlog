@@ -64,5 +64,40 @@
       "name": "upload.github.repos",
       "type": "java.lang.String",
       "description": "Description for upload.github.repos."
+    },
+    {
+      "name": "mysql-backup.host",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.host."
+    },
+    {
+      "name": "mysql-backup.port",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.port."
+    },
+    {
+      "name": "mysql-backup.qiniuyun.linuxPath",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.qi-niu-yun.linuxPath."
+    },
+    {
+      "name": "mysql-backup.qiniuyun.winPath",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.qi-niu-yun.winPath."
+    },
+    {
+      "name": "mysql-backup.qiniuyun.accessKey",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.qi-niu-yun.accessKey."
+    },
+    {
+      "name": "mysql-backup.qiniuyun.secretKey",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.qi-niu-yun.secretKey."
+    },
+    {
+      "name": "mysql-backup.qiniuyun.bucket",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.qi-niu-yun.bucket."
     }
   ] }
