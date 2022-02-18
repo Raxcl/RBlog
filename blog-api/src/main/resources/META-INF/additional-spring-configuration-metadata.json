@@ -76,16 +76,6 @@
       "description": "Description for mysql-backup.port."
     },
     {
-      "name": "mysql-backup.qiniuyun.linuxPath",
-      "type": "java.lang.String",
-      "description": "Description for mysql-backup.qi-niu-yun.linuxPath."
-    },
-    {
-      "name": "mysql-backup.qiniuyun.winPath",
-      "type": "java.lang.String",
-      "description": "Description for mysql-backup.qi-niu-yun.winPath."
-    },
-    {
       "name": "mysql-backup.qiniuyun.accessKey",
       "type": "java.lang.String",
       "description": "Description for mysql-backup.qi-niu-yun.accessKey."
@@ -99,5 +89,10 @@
       "name": "mysql-backup.qiniuyun.bucket",
       "type": "java.lang.String",
       "description": "Description for mysql-backup.qi-niu-yun.bucket."
+    },
+    {
+      "name": "mysql-backup.qi-niu-yun.path",
+      "type": "java.lang.String",
+      "description": "Description for mysql-backup.qi-niu-yun.path."
     }
   ] }

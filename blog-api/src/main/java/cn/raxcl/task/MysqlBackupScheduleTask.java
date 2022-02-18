@@ -39,10 +39,8 @@ public class MysqlBackupScheduleTask {
     private String username;
     @Value("${spring.datasource.password}")
     private String password;
-    @Value("${mysql-backup.qi-niu-yun.linuxPath}")
-    private String linuxPath;
-    @Value("${mysql-backup.qi-niu-yun.winPath}")
-    private String winPath;
+    @Value("${mysql-backup.qi-niu-yun.path}")
+    private String filePath;
     @Value("${mysql-backup.qi-niu-yun.accessKey}")
     private String accessKey;
     @Value("${mysql-backup.qi-niu-yun.secretKey}")
@@ -57,12 +55,15 @@ public class MysqlBackupScheduleTask {
         //1. 提取mysql数据
         log.info("开始备份数据库");
         String backName = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date()) + ".sql";
-        dataBaseDump(backName);
+        boolean flag = dataBaseDump(backName);
+        if (!flag){
+            throw new NotFoundException("数据库备份失败，中断执行");
+        }
         //2. 备份数据至七牛云
-        String localFilePath = (isOsLinux() ? linuxPath + "/" : winPath + "\\") + backName;
+        String localFilePath = filePath + File.separator + backName;
         boolean upload = upload(localFilePath, backName);
         if (!upload){
-            throw new NotFoundException("备份数据失败,请联系管理员");
+            throw new NotFoundException("数据上传失败,请联系管理员");
         }
     }
 
@@ -70,29 +71,23 @@ public class MysqlBackupScheduleTask {
      * 提取mysql数据操作
      * @param backName sql备份名
      */
-    private void dataBaseDump(String backName) throws IOException, InterruptedException {
-        Path path = Paths.get(isOsLinux() ? linuxPath : winPath);
-//        File file = new File(isOsLinux() ? linuxPath : winPath);
+    private boolean dataBaseDump(String backName) throws IOException, InterruptedException {
+        Path path = Paths.get(filePath);
         //判断目录是否存在
         //File存在创建文件夹的缺陷，改用Files
+        log.warn("如果项目部署在docker等容器中，请将目录与宿主机进行映射！！！");
         log.info("判断目录是否存在:{}",path);
         if (Files.notExists(path)){
             log.info("目录不存在，创建它~");
-//            boolean mkdir = file.mkdir();
-                Path directories = Files.createDirectory(path);
+                Path directories = Files.createDirectories(path);
                 log.info("创建目录成功:{}",directories);
-
-//            if (mkdir){
-//                log.info("创建文件夹成功");
-//            }else{
-//                log.error("创建文件夹失败");
-//                throw new NotFoundException("创建文件夹失败");
-//            }
+        }else{
+            log.info("目录已存在");
         }
         File datafile = new File(path + File.separator + backName);
         if (datafile.exists()){
-            log.warn("文件名已存在，请更换:{}",backName);
-            return;
+            log.error("文件名已存在，请更换:{}",backName);
+            return false;
         }
         //拼接cmd命令
         String command = (isOsLinux() ?
@@ -103,7 +98,10 @@ public class MysqlBackupScheduleTask {
         Process exec = Runtime.getRuntime().exec(command);
         if (exec.waitFor() == 0){
             log.info("数据库备份成功，备份路径为:{}",datafile);
+            return true;
         }
+        log.info("数据库备份失败，具体原因:{}",exec.getErrorStream().toString());
+        return false;
     }
 
     /**
