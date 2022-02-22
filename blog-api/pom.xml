@@ -187,19 +187,17 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.6.2</version>
             </plugin>
 
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>1.0.0</version>
 
                 <configuration>
                     <!--镜像名称 raxcl/blog-api-->
                     <imageName>app</imageName>
                     <!--基础镜像jdk 1.8-->
-                    <baseImage>java</baseImage>
+                    <baseImage>java:8</baseImage>
                     <!--制作者提供本人信息-->
                     <maintainer>raxcl raxcl@qq.com</maintainer>
                     <!--切换到/ROOT目录-->

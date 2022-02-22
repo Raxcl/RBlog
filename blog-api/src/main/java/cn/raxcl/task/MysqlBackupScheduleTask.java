@@ -12,14 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * mysql相关任务
@@ -55,10 +53,7 @@ public class MysqlBackupScheduleTask {
         //1. 提取mysql数据
         log.info("开始备份数据库");
         String backName = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date()) + ".sql";
-        boolean flag = dataBaseDump(backName);
-        if (!flag){
-            throw new NotFoundException("数据库备份失败，中断执行");
-        }
+        dataBaseDump(backName);
         //2. 备份数据至七牛云
         String localFilePath = filePath + File.separator + backName;
         boolean upload = upload(localFilePath, backName);
@@ -71,37 +66,58 @@ public class MysqlBackupScheduleTask {
      * 提取mysql数据操作
      * @param backName sql备份名
      */
-    private boolean dataBaseDump(String backName) throws IOException, InterruptedException {
-        Path path = Paths.get(filePath);
-        //判断目录是否存在
-        //File存在创建文件夹的缺陷，改用Files
+    private void dataBaseDump(String backName) throws IOException, InterruptedException {
+        //非Linux下判断目录是否存在
         log.warn("如果项目部署在docker等容器中，请将目录与宿主机进行映射！！！");
-        log.info("判断目录是否存在:{}",path);
-        if (Files.notExists(path)){
-            log.info("目录不存在，创建它~");
+        if(!isOsLinux()){
+            Path path = Paths.get(filePath);
+            //判断目录是否存在
+            //File存在创建文件夹的缺陷，改用Files
+            log.info("判断目录是否存在:{}",path);
+            if (Files.notExists(path)){
+                log.info("目录不存在，创建它~");
                 Path directories = Files.createDirectories(path);
                 log.info("创建目录成功:{}",directories);
-        }else{
-            log.info("目录已存在");
+            }else{
+                log.info("目录已存在");
+            }
         }
-        File datafile = new File(path + File.separator + backName);
+        File datafile = new File(filePath + File.separator + backName);
         if (datafile.exists()){
             log.error("文件名已存在，请更换:{}",backName);
-            return false;
+            throw new NotFoundException("文件名已存在，请更换");
         }
         //拼接cmd命令
-        String command = (isOsLinux() ?
-                "docker exec -it mysql mysqldump -u" + username + " -p" + password + " r_blog > " :
-                "cmd /c mysqldump -h" + host + " -P" + port + " -u" + username + " -p" + password + " r_blog > "
-                ) + datafile;
+        String command = isOsLinux() ?
+                "sh /mnt/docker/mysql_backup/shell/mysqlDump.sh " +backName :
+                "cmd /c mysqldump -h" + host + " -P" + port + " -u" + username + " -p" + password + " r_blog > " + datafile;
         log.info("备份命令为:{}",command);
-        Process exec = Runtime.getRuntime().exec(command);
-        if (exec.waitFor() == 0){
-            log.info("数据库备份成功，备份路径为:{}",datafile);
-            return true;
+        List<String> commandList = new ArrayList<>();
+        Collections.addAll(commandList,command.split(" "));
+        log.info("commandList为:{}",commandList);
+        log.info("开始执行备份操作");
+        //执行备份命令
+        ProcessBuilder processBuilder = new ProcessBuilder(commandList);
+        processBuilder.redirectErrorStream(true);
+        Process process = processBuilder.start();
+        log.info("执行完成:{}",processBuilder);
+        //读取命令的输出信息
+        InputStream inputStream = process.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        process.waitFor();
+        if (process.exitValue() != 0) {
+            log.error("命令执行失败");
+            throw new NotFoundException("命令执行失败");
         }
-        log.info("数据库备份失败，具体原因:{}",exec.getErrorStream().toString());
-        return false;
+        log.info("打印进程输出信息====================================================");
+        String info;
+        while ((info = bufferedReader.readLine()) != null){
+            log.info(info);
+        }
+        log.info("打印进程输出信息结束=====================================================");
+        if (process.waitFor() == 0){
+            log.info("数据库备份成功，备份路径为:{}",datafile);
+        }
     }
 
     /**
