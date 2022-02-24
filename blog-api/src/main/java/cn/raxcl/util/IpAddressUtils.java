@@ -2,16 +2,14 @@ package cn.raxcl.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.lionsoul.ip2region.DataBlock;
-import org.lionsoul.ip2region.DbConfig;
-import org.lionsoul.ip2region.DbSearcher;
-import org.lionsoul.ip2region.Util;
+import org.lionsoul.ip2region.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -36,7 +34,10 @@ public class IpAddressUtils {
 	 * @return String
 	 */
 	public static String getIpAddress(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
+		String ip = request.getHeader("X-Real-IP");
+		if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+			ip = request.getHeader("x-forwarded-for");
+		}
 		if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
 			ip = request.getHeader("Proxy-Client-IP");
 		}
@@ -78,16 +79,12 @@ public class IpAddressUtils {
 	 * 解决打包jar后找不到 ip2region.db 的问题
 	 */
 	@PostConstruct
-	private void initIp2regionResource() {
-		try {
+	private void initIp2regionResource() throws IOException, DbMakerConfigException, NoSuchMethodException {
 			InputStream inputStream = new ClassPathResource("/ipdb/ip2region.db").getInputStream();
 			//将 ip2region.db 转为 ByteArray
 			byte[] dbBinStr = FileCopyUtils.copyToByteArray(inputStream);
 			DbConfig dbConfig = new DbConfig();
 			setVariable(dbConfig, dbBinStr);
-		} catch (Exception e) {
-			log.error("initIp2regionResource exception:", e);
-		}
 	}
 
 	private static void setVariable(DbConfig dbConfig, byte[] dbBinStr) throws NoSuchMethodException {
@@ -105,7 +102,7 @@ public class IpAddressUtils {
 	public static String getCityInfo(String ip) {
 		if (ip == null || !Util.isIpAddress(ip)) {
 			log.error("Error: Invalid ip address");
-			return null;
+			return "";
 		}
 		try {
 			DataBlock dataBlock = (DataBlock) method.invoke(searcher, ip);
@@ -118,6 +115,6 @@ public class IpAddressUtils {
 		} catch (Exception e) {
 			log.error("getCityInfo exception:", e);
 		}
-		return null;
+		return "";
 	}
 }
