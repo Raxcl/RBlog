@@ -27,7 +27,7 @@ const routes = [
 				path: 'dashboard',
 				name: 'Dashboard',
 				component: () => import('@/views/dashboard'),
-				meta: {title: 'Dashboard', icon: 'dashboard'}
+				meta: {title: '仪表盘', icon: 'dashboard'}
 			}
 		]
 	},
