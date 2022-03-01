@@ -36,6 +36,9 @@
 		<!--私密文章密码对话框-->
 		<BlogPasswordDialog/>
 
+		<!-- live2d 看板娘 -->
+			<Live2d/>
+
 		<!--APlayer-->
 		<div class="m-mobile-hide">
 			<MyAPlayer/>
@@ -62,10 +65,11 @@
 	import BlogPasswordDialog from "@/components/index/BlogPasswordDialog";
 	import {mapState} from 'vuex'
 	import {SAVE_CLIENT_SIZE, SAVE_INTRODUCTION, SAVE_SITE_INFO, RESTORE_COMMENT_FORM} from "@/store/mutations-types";
+	import Live2d from '@/components/live2d/live2d'
 
 	export default {
 		name: "Index",
-		components: {Header, BlogPasswordDialog, Tocbot, MyAPlayer, RandomBlog, Tags, Nav, Footer, Introduction},
+		components: {Header, BlogPasswordDialog, Tocbot, MyAPlayer, RandomBlog, Tags, Nav, Footer, Introduction, Live2d},
 		data() {
 			return {
 				siteInfo: {
