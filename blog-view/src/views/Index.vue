@@ -37,7 +37,10 @@
 		<BlogPasswordDialog/>
 
 		<!-- live2d 看板娘 -->
+		<div class="m-mobile-hide">
 			<Live2d/>
+		</div>
+			<!-- <Live2d/> -->
 
 		<!--APlayer-->
 		<div class="m-mobile-hide">

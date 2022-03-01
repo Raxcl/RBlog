@@ -1,6 +1,6 @@
 <template>
   <!-- 使用示例 -->
-  <div>
+  <!-- <div> -->
     <!-- <div style="margin: 2px 0">注意：如果有时候按钮不能点击，是因为模型 zIndex 挡住了按钮。</div>
     <div>
       <span>position style：</span>
@@ -35,7 +35,7 @@
       :direction="direction"
       :size="size"
     ></live2d>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -53,7 +53,7 @@ export default {
     return {
       direction: 'right',
       // style: '',
-      style: 'position: fixed; bottom: 0; right: 0;',
+      style: 'position: fixed; bottom: 0; right: 0; zIndex: 1',
       width: 500,
       height: 500,
       size: 350,
