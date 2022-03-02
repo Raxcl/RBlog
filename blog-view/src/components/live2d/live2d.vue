@@ -33,56 +33,49 @@ export default {
         mouseover: [
           {
             selector: ".vue-live2d-tool .fa-comment",
-            texts: ["猜猜我要说些什么？", "欣赏一些有意思的短句？"],
+            texts: [
+              "一言一语，一颦一笑。一字一句，一颗赛艇。",
+              "猜猜我要说些什么？', '欣赏一些有意思的短句？",
+              ],
           },
           {
             selector: ".vue-live2d-tool .fa-user-circle",
-            texts: ["想看看我的朋友们吗？"],
+            texts: [
+              "嗯··· 要切换 看板娘 吗？",
+              "你不喜欢我了吗...",
+              "想看看我的朋友们吗？",
+              ],
           },
           {
             selector: ".vue-live2d-tool .fa-street-view",
-            texts: ["变装！"],
+            texts: [
+              "喜欢换装 Play 吗？",
+              "变装！",
+              "我还没有其他衣服呢", "我的新衣服好看嘛",
+              ],
           },
           {
             selector: ".vue-live2d-tool .fa-camera-retro",
-            texts: ["一起拍照留念？"],
+            texts: [
+              "要拍张纪念照片吗？",
+              "一起拍照留念？",
+              "照好了嘛，是不是很可爱呢？",
+              ],
           },
           {
             selector: ".vue-live2d-tool .fa-info-circle",
-            texts: ["(＾Ｕ＾)ノ~ＹＯ"],
+            texts: [
+              "这里有关于我的信息呢",
+              "(＾Ｕ＾)ノ~ＹＯ",
+              ],
           },
           {
             selector: ".vue-live2d-tool .fa-times",
-            texts: ["就要说再见了吗？"],
+            texts: [
+              "就要说再见了吗？",
+              "我们还能再见面的吧…",
+              ],
           },
-        // { selector: ".fui-chat", "text": ["一言一语，一颦一笑。一字一句，一颗赛艇。"] },
-        // { selector: ".fui-eye", "text": ["嗯··· 要切换 看板娘 吗？"] },
-        // { selector: ".fui-user", "text": ["喜欢换装 Play 吗？"] },
-        // { selector: ".fui-photo", "text": ["要拍张纪念照片吗？"] },
-        // { selector: ".fui-info-circle", "text": ["这里有关于我的信息呢"] },
-        // { selector: ".fui-cross", "text": ["你不喜欢我了吗..."] },
-        // { selector: "#tor_show", "text": ["翻页比较麻烦吗，点击可以显示这篇文章的目录呢"] },
-        // { selector: "#comment_go", "text": ["想要去评论些什么吗？"] },
-        // { selector: "#night_mode", "text": ["深夜时要爱护眼睛呀"] },
-        // { selector: "#qrcode", "text": ["手机扫一下就能继续看，很方便呢"] },
-        // { selector: ".comment_reply", "text": ["要吐槽些什么呢"] },
-        // { selector: "#back-to-top", "text": ["回到开始的地方吧"] },
-        // { selector: "#author", "text": ["该怎么称呼你呢"] },
-        // { selector: "#url", "text": ["你的家在哪里呢，好让我去参观参观"] },
-        // { selector: "#textarea", "text": ["认真填写哦，垃圾评论是禁止事项"] },
-        // { selector: ".OwO-logo", "text": ["要插入一个表情吗"] },
-        // { selector: "#csubmit", "text": ["要[提交]^(Commit)了吗，首次评论需要审核，请耐心等待~"] },
-        // { selector: ".ImageBox", "text": ["点击图片可以放大呢"] },
-        // { selector: "input[name=s]", "text": ["找不到想看的内容？搜索看看吧"] },
-        // { selector: ".previous", "text": ["去上一页看看吧"] },
-        // { selector: ".next", "text": ["去下一页看看吧"] },
-        // { selector: ".dropdown-toggle", "text": ["这里是菜单"] },
-        // { selector: "c-player a.play-icon", "text": ["想要听点音乐吗"] },
-        // { selector: "c-player div.time", "text": ["在这里可以调整<span style=\"color:#0099cc;\">播放进度</span>呢"] },
-        // { selector: "c-player div.volume", "text": ["在这里可以调整<span style=\"color:#0099cc;\">音量</span>呢"] },
-        // { selector: "c-player div.list-button", "text": ["<span style=\"color:#0099cc;\">播放列表</span>里都有什么呢"] },
-        // { selector: "c-player div.lyric-button", "text": ["有<span style=\"color:#0099cc;\">歌词</span>的话就能跟着一起唱呢"] },
-        // { selector: ".waifu #live2d", "text": ["干嘛呢你，快把手拿开", "鼠…鼠标放错地方了！"] }
         ],
         copy: [
           {
