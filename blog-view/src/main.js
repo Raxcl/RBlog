@@ -30,7 +30,6 @@ console.log(
 
 Vue.use(Element)
 Vue.use(Viewer)
-// Vue.use(Live2d)
 
 
 Vue.prototype.msgSuccess = function (msg) {

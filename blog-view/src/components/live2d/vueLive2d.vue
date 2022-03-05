@@ -32,7 +32,7 @@ import './lib/live2d.min.js'
 import 'font-awesome/css/font-awesome.min.css'
 
 import tips from './options/tips'
-
+import myModels from './options/myModels'
 export default {
   name: 'live2d',
   props: {
@@ -53,7 +53,7 @@ export default {
       type: Array
     },
     homePage: {
-      default: 'https://github.com/evgo2017/vue-live2d',
+      default: 'https://github.com/Raxcl',
       type: String
     },
     tips: {
@@ -82,15 +82,18 @@ export default {
       toolShow: false,
       modelId: 1,
       modelTexturesId: 53,
+      myModelId: 0,
+      myModelTexturesId: 0,
+      isMyModels: true,
       tools: [{
         name: 'fa-comment',
         click: this.showHitokoto
       }, {
         name: 'fa-user-circle',
-        click: this.loadRandModel
+        click: this.chooseLoadRandModel
       }, {
         name: 'fa-street-view',
-        click: this.loadRandTextures
+        click: this.chooseLoadRandTextures
       }, {
         name: 'fa-camera-retro',
         click: this.takePhoto
@@ -171,6 +174,19 @@ export default {
       window.loadlive2d(live2dMainId, url)
       console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`)
     },
+    myLoadModel () {
+      const {  myModelId, myModelTexturesId, live2dMainId } = this
+      const {myModel} = myModels
+      //随机模型id，确保下次模型id不与当前重复
+      //TODO
+      console.log("myLoadModel")
+      const url = myModel[myModelId][myModelTexturesId]
+      window.loadlive2d(live2dMainId, url)
+      console.log(`Live2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
+    },
+    chooseLoadRandModel(){
+      this.isMyModels ? this.myLoadRandModel() : this.loadRandModel()
+    },
     loadRandModel () {
       const url = `${this.apiPath}/rand/?id=${this.modelId}`
       axios.get(url).then((res) => {
@@ -178,9 +194,31 @@ export default {
         this.modelId = id
         this.showMessage(message, 4000)
         this.loadRandTextures(true)
+        //定义下次按钮触发为新接口
+        this.isMyModels = true;
       }).catch(function (err) {
         console.log(err)
       })
+    },
+    myLoadRandModel () {
+      const {myModel,myMessage} = myModels
+      //随机模型id，确保下次模型id不与当前重复
+      while(true){
+        const tempMyModelId = Math.floor(Math.random() * myModel.length + 1)-1;
+        if(this.myModelId != tempMyModelId){
+          this.myModelId = tempMyModelId;
+          break;
+        }
+      }
+      //出场语句
+      this.showMessage(myMessage[0], 4000)
+      //挑选随机模型皮肤
+      this.myLoadRandTextures(true)
+      //定义下次按钮触发为原接口
+      this.isMyModels = false;
+    },
+    chooseLoadRandTextures(){
+      this.isMyModels ? this.loadRandTextures() : this.myLoadRandTextures()
     },
     loadRandTextures (isAfterRandModel = false) {
       const url = `${this.apiPath}/rand_textures/?id=${this.modelId}-${this.modelTexturesId}`
@@ -194,6 +232,23 @@ export default {
       }).catch(function (err) {
         console.log(err)
       })
+    },
+    myLoadRandTextures (isAfterRandModel = false) {
+      const {myModel} = myModels
+      //随机皮肤id,确保下次皮肤不与当前重复(只有一个皮肤时不更换皮肤)
+      while(myModel[this.myModelId].length != 1){
+        const tempMyModelTexturesId = Math.floor(Math.random() * myModel[this.myModelId].length + 1)-1;
+        if(this.myModelTexturesId != tempMyModelTexturesId){
+          this.myModelTexturesId = tempMyModelTexturesId;
+          break;
+        }
+      }
+      //加载模型
+      this.myLoadModel()
+      if (!isAfterRandModel) {
+        this.showMessage('我的新衣服好看嘛？', 4000)
+      }
+
     },
     showMessage (msg = '', timeout = 6000) {
       if (this.messageTimer) {
@@ -213,17 +268,6 @@ export default {
       window.Live2D.captureName = 'photo.png'
       window.Live2D.captureFrame = true
     },
-    // showHitokoto () {
-    //   const url = 'https://v1.hitokoto.cn'
-    //   const url = 'https://v1.hitokoto.cn'
-    //   axios.get(url).then((res) => {
-    //     const { hitokoto, id, creator } = res.data
-    //     this.showMessage(`${hitokoto}`)
-    //     //  <br> - by <a href="https://hitokoto.cn?id=${id}">${creator}</a> from 《${res.data.from} 》`)
-    //   }).catch(function (err) {
-    //     console.log(err)
-    //   })
-    // },
     showHitokoto () {
       // n取0-2（2代表default）
       const n = Math.floor(Math.random() * 3 + 1)-1;
@@ -295,23 +339,6 @@ export default {
 .vue-live2d-on-right:hover {
   transform: translateX(-21px);
 }
-/* live2d-tip */
-/* .vue-live2d-tip {
-  position: absolute;
-  width: 100%;
-  min-height: 3rem;
-  line-height: 1.5rem;
-  margin-top: -20px;
-  padding: 5px 10px;
-  font-size: .9rem;
-  word-break: break-all;
-  text-overflow: ellipsis;
-  border: 1px solid rgba(224, 186, 140, 0.62);
-  border-radius: 12px;
-  background-color: rgba(236, 217, 188, 0.5);
-  box-shadow: 0 3px 15px 2px rgba(191, 158, 118, 0.2);
-  animation: shake 50s ease-in-out 5s infinite;
-} */
 
 /* live2d-tip */
 .vue-live2d-tip {
@@ -321,7 +348,6 @@ export default {
   line-height: 1.5rem;
   margin-top: -20px;
   padding: 5px 10px;
-  /* font-size: .9rem; */
   font-size: 13px;
   word-break: break-all;
   text-overflow: ellipsis;
@@ -332,9 +358,7 @@ export default {
   animation: shake 50s ease-in-out 5s infinite;
   font-family: 幼圆;
   color: rgb(56, 106, 197);
-/* transform: translateX(-50%); */
-	/* opacity: 0; */
-	/* transition: opacity 1s; */
+
 }
 
 /* live2d-main */
