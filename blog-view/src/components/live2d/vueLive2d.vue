@@ -5,7 +5,7 @@
     :style="{ width: live2dWidth + 'px', height: live2dHeight + 'px' }"
     @mouseover="toolShow = true"
     @mouseout="toolShow = false">
-    <div v-show="mainShow">
+    <div v-show="mainShow" >
       <div class="vue-live2d-tip" v-html="tipText" v-show="tipShow"></div>
       <canvas :id="live2dMainId" ref="vue-live2d-main" :width="live2dWidth" :height="live2dHeight" class="vue-live2d-main"></canvas>
       <div
@@ -180,7 +180,8 @@ export default {
       //随机模型id，确保下次模型id不与当前重复
       //TODO
       console.log("myLoadModel")
-      const url = myModel[myModelId][myModelTexturesId]
+      // const url = myModel[myModelId][myModelTexturesId]
+      const url = myModel[1][0]
       window.loadlive2d(live2dMainId, url)
       console.log(`Live2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
     },
@@ -204,6 +205,9 @@ export default {
       const {myModel,myMessage} = myModels
       //随机模型id，确保下次模型id不与当前重复
       while(true){
+        if(myModel.length <= 1){
+          break;
+        }
         const tempMyModelId = Math.floor(Math.random() * myModel.length + 1)-1;
         if(this.myModelId != tempMyModelId){
           this.myModelId = tempMyModelId;
