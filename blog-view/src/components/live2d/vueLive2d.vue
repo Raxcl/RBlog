@@ -156,7 +156,6 @@ export default {
       const { live2dMainId, live2dWidth: width, live2dHeight: height } = this
       // 不知还有调整宽高的好方法没？
       document.querySelector(`#${live2dMainId}`).outerHTML = `<canvas id=${live2dMainId} width="${width}" height="${height}" class="vue-live2d-main"></canvas>`
-      this.loadModel()
     },
     setDirection () {
       const containers = ['vue-live2d', 'vue-live2d-tool', 'vue-live2d-toggle']
@@ -178,10 +177,8 @@ export default {
       const {  myModelId, myModelTexturesId, live2dMainId } = this
       const {myModel} = myModels
       //随机模型id，确保下次模型id不与当前重复
-      //TODO
       console.log("myLoadModel")
-      // const url = myModel[myModelId][myModelTexturesId]
-      const url = myModel[1][0]
+      const url = myModel[myModelId][myModelTexturesId]
       window.loadlive2d(live2dMainId, url)
       console.log(`Live2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
     },
@@ -193,6 +190,8 @@ export default {
       axios.get(url).then((res) => {
         const { id, message } = res.data.model
         this.modelId = id
+        //调整高度
+        this.updateHeight();
         this.showMessage(message, 4000)
         this.loadRandTextures(true)
         //定义下次按钮触发为新接口
@@ -214,6 +213,8 @@ export default {
           break;
         }
       }
+      //调整高度
+      this.updateHeight();
       //出场语句
       this.showMessage(myMessage[0], 4000)
       //挑选随机模型皮肤
@@ -266,6 +267,37 @@ export default {
         this.tipShow = false
         this.messageTimer = null
       }, timeout)
+    },
+    updateHeight(){
+      //小模型采用另外的高度,小模型id需手动添加
+      if(this.isMyModels == true){
+        const n = this.myModelId
+        switch(n){
+          case 1:
+            this.height = 450
+            this.height = this.height - 450;
+            break;
+          default:
+            this.height = 0;
+            this.height = this.height + 450;
+        } 
+      } else {
+        const n = this.modelId
+        switch(n){
+          case 1:case 2:case 3:case 4:case 5:
+            this.height = 450
+            this.height = this.height - 450;
+            break;
+          //模型6过高，特殊化
+          case 6:
+            this.height = 0;
+            this.height = this.height +800;
+            break;
+          default:
+            this.height = 0;
+            this.height = this.height + 450;
+        } 
+      }
     },
     takePhoto () {
       this.showMessage('照好了嘛，留个纪念吖~')
