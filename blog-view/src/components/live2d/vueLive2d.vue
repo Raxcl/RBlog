@@ -145,11 +145,9 @@ export default {
       this.changeLive2dSize()
     },
     height () {
-      console.log("height方法")
       this.changeLive2dSize()
     },
     dataHeight () {
-      console.log("dataHeight方法")
       this.changeLive2dSize()
     },
     size () {
@@ -198,7 +196,7 @@ export default {
         const { id, message } = res.data.model
         this.modelId = id
         //调整高度
-        this.updateHeight();
+        this.updateModelHeight();
         this.showMessage(message, 4000)
         this.loadRandTextures(true)
         //定义下次按钮触发为新接口
@@ -221,7 +219,7 @@ export default {
         }
       }
       //调整高度
-      this.updateHeight();
+      this.updateMyModelHeight();
       //出场语句
       this.showMessage(myMessage[0], 4000)
       //挑选随机模型皮肤
@@ -275,20 +273,7 @@ export default {
         this.messageTimer = null
       }, timeout)
     },
-    updateHeight(){
-      //小模型采用另外的高度,小模型id需手动添加
-      if(this.isMyModels == true){
-        const n = this.myModelId
-        switch(n){
-          case 1:
-            this.dataHeight = 450
-            this.dataHeight = this.dataHeight - 450;
-            break;
-          default:
-            this.dataHeight = 0;
-            this.dataHeight = this.dataHeight + 450;
-        } 
-      } else {
+    updateModelHeight(){
         const n = this.modelId
         switch(n){
           case 1:case 2:case 3:case 4:case 5:
@@ -299,6 +284,20 @@ export default {
           case 6:
             this.dataHeight = 0;
             this.dataHeight = this.dataHeight +750;
+            break;
+          default:
+            this.dataHeight = 0;
+            this.dataHeight = this.dataHeight + 450;
+        } 
+    },
+    updateMyModelHeight(){
+      //小模型采用另外的高度,小模型id需手动添加
+      if(this.isMyModels == true){
+        const n = this.myModelId
+        switch(n){
+          case 1:
+            this.dataHeight = 450
+            this.dataHeight = this.dataHeight - 450;
             break;
           default:
             this.dataHeight = 0;
