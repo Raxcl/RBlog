@@ -85,6 +85,7 @@ export default {
       myModelId: 0,
       myModelTexturesId: 0,
       isMyModels: true,
+      dataHeight: this.height,
       tools: [{
         name: 'fa-comment',
         click: this.showHitokoto
@@ -126,8 +127,8 @@ export default {
       return this.width ? this.width : this.size
     },
     live2dHeight () {
-      return this.height ? this.height : this.size
-    }
+      return this.dataHeight ? this.dataHeight : this.size
+    },
   },
   watch: {
     mainShow () {
@@ -144,6 +145,11 @@ export default {
       this.changeLive2dSize()
     },
     height () {
+      console.log("height方法")
+      this.changeLive2dSize()
+    },
+    dataHeight () {
+      console.log("dataHeight方法")
       this.changeLive2dSize()
     },
     size () {
@@ -153,9 +159,10 @@ export default {
   },
   methods: {
     changeLive2dSize () {
-      const { live2dMainId, live2dWidth: width, live2dHeight: height } = this
+      console.log("changeLive2dSizevvvvvvv")
+      const { live2dMainId, live2dWidth: width, live2dHeight: dataHeight } = this
       // 不知还有调整宽高的好方法没？
-      document.querySelector(`#${live2dMainId}`).outerHTML = `<canvas id=${live2dMainId} width="${width}" height="${height}" class="vue-live2d-main"></canvas>`
+      document.querySelector(`#${live2dMainId}`).outerHTML = `<canvas id=${live2dMainId} width="${width}" height="${dataHeight}" class="vue-live2d-main"></canvas>`
     },
     setDirection () {
       const containers = ['vue-live2d', 'vue-live2d-tool', 'vue-live2d-toggle']
@@ -274,28 +281,28 @@ export default {
         const n = this.myModelId
         switch(n){
           case 1:
-            this.height = 450
-            this.height = this.height - 450;
+            this.dataHeight = 450
+            this.dataHeight = this.dataHeight - 450;
             break;
           default:
-            this.height = 0;
-            this.height = this.height + 450;
+            this.dataHeight = 0;
+            this.dataHeight = this.dataHeight + 450;
         } 
       } else {
         const n = this.modelId
         switch(n){
           case 1:case 2:case 3:case 4:case 5:
-            this.height = 450
-            this.height = this.height - 450;
+            this.dataHeight = 450
+            this.dataHeight = this.dataHeight - 450;
             break;
           //模型6过高，特殊化
           case 6:
-            this.height = 0;
-            this.height = this.height +800;
+            this.dataHeight = 0;
+            this.dataHeight = this.dataHeight +750;
             break;
           default:
-            this.height = 0;
-            this.height = this.height + 450;
+            this.dataHeight = 0;
+            this.dataHeight = this.dataHeight + 450;
         } 
       }
     },

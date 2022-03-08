@@ -24,8 +24,8 @@ export default {
       direction: "right",
       // style: '',
       style: "position: fixed; bottom: 0; right: 0; zIndex: 1",
-      width: 500,
-      height: 500,
+      // width: 500,
+      // height: 500,
       size: 350,
       homePage: "https://github.com/Raxcl",
       
