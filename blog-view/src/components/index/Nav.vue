@@ -2,10 +2,10 @@
 	<div ref="nav" class="ui fixed inverted stackable pointing menu" :class="{'transparent':$route.name==='home' && clientSize.clientWidth>768}">
 		<div class="ui container">
 			<router-link to="/">
-				<h3 class="ui header item m-blue">{{ blogName }}</h3>
+				<h3 class="ui header item m-blue" style="font-family:'Delius Swash Caps',cursive">{{ blogName }}</h3>
 			</router-link>
 			<router-link to="/home" class="item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='home'}">
-				<i class="home icon"></i>首页
+				<i class="home icon" ></i>首页
 			</router-link>
 			<el-dropdown trigger="click" @command="categoryRoute">
 				<span class="el-dropdown-link item" :class="{'m-mobile-hide': mobileHide,'active':$route.name==='category'}">
@@ -29,7 +29,7 @@
 			</router-link>
 			<el-autocomplete v-model="queryString" :fetch-suggestions="debounceQuery" placeholder="Search..."
 			                 class="right item m-search" :class="{'m-mobile-hide': mobileHide}"
-			                 popper-class="m-search-item" @select="handleSelect">
+			                 popper-class="m-search-item" @select="handleSelect" style="font-family:'Delius Swash Caps',cursive">
 				<i class="search icon el-input__icon" slot="suffix"></i>
 				<template slot-scope="{ item }">
 					<div class="title">{{ item.title }}</div>

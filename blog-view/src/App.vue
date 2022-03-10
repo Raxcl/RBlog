@@ -10,6 +10,9 @@
 	}
 </script>
 
-<style>
-
+<style >
+	@import "./common/font/font.css";
+	#app{
+		font-family: "Delius Swash Caps", cursive;
+	}
 </style>

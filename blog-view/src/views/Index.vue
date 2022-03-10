@@ -1,7 +1,7 @@
 <template>
 	<div class="site">
 		<!--顶部导航-->
-		<Nav :blogName="siteInfo.blogName" :categoryList="categoryList"/>
+		<Nav :blogName="siteInfo.blogName" :categoryList="categoryList" style="font-family:'Delius Swash Caps',cursive"/>
 		<!--首页大图 只在首页且pc端时显示-->
 		<div class="m-mobile-hide">
 			<Header v-if="$route.name==='home'"/>
@@ -50,7 +50,7 @@
 			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
 		</el-backtop>
 		<!--底部footer-->
-		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :hitokoto="hitokoto"/>
+		<Footer :siteInfo="siteInfo" :badges="badges" :newBlogList="newBlogList" :hitokoto="hitokoto" style="font-family:'Delius Swash Caps',cursive"/>
 	</div>
 </template>
 
@@ -68,6 +68,7 @@
 	import {mapState} from 'vuex'
 	import {SAVE_CLIENT_SIZE, SAVE_INTRODUCTION, SAVE_SITE_INFO, RESTORE_COMMENT_FORM} from "@/store/mutations-types";
 	import Live2d from '@/components/live2d/live2d'
+	import "../common/font/font.css";
 
 	export default {
 		name: "Index",
@@ -138,6 +139,8 @@
 		display: flex;
 		min-height: 100vh; /* 没有元素时，也把页面撑开至100% */
 		flex-direction: column;
+		font-family: "Delius Swash Caps", cursive;
+		
 	}
 
 	.main {

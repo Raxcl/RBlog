@@ -20,6 +20,9 @@ import 'viewerjs/dist/viewer.css'
 import Viewer from 'v-viewer'
 // directive
 import './util/directive'
+//引入字体
+// import './common/font/font.css'
+
 
 console.log(
 	'%c RBlog %c By Raxcl %c https://github.com/Raxcl/RBlog',

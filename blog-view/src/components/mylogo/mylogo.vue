@@ -331,7 +331,7 @@ export default {
 <style scoped>
 body {
   height: 100vh;
-  font-family: "Delius Swash Caps", cursive;
+  /* font-family: "Delius Swash Caps", cursive; */
   text-align: center;
   color: #004466;
   background: #e4e5e6;
