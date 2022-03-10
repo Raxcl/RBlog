@@ -367,21 +367,21 @@ export default {
       const logofix = document.querySelector(".logo");
       const resetbutton = document.querySelector(".restart");
       const ani = document.querySelector(".animation-wrapper");
-      const layout = document.querySelector(".layout");
+    //   const layout = document.querySelector(".layout");
       logofix.classList.add("visible");
       resetbutton.classList.add("visible");
       ani.classList.add("notvisible");
-      layout.classList.remove("notvisible");
+    //   layout.classList.remove("notvisible");
     },
     logonotVisible() {
       const logofix = document.querySelector(".logo");
       const resetbutton = document.querySelector(".restart");
       const ani = document.querySelector(".animation-wrapper");
-      const layout = document.querySelector(".layout");
+    //   const layout = document.querySelector(".layout");
       logofix.classList.remove("visible");
       resetbutton.classList.remove("visible");
       ani.classList.remove("notvisible");
-      layout.classList.add("notvisible");
+    //   layout.classList.add("notvisible");
     },
     resetit() {
       const cat = document.querySelector(".cat");
