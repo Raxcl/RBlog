@@ -111,7 +111,6 @@
         </div>
         <div class="logoani">RBlog</div>
       </div>
-      <!-- <button class="restart" @click="initAni">restart animation</button> -->
     </div>
 
     <div class="wrapper">
@@ -329,23 +328,15 @@ export default {
     },
     logoVisible() {
       const logofix = document.querySelector(".logo");
-      // const resetbutton = document.querySelector(".restart");
       const ani = document.querySelector(".animation-wrapper");
-    //   const layout = document.querySelector(".layout");
       logofix.classList.add("visible");
-      // resetbutton.classList.add("visible");
       ani.classList.add("notvisible");
-    //   layout.classList.remove("notvisible");
     },
     logonotVisible() {
       const logofix = document.querySelector(".logo");
-      // const resetbutton = document.querySelector(".restart");
       const ani = document.querySelector(".animation-wrapper");
-    //   const layout = document.querySelector(".layout");
       logofix.classList.remove("visible");
-      // resetbutton.classList.remove("visible");
       ani.classList.remove("notvisible");
-    //   layout.classList.add("notvisible");
     },
     resetit() {
       const cat = document.querySelector(".cat");
@@ -623,11 +614,7 @@ body {
   position: absolute;
   top: 20%;
   left: 20%;
-  /* transform: translate(-50%, -50%) scale(2.5); */
   width: 220px;
-  /* font-size: 34px; */
-  /* font-family: sans-serif; */
-  /* color: transparent; */
   display: flex;
   justify-content: center;
 }
@@ -667,124 +654,8 @@ body {
   top: 40px;
   transition: all 1s;
 }
-/* .wrapper-no7 .restart {
-  display: none;
-  font-size: 20px;
-  position: absolute;
-  top: 50%;
-  background-color: white;
-  border: #bbbbbb 1px solid;
-  box-shadow: none;
-  padding: 20px;
-  border-radius: 10px;
-  visibility: hidden;
-} */
-/* .wrapper-no7 .restart:hover {
-  background-color: #ddd;
-}
-.wrapper-no7 .restart.visible {
-  display: block;
-} */
-/* .wrapper-no7 .layout {
-  display: block;
-  opacity: 1;
-  width: 80%;
-  position: absolute;
-  top: 40px;
-  transition: opacity 1s;
-}
-.wrapper-no7 .layout.notvisible {
-  display: none;
-  opacity: 0;
-}
-.wrapper-no7 .layout li {
-  height: 15px;
-  background-color: #bbbbbb;
-}
-.wrapper-no7 .layout ul {
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-.wrapper-no7 .layout li {
-  width: 50px;
-  margin-left: 20px;
-  list-style: none;
-  background-color: #bbbbbb;
-}
-.wrapper-no7 .layout .layout__nav {
-  display: flex;
-  justify-content: space-between;
-}
-.wrapper-no7 .layout .layout__nav-left,
-.wrapper-no7 .layout .layout__nav-right {
-  width: 40%;
-}
-.wrapper-no7 .layout .layout__nav-left li:first-child {
-  margin-left: 0;
-}
-.wrapper-no7 .layout .layout__nav-right {
-  flex-direction: row-reverse;
-}
-.wrapper-no7 .layout .layout__title {
-  width: 80%;
-  height: 40px;
-  background-color: #bbbbbb;
-  margin-top: 150px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.wrapper-no7 .layout .layout__content {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-}
-.wrapper-no7 .layout .layout__content div {
-  width: 80%;
-  height: 20px;
-  background-color: #bbbbbb;
-  margin-top: 20px;
-}
-.wrapper-no7 .layout .layout__content div:first-child {
-  margin-top: 100px;
-} */
-@media screen and (max-width: 500px) {
-  /* .wrapper-no7 .layout {
-    width: 100%;
-  }
-  .wrapper-no7 .layout .layout__nav,
-  .wrapper-no7 .layout .layout__nav-left,
-  .wrapper-no7 .layout .layout__nav-right {
-    display: none;
-  }
-  .wrapper-no7 .layout .layout__title {
-    margin-top: 100px;
-  }
-  .wrapper-no7 .layout .layout__content div:first-child {
-    margin-top: 40px;
-  } */
-}
+
 @media screen and (max-width: 768px) {
-  /* .wrapper-no7 .layout {
-    width: 100%;
-  }
-  .wrapper-no7 .layout .layout__title {
-    margin-top: 100px;
-  }
-  .wrapper-no7 .layout .layout__content div:first-child {
-    margin-top: 40px;
-  }
-  .wrapper-no7 .layout .layout__title {
-    margin-top: 70px;
-  }
-  .wrapper-no7 .layout .layout__nav {
-    margin-top: 20px;
-  }
-  .wrapper-no7 .layout .layout__nav-left,
-  .wrapper-no7 .layout .layout__nav-right {
-    width: 35%;
-  } */
   .wrapper-no7 .logo {
     font-size: 45px;
   }
