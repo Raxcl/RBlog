@@ -32,7 +32,7 @@
     <!-- logo特效 -->
     <!-- todo -->
     <div class="wrapper-no7">
-      <div class="logo">LOGO</div>
+      <div class="logo" @click="initAni">RBlog</div>
       <div class="animation-wrapper">
         <div class="cat-wrapper">
           <svg
@@ -109,45 +109,9 @@
             </g>
           </svg>
         </div>
-        <div class="logoani">LOGO</div>
+        <div class="logoani">RBlog</div>
       </div>
-      <div class="layout notvisible">
-        <!-- <div class="layout__nav">
-          <ul class="layout__nav-left">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-          <ul class="layout__nav-right">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-        </div>
-        <div class="layout__title"></div>
-        <div class="layout__content">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div> -->
-      
-	  </div>
-      <button class="restart" @click="initAni">restart animation</button>
+      <!-- <button class="restart" @click="initAni">restart animation</button> -->
     </div>
 
     <div class="wrapper">
@@ -365,21 +329,21 @@ export default {
     },
     logoVisible() {
       const logofix = document.querySelector(".logo");
-      const resetbutton = document.querySelector(".restart");
+      // const resetbutton = document.querySelector(".restart");
       const ani = document.querySelector(".animation-wrapper");
     //   const layout = document.querySelector(".layout");
       logofix.classList.add("visible");
-      resetbutton.classList.add("visible");
+      // resetbutton.classList.add("visible");
       ani.classList.add("notvisible");
     //   layout.classList.remove("notvisible");
     },
     logonotVisible() {
       const logofix = document.querySelector(".logo");
-      const resetbutton = document.querySelector(".restart");
+      // const resetbutton = document.querySelector(".restart");
       const ani = document.querySelector(".animation-wrapper");
     //   const layout = document.querySelector(".layout");
       logofix.classList.remove("visible");
-      resetbutton.classList.remove("visible");
+      // resetbutton.classList.remove("visible");
       ani.classList.remove("notvisible");
     //   layout.classList.add("notvisible");
     },
@@ -703,7 +667,7 @@ body {
   top: 40px;
   transition: all 1s;
 }
-.wrapper-no7 .restart {
+/* .wrapper-no7 .restart {
   display: none;
   font-size: 20px;
   position: absolute;
@@ -713,14 +677,15 @@ body {
   box-shadow: none;
   padding: 20px;
   border-radius: 10px;
-}
-.wrapper-no7 .restart:hover {
+  visibility: hidden;
+} */
+/* .wrapper-no7 .restart:hover {
   background-color: #ddd;
 }
 .wrapper-no7 .restart.visible {
   display: block;
-}
-.wrapper-no7 .layout {
+} */
+/* .wrapper-no7 .layout {
   display: block;
   opacity: 1;
   width: 80%;
@@ -783,9 +748,9 @@ body {
 }
 .wrapper-no7 .layout .layout__content div:first-child {
   margin-top: 100px;
-}
+} */
 @media screen and (max-width: 500px) {
-  .wrapper-no7 .layout {
+  /* .wrapper-no7 .layout {
     width: 100%;
   }
   .wrapper-no7 .layout .layout__nav,
@@ -798,10 +763,10 @@ body {
   }
   .wrapper-no7 .layout .layout__content div:first-child {
     margin-top: 40px;
-  }
+  } */
 }
 @media screen and (max-width: 768px) {
-  .wrapper-no7 .layout {
+  /* .wrapper-no7 .layout {
     width: 100%;
   }
   .wrapper-no7 .layout .layout__title {
@@ -819,7 +784,7 @@ body {
   .wrapper-no7 .layout .layout__nav-left,
   .wrapper-no7 .layout .layout__nav-right {
     width: 35%;
-  }
+  } */
   .wrapper-no7 .logo {
     font-size: 45px;
   }
