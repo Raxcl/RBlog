@@ -40,7 +40,6 @@
 		<div class="m-mobile-hide">
 			<Live2d/>
 		</div>
-			<!-- <Live2d/> -->
 
 		<!--APlayer-->
 		<div class="m-mobile-hide">
