@@ -6,7 +6,7 @@
     @mouseover="toolShow = true"
     @mouseout="toolShow = false">
     <div v-show="mainShow" >
-      <div class="vue-live2d-tip" v-html="tipText" v-show="tipShow"></div>
+      <div class="vue-live2d-tip" v-html="tipText" v-show="tipShow" :style="{top: fixtiptop + 'px'}"></div>
       <canvas id="vue-live2d-main" ref="vue-live2d-main" :width="live2dWidth" :height="live2dHeight" class="vue-live2d-main"></canvas>
       <div
         class="vue-live2d-tool"
@@ -37,6 +37,7 @@ export default {
   name: 'Live2d',
   data () {
     return {
+      tiptop : 20,
       direction: 'right',
       apiPath: 'https://live2d.fghrsh.net/api',
       homePage: 'https://github.com/Raxcl',
@@ -72,7 +73,24 @@ export default {
       }, {
         name: 'fa-times',
         click: this.close
-      }]
+      },
+      {
+        name: 'fa-times',
+        click: this.modeljia,
+      },
+      {
+        name: 'fa-times',
+        click: this.modeljian,
+      },
+      {
+        name: 'fa-info-circle',
+        click: this.tipjia,
+      },
+      {
+        name: 'fa-info-circle',
+        click: this.tipjian,
+      },
+      ]
     }
   },
   mounted () {
@@ -84,10 +102,13 @@ export default {
   },
   computed: {
     live2dWidth () {
-      return this.width ? this.width : this.size
+      return this.width ? this.width : 350
     },
     live2dHeight () {
       return this.height ? this.height : this.size
+    },
+    fixtiptop(){
+      return this.tiptop ? this.tiptop : 20
     },
   },
   watch: {
@@ -113,10 +134,25 @@ export default {
     }
   },
   methods: {
+    modeljia(){
+        this.size = this.size + 10;
+      
+    },
+    modeljian(){
+        this.size = this.size - 10;
+    },
+    tipjia(){
+        this.tiptop = this.tiptop - 10;
+    },
+    tipjian(){
+        this.tiptop = this.tiptop + 10;
+    },
     changeLive2dSize () {
       const { live2dWidth: width, live2dHeight: height } = this
       // 不知还有调整宽高的好方法没？
       document.querySelector('.vue-live2d-main').outerHTML = `<canvas id="vue-live2d-main" width="${width}" height="${height}" class="vue-live2d-main"></canvas>`
+      //更新高度后需重新加载模型，否则会无法显示
+      this.loadModel()
     },
     setDirection () {
       const containers = ['vue-live2d', 'vue-live2d-tool', 'vue-live2d-toggle']
@@ -176,8 +212,6 @@ export default {
           break;
         }
       }
-      //调整高度
-      // this.updateMyModelHeight();
       
       //出场语句
       this.showMessage(myMessage[0], 4000)
@@ -231,36 +265,6 @@ export default {
         this.tipShow = false
         this.messageTimer = null
       }, timeout)
-    },
-    updateModelHeight(){
-        const n = this.modelId
-        switch(n){
-          case 1:case 2:case 3:case 4:case 5:
-            this.height = 450
-            this.height = this.height - 450;
-            break;
-          //模型6过高，特殊化
-          case 6:
-            this.height = 0;
-            this.height = this.height +750;
-            break;
-          default:
-            this.height = 0;
-            this.height = this.height + 450;
-        } 
-    },
-    updateMyModelHeight(){
-      //小模型采用另外的高度,小模型id需手动添加
-      const n = this.myModelId
-      switch(n){
-        case 2:
-          this.height = 450
-          this.height = this.height - 450;
-          break;
-        default:
-          this.height = 0;
-          this.height = this.height + 450;
-      } 
     },
     takePhoto () {
       this.showMessage('照好了嘛，留个纪念吖~')
