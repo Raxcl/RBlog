@@ -55,6 +55,7 @@ export default {
       myModelId: 0,
       myModelTexturesId: 0,
       isMyModels: false,
+      myModelsAdjust: false,
       tools: [{
         name: 'fa-comment',
         click: this.showHitokoto
@@ -174,14 +175,12 @@ export default {
       const {  myModelId, myModelTexturesId } = this
       const {myModel} = myModels
       //随机模型id，确保下次模型id不与当前重复
-      console.log("myLoadModel")
       const url = myModel[myModelId][myModelTexturesId]
-      console.log("url:"+url)
       window.loadlive2d("vue-live2d-main", url)
-      console.log(`Live2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
+      console.log(`myLive2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
     },
     chooseLoadModel(){
-      this.isMyModels ? this.myLoadModel() : this.loadModel()
+      this.myModelsAdjust ? this.myLoadModel() : this.loadModel()
     },
     chooseLoadRandModel(){
       this.isMyModels ? this.myLoadRandModel() : this.loadRandModel()
@@ -198,6 +197,8 @@ export default {
         this.loadRandTextures(true)
         //定义下次按钮触发为新接口
         this.isMyModels = true;
+        //定义调整高度按钮为原模型
+        this.myModelsAdjust = false;
       }).catch(function (err) {
         console.log(err)
       })
@@ -222,6 +223,8 @@ export default {
       this.myLoadRandTextures(true)
       //定义下次按钮触发为原接口
       this.isMyModels = false;
+      //定义调整高度按钮为新模型
+      this.myModelsAdjust = true;
     },
     chooseLoadRandTextures(){
       this.isMyModels ? this.loadRandTextures() : this.myLoadRandTextures()

@@ -12,7 +12,7 @@ export default {
         'https://cdn.jsdelivr.net/gh/Raxcl/vue-live2d-models/model-library/date_16/date_16.model.json',
       ],
       [
-        'https://cdn.jsdelivr.net/gh/Raxcl/vue-live2d-models/model-library/epsilon/epsilon.model.json',
+        'https://cdn.jsdelivr.net/gh/Raxcl/vue-live2d-models/model-library/Epsilon/Epsilon.model.json',
       ],
       [
         'https://cdn.jsdelivr.net/gh/Raxcl/vue-live2d-models/model-library/hallo_16/hallo_16.model.json',
