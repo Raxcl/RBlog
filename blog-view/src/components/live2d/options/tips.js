@@ -45,6 +45,33 @@ export default {
           "我们还能再见面的吧…",
           ],
       },
+      {
+        selector: ".vue-live2d-tool .fa-chevron-circle-up",
+        texts: [
+          "想看到我的全部嘛？",
+          "我准备好到上面去了，来吧~",
+          ],
+      },
+      {
+        selector: ".vue-live2d-tool .fa-chevron-circle-down",
+        texts: [
+          "emmmm...是太高了吗？",
+          "快放我下去~",
+          ],
+      },
+      {
+        selector: ".vue-live2d-tool .fa-hand-o-up",
+        texts: [
+          "挡住我啦，快挪一挪叭~",
+          ],
+      },
+      {
+        selector: ".vue-live2d-tool .fa-hand-o-down",
+        texts: [
+          "太高啦，下来下来~",
+          "呀~是太高了嘛？",
+          ],
+      },
     ],
     copy: [
       {

@@ -75,19 +75,19 @@ export default {
         click: this.close
       },
       {
-        name: 'fa-times',
+        name: 'fa-chevron-circle-up',
         click: this.modeljia,
       },
       {
-        name: 'fa-times',
+        name: 'fa-chevron-circle-down',
         click: this.modeljian,
       },
       {
-        name: 'fa-info-circle',
+        name: 'fa-hand-o-up',
         click: this.tipjia,
       },
       {
-        name: 'fa-info-circle',
+        name: 'fa-hand-o-down',
         click: this.tipjian,
       },
       ]
