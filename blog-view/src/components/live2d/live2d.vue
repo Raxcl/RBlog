@@ -54,7 +54,7 @@ export default {
       modelTexturesId: 53,
       myModelId: 0,
       myModelTexturesId: 0,
-      isMyModels: true,
+      isMyModels: false,
       tools: [{
         name: 'fa-comment',
         click: this.showHitokoto
@@ -152,7 +152,7 @@ export default {
       // 不知还有调整宽高的好方法没？
       document.querySelector('.vue-live2d-main').outerHTML = `<canvas id="vue-live2d-main" width="${width}" height="${height}" class="vue-live2d-main"></canvas>`
       //更新高度后需重新加载模型，否则会无法显示
-      this.loadModel()
+      this.chooseLoadModel()
     },
     setDirection () {
       const containers = ['vue-live2d', 'vue-live2d-tool', 'vue-live2d-toggle']
@@ -179,6 +179,9 @@ export default {
       console.log("url:"+url)
       window.loadlive2d("vue-live2d-main", url)
       console.log(`Live2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
+    },
+    chooseLoadModel(){
+      this.isMyModels ? this.myLoadModel() : this.loadModel()
     },
     chooseLoadRandModel(){
       this.isMyModels ? this.myLoadRandModel() : this.loadRandModel()
