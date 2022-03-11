@@ -7,7 +7,7 @@
     @mouseout="toolShow = false">
     <div v-show="mainShow" >
       <div class="vue-live2d-tip" v-html="tipText" v-show="tipShow"></div>
-      <canvas :id="live2dMainId" ref="vue-live2d-main" :width="live2dWidth" :height="live2dHeight" class="vue-live2d-main"></canvas>
+      <canvas id="vue-live2d-main" ref="vue-live2d-main" :width="live2dWidth" :height="live2dHeight" class="vue-live2d-main"></canvas>
       <div
         class="vue-live2d-tool"
         ref="vue-live2d-tool"
@@ -39,7 +39,6 @@ export default {
     return {
       direction: 'right',
       apiPath: 'https://live2d.fghrsh.net/api',
-      customId: '',
       homePage: 'https://github.com/Raxcl',
       tips: tips,
       width: 0,
@@ -84,12 +83,6 @@ export default {
     })
   },
   computed: {
-    live2dMainId () {
-      const defaultId = 'vue-live2d-main'
-      const customId = this.customId
-      if (!customId) return defaultId
-      return customId
-    },
     live2dWidth () {
       return this.width ? this.width : this.size
     },
@@ -121,9 +114,9 @@ export default {
   },
   methods: {
     changeLive2dSize () {
-      const { live2dMainId, live2dWidth: width, live2dHeight: height } = this
+      const { live2dWidth: width, live2dHeight: height } = this
       // 不知还有调整宽高的好方法没？
-      document.querySelector(`#${live2dMainId}`).outerHTML = `<canvas id=${live2dMainId} width="${width}" height="${height}" class="vue-live2d-main"></canvas>`
+      document.querySelector('.vue-live2d-main').outerHTML = `<canvas id="vue-live2d-main" width="${width}" height="${height}" class="vue-live2d-main"></canvas>`
     },
     setDirection () {
       const containers = ['vue-live2d', 'vue-live2d-tool', 'vue-live2d-toggle']
@@ -136,19 +129,19 @@ export default {
       })
     },
     loadModel () {
-      const { apiPath, modelId, modelTexturesId, live2dMainId } = this
+      const { apiPath, modelId, modelTexturesId } = this
       const url = `${apiPath}/get/?id=${modelId}-${modelTexturesId}`
-      window.loadlive2d(live2dMainId, url)
+      window.loadlive2d("vue-live2d-main", url)
       console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`)
     },
     myLoadModel () {
-      const {  myModelId, myModelTexturesId, live2dMainId } = this
+      const {  myModelId, myModelTexturesId } = this
       const {myModel} = myModels
       //随机模型id，确保下次模型id不与当前重复
       console.log("myLoadModel")
       const url = myModel[myModelId][myModelTexturesId]
       console.log("url:"+url)
-      window.loadlive2d(live2dMainId, url)
+      window.loadlive2d("vue-live2d-main", url)
       console.log(`Live2D 模型 ${myModelId}-${myModelTexturesId} 加载完成`)
     },
     chooseLoadRandModel(){
