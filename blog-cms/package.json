@@ -14,6 +14,8 @@
     "core-js": "3.6.5",
     "echarts": "4.9.0",
     "element-ui": "2.13.2",
+    "font-awesome": "^4.7.0",
+    "jinrishici": "^1.0.6",
     "lodash": "4.17.19",
     "mavon-editor": "2.9.1",
     "moment": "2.27.0",
