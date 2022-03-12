@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<router-view />
-		<Live2d style="z-index:1703"/>
+		<Live2d/>
 	</div>
 </template>
 
@@ -16,3 +16,10 @@
 		}
 	}
 </script>
+
+<style>
+	@import "./common/font/font.css";
+	#app{
+		font-family: "Delius Swash Caps", cursive;
+	}
+</style>
