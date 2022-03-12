@@ -1,11 +1,12 @@
 <template>
-  <div
+  <div>
+    <div v-show="mainShow"
     class="vue-live2d"
     ref="vue-live2d"
-    :style="{ width: live2dWidth + 'px', height: live2dHeight + 'px', zIndex: 1 }"
+    :style="{ width: live2dWidth + 'px', height: live2dHeight + 'px', zIndex: 3000 }"
     @mouseover="toolShow = true"
     @mouseout="toolShow = false">
-    <div v-show="mainShow" >
+    <div  >
       <div class="vue-live2d-tip" v-html="tipText" v-show="tipShow" :style="{top: fixtiptop + 'px'}"></div>
       <canvas id="vue-live2d-main" ref="vue-live2d-main" :width="live2dWidth" :height="live2dHeight" class="vue-live2d-main"></canvas>
       <div
@@ -20,7 +21,9 @@
           @click="tool.click"/>
       </div>
     </div>
-    <div class="vue-live2d-toggle" ref="vue-live2d-toggle" v-show="!mainShow" @click="mainShow = true">
+    
+  </div>
+  <div class="vue-live2d-toggle" ref="vue-live2d-toggle" v-show="!mainShow" @click="mainShow = true" style="zIndex: 3000">
       <span>看板娘</span>
     </div>
   </div>
@@ -407,7 +410,7 @@ export default {
 /* live2d-toggle */
 .vue-live2d-toggle {
   width: 1.5rem;
-  position: absolute;
+  position: fixed;
   bottom: 1rem;
   padding: .3rem 0;
   writing-mode: vertical-lr;
@@ -415,6 +418,7 @@ export default {
   background-color: #fa0;
   font-size: 1rem;
   cursor: pointer;
+  right: 0; 
 }
 .vue-live2d-toggle-on-left {
   left: 0;
