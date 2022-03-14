@@ -12,7 +12,7 @@ logo
 
 前台：[https://raxcl.cn](https://raxcl.cn)
 
-后台：[https://admin.raxcl.cn](https://admin.raxcl.cn) 账号`Visitor`密码`666666`
+后台管理平台：[https://admin.raxcl.cn](https://admin.raxcl.cn) 账号`Visitor`密码`666666`
 
 
 ## 后端
