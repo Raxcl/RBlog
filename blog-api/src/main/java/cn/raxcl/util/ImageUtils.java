@@ -1,6 +1,6 @@
 package cn.raxcl.util;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.exception.BadRequestException;
 import cn.raxcl.exception.NotFoundException;
 import lombok.AllArgsConstructor;
@@ -42,7 +42,7 @@ public class ImageUtils {
 		if(contentType == null){
 			throw new NotFoundException("getImageByRequest is null---ImageUtils.class");
 		}
-		if (CommonConstant.IMAGE.equals(contentType.getType())) {
+		if (CommonConstants.IMAGE.equals(contentType.getType())) {
 			return new ImageResource(responseEntity.getBody(), contentType.getSubtype());
 		}
 		throw new BadRequestException("response contentType unlike image");
@@ -50,7 +50,7 @@ public class ImageUtils {
 
 	public static String pushGithub(ImageResource image, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
 		String fileName = UUID.randomUUID() + "." + image.getType();
-		String url = String.format(CommonConstant.GITHUB_UPLOAD_API, githubUsername, githubRepos, githubReposPath, fileName);
+		String url = String.format(CommonConstants.GITHUB_UPLOAD_API, githubUsername, githubRepos, githubReposPath, fileName);
 		String imgBase64 = Base64.getEncoder().encodeToString(image.getData());
 
 		HttpHeaders headers = new HttpHeaders();
@@ -62,6 +62,6 @@ public class ImageUtils {
 		HttpEntity<HashMap<String, String>> httpEntity = new HttpEntity<>(body, headers);
 		REST_TEMPLATE.put(url, httpEntity);
 
-		return String.format(CommonConstant.CDN_URL4_GITHUB, githubUsername, githubRepos, githubReposPath, fileName);
+		return String.format(CommonConstants.CDN_URL4_GITHUB, githubUsername, githubRepos, githubReposPath, fileName);
 	}
 }

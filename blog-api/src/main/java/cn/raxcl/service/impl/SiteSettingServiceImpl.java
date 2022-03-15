@@ -1,10 +1,10 @@
 package cn.raxcl.service.impl;
 
 import cn.raxcl.aspect.AopProxy;
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.SiteSetting;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.SiteSettingMapper;
@@ -65,7 +65,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 
 	@Override
 	public Map<String, Object> getSiteInfo() {
-		String redisKey = RedisKeyConstant.SITE_INFO_MAP;
+		String redisKey = RedisKeyConstants.SITE_INFO_MAP;
 		Map<String, Object> siteInfoMapFromRedis = redisService.getMapByValue(redisKey);
 		if (siteInfoMapFromRedis != null) {
 			return siteInfoMapFromRedis;
@@ -104,24 +104,24 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	}
 
 	private void siteInfoDispose(SiteSetting s, IntroductionVO introductionVO, List<Favorite> favorites, List<String> rollTexts) {
-		if (CommonConstant.AVATAR.equals(s.getNameEn())) {
+		if (CommonConstants.AVATAR.equals(s.getNameEn())) {
 			introductionVO.setAvatar(s.getValue());
-		} else if (CommonConstant.NAME.equals(s.getNameEn())) {
+		} else if (CommonConstants.NAME.equals(s.getNameEn())) {
 			introductionVO.setName(s.getValue());
-		} else if (CommonConstant.GITHUB.equals(s.getNameEn())) {
+		} else if (CommonConstants.GITHUB.equals(s.getNameEn())) {
 			introductionVO.setGithub(s.getValue());
-		} else if (CommonConstant.QQ.equals(s.getNameEn())) {
+		} else if (CommonConstants.QQ.equals(s.getNameEn())) {
 			introductionVO.setQq(s.getValue());
-		} else if (CommonConstant.BILIBILI.equals(s.getNameEn())) {
+		} else if (CommonConstants.BILIBILI.equals(s.getNameEn())) {
 			introductionVO.setBilibili(s.getValue());
-		} else if (CommonConstant.NETEASE.equals(s.getNameEn())) {
+		} else if (CommonConstants.NETEASE.equals(s.getNameEn())) {
 			introductionVO.setNetease(s.getValue());
-		} else if (CommonConstant.EMAIL.equals(s.getNameEn())) {
+		} else if (CommonConstants.EMAIL.equals(s.getNameEn())) {
 			introductionVO.setEmail(s.getValue());
-		} else if (CommonConstant.FAVORITE.equals(s.getNameEn())) {
+		} else if (CommonConstants.FAVORITE.equals(s.getNameEn())) {
 			Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
 			favorites.add(favorite);
-		} else if (CommonConstant.ROLL_TEXT.equals(s.getNameEn())) {
+		} else if (CommonConstants.ROLL_TEXT.equals(s.getNameEn())) {
 			Matcher m = PATTERN.matcher(s.getValue());
 			while (m.find()) {
 				rollTexts.add(m.group(1));
@@ -180,6 +180,6 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	 * 删除站点信息缓存
 	 */
 	private void deleteSiteInfoRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConstant.SITE_INFO_MAP);
+		redisService.deleteCacheByKey(RedisKeyConstants.SITE_INFO_MAP);
 	}
 }

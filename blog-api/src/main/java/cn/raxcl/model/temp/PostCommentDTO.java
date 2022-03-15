@@ -1,6 +1,7 @@
 package cn.raxcl.model.temp;
 
 import cn.raxcl.entity.User;
+import cn.raxcl.enums.CommentOpenStateEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,5 +30,5 @@ public class PostCommentDTO {
     /**
      * 文章状态
      */
-    Integer judgeResult;
+    CommentOpenStateEnum judgeResult;
 }

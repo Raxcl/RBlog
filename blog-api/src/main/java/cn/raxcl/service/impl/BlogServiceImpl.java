@@ -1,8 +1,8 @@
 package cn.raxcl.service.impl;
 
 import cn.raxcl.aspect.AopProxy;
-import cn.raxcl.constant.CommonConstant;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.util.common.Result;
 import cn.raxcl.entity.Blog;
 import cn.raxcl.entity.Category;
@@ -71,7 +71,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
      */
     @PostConstruct
     private void saveBlogViewsToRedis() {
-        String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
+        String redisKey = RedisKeyConstants.BLOG_VIEWS_MAP;
         //Redis中没有存储博客浏览量的Hash
         if (!redisService.hasKey(redisKey)) {
             //从数据库中读取并存入Redis
@@ -107,7 +107,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
 
     @Override
     public List<NewBlogVO> getNewBlogListByIsPublished() {
-        String redisKey = RedisKeyConstant.NEW_BLOG_LIST;
+        String redisKey = RedisKeyConstants.NEW_BLOG_LIST;
         List<NewBlogVO> newBlogVOListFromRedis = redisService.getListByValue(redisKey);
         if (newBlogVOListFromRedis != null) {
             return newBlogVOListFromRedis;
@@ -128,7 +128,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
 
     @Override
     public PageResultVO<BlogInfoVO> getBlogInfoListByIsPublished(Integer pageNum) {
-        String redisKey = RedisKeyConstant.HOME_BLOG_INFO_LIST;
+        String redisKey = RedisKeyConstants.HOME_BLOG_INFO_LIST;
         //redis已有当前页缓存
         PageResultVO<BlogInfoVO> pageResultVOFromRedis = redisService.getBlogInfoPageResultByHash(redisKey, pageNum);
         if (pageResultVOFromRedis != null) {
@@ -152,7 +152,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
      * @param pageResultVO pageResult
      */
     private void setBlogViewsFromRedisToPageResult(PageResultVO<BlogInfoVO> pageResultVO) {
-        String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
+        String redisKey = RedisKeyConstants.BLOG_VIEWS_MAP;
         List<BlogInfoVO> blogInfoVOS = pageResultVO.getList();
         for (int i = 0; i < blogInfoVOS.size(); i++) {
             BlogInfoVO blogInfoVO = JacksonUtils.convertValue(blogInfoVOS.get(i), BlogInfoVO.class);
@@ -200,7 +200,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
 
     @Override
     public Map<String, Object> getArchiveBlogAndCountByIsPublished() {
-        String redisKey = RedisKeyConstant.ARCHIVE_BLOG_MAP;
+        String redisKey = RedisKeyConstants.ARCHIVE_BLOG_MAP;
         Map<String, Object> mapFromRedis = redisService.getMapByValue(redisKey);
         if (mapFromRedis != null) {
             return mapFromRedis;
@@ -257,7 +257,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
             throw new NotFoundException("该博客不存在");
         }
         deleteBlogRedisCache();
-        redisService.deleteByHashKey(RedisKeyConstant.BLOG_VIEWS_MAP, id);
+        redisService.deleteByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, id);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -274,7 +274,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         if (blogMapper.saveBlog(blogDTO) != 1) {
             throw new PersistenceException("添加博客失败");
         }
-        redisService.saveKvToHash(RedisKeyConstant.BLOG_VIEWS_MAP, blogDTO.getId(), 0);
+        redisService.saveKvToHash(RedisKeyConstants.BLOG_VIEWS_MAP, blogDTO.getId(), 0);
         deleteBlogRedisCache();
     }
 
@@ -300,9 +300,9 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         if (blogMapper.updateBlogVisibilityById(blogId, blogVisibilityDTO) != 1) {
             throw new PersistenceException("操作失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.NEW_BLOG_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.ARCHIVE_BLOG_MAP);
+        redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
+        redisService.deleteCacheByKey(RedisKeyConstants.NEW_BLOG_LIST);
+        redisService.deleteCacheByKey(RedisKeyConstants.ARCHIVE_BLOG_MAP);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -311,11 +311,11 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         if (blogMapper.updateBlogTopById(blogId, top) != 1) {
             throw new PersistenceException("操作失败");
         }
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
+        redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
     }
 
     private void updateViewsToRedis(Long blogId) {
-        redisService.incrementByHashKey(RedisKeyConstant.BLOG_VIEWS_MAP, blogId, 1);
+        redisService.incrementByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blogId, 1);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -333,7 +333,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
             throw new NotFoundException("博客不存在");
         }
         //将浏览量设置为Redis中的最新值
-        int view = (int) redisService.getValueByHashKey(RedisKeyConstant.BLOG_VIEWS_MAP, blog.getId());
+        int view = (int) redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
         blog.setViews(view);
         return blog;
     }
@@ -350,7 +350,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         }
         blog.setContent(MarkdownUtils.markdownToHtmlExtensions(blog.getContent()));
         //将浏览量设置为Redis中的最新值
-        int view = (int) redisService.getValueByHashKey(RedisKeyConstant.BLOG_VIEWS_MAP, blog.getId());
+        int view = (int) redisService.getValueByHashKey(RedisKeyConstants.BLOG_VIEWS_MAP, blog.getId());
         blog.setViews(view);
         return blog;
     }
@@ -367,7 +367,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
             throw new PersistenceException("更新博客失败");
         }
         deleteBlogRedisCache();
-        redisService.saveKvToHash(RedisKeyConstant.BLOG_VIEWS_MAP, blogDTO.getId(), blogDTO.getViews());
+        redisService.saveKvToHash(RedisKeyConstants.BLOG_VIEWS_MAP, blogDTO.getId(), blogDTO.getViews());
     }
 
     private int countBlogByIsPublished() {
@@ -413,7 +413,7 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
         if (blogDTO.getViews() == null || blogDTO.getViews() < 0) {
             blogDTO.setViews(0);
         }
-        if (CommonConstant.SAVE.equals(type)) {
+        if (CommonConstants.SAVE.equals(type)) {
             blogDTO.setCreateTime(date);
             blogDTO.setUpdateTime(date);
             User user = new User();
@@ -523,8 +523,8 @@ public class BlogServiceImpl implements BlogService, AopProxy<BlogServiceImpl> {
      * 删除首页缓存、最新推荐缓存、归档页面缓存、博客浏览量缓存
      */
     private void deleteBlogRedisCache() {
-        redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.NEW_BLOG_LIST);
-        redisService.deleteCacheByKey(RedisKeyConstant.ARCHIVE_BLOG_MAP);
+        redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
+        redisService.deleteCacheByKey(RedisKeyConstants.NEW_BLOG_LIST);
+        redisService.deleteCacheByKey(RedisKeyConstants.ARCHIVE_BLOG_MAP);
     }
 }

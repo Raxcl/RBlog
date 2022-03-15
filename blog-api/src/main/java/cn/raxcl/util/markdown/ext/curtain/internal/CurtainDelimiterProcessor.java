@@ -1,6 +1,6 @@
 package cn.raxcl.util.markdown.ext.curtain.internal;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.util.markdown.ext.cover.internal.CoverDelimiterProcessor;
 import org.commonmark.node.Node;
 import org.commonmark.node.Text;
@@ -31,7 +31,7 @@ public class CurtainDelimiterProcessor implements DelimiterProcessor {
 
 	@Override
 	public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
-		if (openingRun.length() >= CommonConstant.TWO && closingRun.length() >= CommonConstant.TWO) {
+		if (openingRun.length() >= CommonConstants.TWO && closingRun.length() >= CommonConstants.TWO) {
 			// Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
 			Text opener = openingRun.getOpener();
 			// Wrap nodes between delimiters in hei_mu.

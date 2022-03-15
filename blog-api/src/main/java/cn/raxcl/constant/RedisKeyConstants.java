@@ -5,8 +5,8 @@ package cn.raxcl.constant;
  * @author Raxcl
  * @date 2021-12-31 17:38:30
  */
-public class RedisKeyConstant {
-	private RedisKeyConstant() {
+public class RedisKeyConstants {
+	private RedisKeyConstants() {
 
 	}
 
@@ -59,4 +59,8 @@ public class RedisKeyConstant {
 	 * 访客标识码key
 	 */
 	public static final String IDENTIFICATION_SET = "identificationSet";
+	/**
+	 * 	qq号与对应头像链接key
+	 */
+	public static final String QQ_AVATAR_GITHUB_URL = "qqAvatarGithubUrl";
 }

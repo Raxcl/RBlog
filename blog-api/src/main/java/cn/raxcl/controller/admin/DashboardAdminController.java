@@ -3,7 +3,7 @@ package cn.raxcl.controller.admin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.CityVisitor;
 import cn.raxcl.util.common.Result;
 import cn.raxcl.service.DashboardService;
@@ -32,7 +32,7 @@ public class DashboardAdminController {
 	@GetMapping("/dashboard")
 	public Result dashboard() {
 		int todayPv = dashboardService.countVisitLogByToday();
-		int todayUv = redisService.countBySet(RedisKeyConstant.IDENTIFICATION_SET);
+		int todayUv = redisService.countBySet(RedisKeyConstants.IDENTIFICATION_SET);
 		int blogCount = dashboardService.getBlogCount();
 		int commentCount = dashboardService.getCommentCount();
 		Map<String, Object> categoryBlogCountMap = dashboardService.getCategoryBlogCountMap();

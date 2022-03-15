@@ -1,5 +1,6 @@
 package cn.raxcl.util;
 
+import cn.raxcl.util.upload.UploadUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
@@ -11,6 +12,7 @@ import java.util.Objects;
  * @author Raxcl
  * @date 2022-01-07 19:50:43
  */
+//todo 待修改
 public class QqInfoUtils {
 	private QqInfoUtils(){}
 	private static final RestTemplate REST_TEMPLATE = new RestTemplate();
@@ -33,18 +35,25 @@ public class QqInfoUtils {
 		return nickname;
 	}
 
-	private static ImageUtils.ImageResource getImageResourceByQq(String qq) {
-		return ImageUtils.getImageByRequest(String.format(QQ_AVATAR_URL, qq));
+	/**
+	 * 从网络获取QQ头像数据
+	 *
+	 * @param qq qq
+	 * @return ImageResource
+	 */
+	private static UploadUtils.ImageResource getImageResourceByQq(String qq) {
+		return UploadUtils.getImageByRequest(String.format(QQ_AVATAR_URL, qq));
 	}
 
 	/**
-	 * 将QQ头像上传至GitHub仓库，并返回CDN链接
+	 * 获取QQ头像URL
 	 *
-	 * @param qq qq
-	 * @return 指向该图片的jsDelivr CDN链接
+	 * @param qq
+	 * @return
+	 * @throws Exception
 	 */
-	public static String getQqAvatarUrlByGithubUpload(String qq, String githubToken, String githubUsername, String githubRepos, String githubReposPath) {
-		return ImageUtils.pushGithub(getImageResourceByQq(qq), githubToken, githubUsername, githubRepos, githubReposPath);
+	public static String getQqAvatarUrl(String qq) throws Exception {
+		return UploadUtils.upload(getImageResourceByQq(qq));
 	}
 
 	public static boolean isQqNumber(String nickname) {

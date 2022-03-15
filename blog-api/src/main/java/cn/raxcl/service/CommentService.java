@@ -79,4 +79,11 @@ public interface CommentService {
 	 */
 	void updateComment(Comment comment);
 
+	/**
+	 * 根据id获取评论信息
+	 * @param id id
+	 * @return Comment
+	 */
+	Comment getCommentById(Long id);
+
 }

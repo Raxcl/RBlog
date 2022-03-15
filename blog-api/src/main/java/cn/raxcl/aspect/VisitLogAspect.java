@@ -1,7 +1,7 @@
 package cn.raxcl.aspect;
 
-import cn.raxcl.constant.CodeConstant;
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CodeConstants;
+import cn.raxcl.constant.CommonConstants;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import cn.raxcl.annotation.VisitLogger;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.VisitLog;
 import cn.raxcl.entity.Visitor;
 import cn.raxcl.model.vo.BlogDetailVO;
@@ -85,20 +85,20 @@ public class VisitLogAspect {
 	 * @return String
 	 */
 	private String checkIdentification(HttpServletRequest request) {
-		String identification = request.getHeader(CommonConstant.IDENTIFICATION);
+		String identification = request.getHeader(CommonConstants.IDENTIFICATION);
 		if (identification == null) {
 			//请求头没有uuid，签发uuid并保存到数据库和Redis
 			identification = saveUuid(request);
 		} else {
 			//校验Redis中是否存在uuid
-			boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
+			boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, identification);
 			//Redis中不存在uuid
 			if (!redisHas) {
 				//校验数据库中是否存在uuid
 				boolean mysqlHas = visitorService.hasUuid(identification);
 				if (mysqlHas) {
 					//数据库存在，保存至Redis
-					redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, identification);
+					redisService.saveValueToSet(RedisKeyConstants.IDENTIFICATION_SET, identification);
 				} else {
 					//数据库不存在，签发新的uuid
 					identification = saveUuid(request);
@@ -129,14 +129,14 @@ public class VisitLogAspect {
 		String nameUuid = timestamp + ip + userAgent;
 		String uuid = UUID.nameUUIDFromBytes(nameUuid.getBytes()).toString();
 		//添加访客标识码UUID至响应头
-		Objects.requireNonNull(response).addHeader(CommonConstant.IDENTIFICATION, uuid);
+		Objects.requireNonNull(response).addHeader(CommonConstants.IDENTIFICATION, uuid);
 		//暴露自定义header供页面资源使用
-		response.addHeader("Access-Control-Expose-Headers", CommonConstant.IDENTIFICATION);
+		response.addHeader("Access-Control-Expose-Headers", CommonConstants.IDENTIFICATION);
 		//校验Redis中是否存在uuid
-		boolean redisHas = redisService.hasValueInSet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
+		boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
 		if (!redisHas) {
 			//保存至Redis
-			redisService.saveValueToSet(RedisKeyConstant.IDENTIFICATION_SET, uuid);
+			redisService.saveValueToSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
 			//保存至数据库
 			Visitor visitor = new Visitor(uuid, ip, userAgent);
 			visitorService.saveVisitor(visitor);
@@ -186,36 +186,36 @@ public class VisitLogAspect {
 	private Map<String, String> judgeBehavior(String behavior, String content, Map<String, Object> requestParams, Object result) {
 		Map<String, String> map = new HashMap<>(16);
 		String remark = "";
-		boolean isViewAndIsFirstPage = CommonConstant.VIEW_PAGE.equals(behavior) && CommonConstant.FIRST_PAGE.equals(content);
-		if ( isViewAndIsFirstPage || CommonConstant.DO_NEW.equals(content)) {
-			int pageNum = (int) requestParams.get(CommonConstant.PAGE_NUM);
+		boolean isViewAndIsFirstPage = CommonConstants.VIEW_PAGE.equals(behavior) && CommonConstants.FIRST_PAGE.equals(content);
+		if ( isViewAndIsFirstPage || CommonConstants.DO_NEW.equals(content)) {
+			int pageNum = (int) requestParams.get(CommonConstants.PAGE_NUM);
 			remark = "第" + pageNum + "页";
-		} else if (CommonConstant.VIEW_BLOG.equals(behavior)) {
+		} else if (CommonConstants.VIEW_BLOG.equals(behavior)) {
 			Result res = (Result) result;
-			if (CodeConstant.SUCCESS.equals(res.getCode())) {
+			if (CodeConstants.SUCCESS.equals(res.getCode())) {
 				BlogDetailVO blog = (BlogDetailVO) res.getData();
 				String title = blog.getTitle();
 				content = title;
 				remark = "文章标题：" + title;
 			}
-		} else if (CommonConstant.SOURCE_BLOG.equals(behavior)) {
+		} else if (CommonConstants.SOURCE_BLOG.equals(behavior)) {
 			Result res = (Result) result;
-			if (CodeConstant.SUCCESS.equals(res.getCode())) {
+			if (CodeConstants.SUCCESS.equals(res.getCode())) {
 				String query = (String) requestParams.get("query");
 				content = query;
 				remark = "搜索内容：" + query;
 			}
-		} else if (CommonConstant.VIEW_CATEGORY.equals(behavior)) {
+		} else if (CommonConstants.VIEW_CATEGORY.equals(behavior)) {
 			String categoryName = (String) requestParams.get("categoryName");
-			int pageNum = (int) requestParams.get(CommonConstant.PAGE_NUM);
+			int pageNum = (int) requestParams.get(CommonConstants.PAGE_NUM);
 			content = categoryName;
 			remark = "分类名称：" + categoryName + "，第" + pageNum + "页";
-		} else if (CommonConstant.VIEW_TAG.equals(behavior)) {
+		} else if (CommonConstants.VIEW_TAG.equals(behavior)) {
 			String tagName = (String) requestParams.get("tagName");
-			int pageNum = (int) requestParams.get(CommonConstant.PAGE_NUM);
+			int pageNum = (int) requestParams.get(CommonConstants.PAGE_NUM);
 			content = tagName;
 			remark = "标签名称：" + tagName + "，第" + pageNum + "页";
-		} else if (CommonConstant.CLICK_FRIEND.equals(behavior)) {
+		} else if (CommonConstants.CLICK_FRIEND.equals(behavior)) {
 			String nickname = (String) requestParams.get("nickname");
 			content = nickname;
 			remark = "友链名称：" + nickname;

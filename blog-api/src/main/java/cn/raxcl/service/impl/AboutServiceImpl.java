@@ -3,7 +3,7 @@ package cn.raxcl.service.impl;
 import cn.raxcl.aspect.AopProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.About;
 import cn.raxcl.exception.PersistenceException;
 import cn.raxcl.mapper.AboutMapper;
@@ -34,7 +34,7 @@ public class AboutServiceImpl implements AboutService, AopProxy<AboutServiceImpl
 
 	@Override
 	public Map<String, String> getAboutInfo() {
-		String redisKey = RedisKeyConstant.ABOUT_INFO_MAP;
+		String redisKey = RedisKeyConstants.ABOUT_INFO_MAP;
 		Map<String, String> aboutInfoMapFromRedis = redisService.getMapByValue(redisKey);
 		if (aboutInfoMapFromRedis != null) {
 			return aboutInfoMapFromRedis;
@@ -88,6 +88,6 @@ public class AboutServiceImpl implements AboutService, AopProxy<AboutServiceImpl
 	 * 删除关于我页面缓存
 	 */
 	private void deleteAboutRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConstant.ABOUT_INFO_MAP);
+		redisService.deleteCacheByKey(RedisKeyConstants.ABOUT_INFO_MAP);
 	}
 }

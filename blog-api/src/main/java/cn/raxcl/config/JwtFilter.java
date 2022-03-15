@@ -1,9 +1,8 @@
 package cn.raxcl.config;
 
-import cn.raxcl.constant.CodeConstant;
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CodeConstants;
+import cn.raxcl.constant.CommonConstants;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -35,14 +34,14 @@ public class JwtFilter extends GenericFilterBean {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 		//后台管理路径外的请求直接跳过
-		if (!request.getRequestURI().startsWith(CommonConstant.PATH_ADMIN)) {
+		if (!request.getRequestURI().startsWith(CommonConstants.PATH_ADMIN)) {
 			filterChain.doFilter(request, servletResponse);
 			return;
 		}
 		String jwt = request.getHeader("Authorization");
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
-				Claims claims = JwtUtils.getTokenBody(jwt, CodeConstant.SECRET_KEY);
+				Claims claims = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY);
 				String username = claims.getSubject();
 				List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, authorities);

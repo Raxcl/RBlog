@@ -2,7 +2,7 @@ package cn.raxcl.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.Category;
 import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.exception.PersistenceException;
@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public List<Category> getCategoryNameList() {
-		String redisKey = RedisKeyConstant.CATEGORY_NAME_LIST;
+		String redisKey = RedisKeyConstants.CATEGORY_NAME_LIST;
 		List<Category> categoryListFromRedis = redisService.getListByValue(redisKey);
 		if (categoryListFromRedis != null) {
 			return categoryListFromRedis;
@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryMapper.saveCategory(category) != 1) {
 			throw new PersistenceException("分类添加失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstant.CATEGORY_NAME_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstants.CATEGORY_NAME_LIST);
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryMapper.deleteCategoryById(id) != 1) {
 			throw new PersistenceException("删除分类失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstant.CATEGORY_NAME_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstants.CATEGORY_NAME_LIST);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -82,8 +82,8 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryMapper.updateCategory(category) != 1) {
 			throw new PersistenceException("分类更新失败");
 		}
-		redisService.deleteCacheByKey(RedisKeyConstant.CATEGORY_NAME_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstants.CATEGORY_NAME_LIST);
 		//修改了分类名，可能有首页文章关联了分类，也要更新首页缓存
-		redisService.deleteCacheByKey(RedisKeyConstant.HOME_BLOG_INFO_LIST);
+		redisService.deleteCacheByKey(RedisKeyConstants.HOME_BLOG_INFO_LIST);
 	}
 }

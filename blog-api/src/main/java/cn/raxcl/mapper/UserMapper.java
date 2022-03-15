@@ -18,4 +18,11 @@ public interface UserMapper {
 	 * @return User
 	 */
 	User findByUsername(String username);
+
+	/**
+	 * 根据id查询用户信息
+	 * @param id id
+	 * @return User
+	 */
+	User findById(Long id);
 }

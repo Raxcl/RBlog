@@ -1,9 +1,9 @@
 package cn.raxcl.task;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Component;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.CityVisitor;
 import cn.raxcl.entity.VisitRecord;
 import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
@@ -52,7 +52,7 @@ public class VisitorSyncScheduleTask {
 	 */
 	public void syncVisitInfoToDatabase() {
 		//清空当天Redis的访客标识Set，以便统计每日UV
-		redisService.deleteCacheByKey(RedisKeyConstant.IDENTIFICATION_SET);
+		redisService.deleteCacheByKey(RedisKeyConstants.IDENTIFICATION_SET);
 		//获取昨天的所有访问日志
 		List<VisitLogUuidTimeDTO> yesterdayLogList = visitLogService.getUuidAndCreateTimeByYesterday();
 		//用Set去重得到当天所有访客的uuid
@@ -88,7 +88,7 @@ public class VisitorSyncScheduleTask {
 		ipSource.forEach(i -> {
 			if (i.startsWith("中国")) {
 				String[] split = i.split("\\|");
-				if (split.length == CommonConstant.FOUR) {
+				if (split.length == CommonConstants.FOUR) {
 					String city = split[2];
 					cityVisitorMap.merge(city, 1, Integer::sum);
 				}

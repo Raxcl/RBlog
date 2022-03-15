@@ -1,15 +1,17 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.constant.CodeConstant;
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CodeConstants;
+import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.JwtConstants;
 import cn.raxcl.entity.User;
+import cn.raxcl.enums.CommentOpenStateEnum;
 import cn.raxcl.exception.NotFoundException;
 import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.model.temp.PostCommentDTO;
-import cn.raxcl.model.vo.FriendInfoVO;
 import cn.raxcl.model.vo.PageResultVO;
 import cn.raxcl.service.*;
 import cn.raxcl.util.*;
+import cn.raxcl.util.comment.CommentUtils;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import cn.raxcl.aspect.AopProxy;
@@ -30,26 +32,6 @@ import java.util.*;
  */
 @Service
 public class CommentServiceImpl implements CommentService, AopProxy<CommentServiceImpl> {
-    /**
-     * GitHub token
-     */
-    @Value("${upload.github.token}")
-    private String githubToken;
-    /**
-     * GitHub用户名
-     */
-    @Value("${upload.github.username}")
-    private String githubUsername;
-    /**
-     * GitHub仓库名
-     */
-    @Value("${upload.github.repos}")
-    private String githubRepos;
-    /**
-     * GitHub仓库路径
-     */
-    @Value("${upload.github.repos-path}")
-    private String githubReposPath;
     @Value("${custom.blog.name}")
     public String blogName;
     @Value("${custom.url.cms}")
@@ -58,37 +40,30 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
     public String websiteUrl;
 
     private final CommentMapper commentMapper;
-    private final BlogService blogService;
-    private final AboutService aboutService;
-    private final FriendService friendService;
     private final UserServiceImpl userService;
     private final PostCommentDTO postCommentDTO;
     private final MailService mailService;
+    private final CommentUtils commentUtils;
 
-    public CommentServiceImpl(CommentMapper commentMapper, BlogService blogService, AboutService aboutService,
-                              FriendService friendService, UserServiceImpl userService, PostCommentDTO postCommentDTO,
-                              MailService mailService) {
+    public CommentServiceImpl(CommentMapper commentMapper,  UserServiceImpl userService, PostCommentDTO postCommentDTO,
+                              MailService mailService, CommentUtils commentUtils) {
         this.commentMapper = commentMapper;
-        this.blogService = blogService;
-        this.aboutService = aboutService;
-        this.friendService = friendService;
         this.userService = userService;
         this.postCommentDTO = postCommentDTO;
         this.mailService = mailService;
+        this.commentUtils = commentUtils;
     }
 
     @Override
     public Map<String, Object> comments(Integer page, Long blogId, Integer pageNum, Integer pageSize, String jwt) {
-
         //评论功能校验
-        checkComment(jwt, blogId, page);
+        checkQueryComment(jwt, blogId, page);
         //查询该页面所有评论的数量
         Integer allComment = countByPageAndIsPublished(page, blogId, null);
         //查询该页面公开评论的数量
         Integer openComment = countByPageAndIsPublished(page, blogId, true);
         PageMethod.startPage(pageNum, pageSize);
-        Long parentCommentId = -1L;
-        PageInfo<PageCommentVO> pageInfo = new PageInfo<>(getPageCommentList(page, blogId, parentCommentId));
+        PageInfo<PageCommentVO> pageInfo = new PageInfo<>(getPageCommentList(page, blogId, (long) -1));
         PageResultVO<PageCommentVO> pageResultVO = new PageResultVO<>(pageInfo.getPages(), pageInfo.getList());
         Map<String, Object> map = new HashMap<>(16);
         map.put("allComment", allComment);
@@ -98,85 +73,160 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
     }
 
     /**
-     * 评论功能校验
-     *
+     * 查询评论功能的校验
      * @param jwt jwt
      * @param blogId blogId
+     * @param page page
      */
-    private void checkComment(String jwt, Long blogId, Integer page) {
+    private void checkQueryComment(String jwt, Long blogId, Integer page) {
         //查询对应页面评论是否开启
-        int judgeResult = judgeCommentEnabled(page, blogId);
-        postCommentDTO.setJudgeResult(judgeResult);
-        if (judgeResult == 1) {
-            throw new NotFoundException("评论已关闭");
-        } else if (judgeResult == CommonConstant.TWO) {
-            throw new NotFoundException("该博客不存在");
-        } else if (judgeResult == CommonConstant.THREE) {
-            //文章受密码保护,验证Token合法性
-            checkToken(jwt, blogId);
+        CommentOpenStateEnum openState = commentUtils.judgeCommentState(page, blogId);
+        switch (openState){
+            case NOT_FOUND:
+                throw new NotFoundException("该博客不存在");
+            case CLOSE:
+                throw new NotFoundException("评论已关闭");
+            case PASSWORD:
+                //文章受密码保护，需要验证Token
+                if (!JwtUtils.judgeTokenIsExist(jwt)) {
+                    throw new NotFoundException("此文章受密码保护，请验证密码！(jwt为空)");
+                }
+                String subject;
+                try {
+                    subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new NotFoundException("Token已失效，请重新验证密码！");
+                }
+                //博主身份Token
+                if (subject.startsWith(JwtConstants.ADMIN_PREFIX)) {
+                    String username = subject.replace(JwtConstants.ADMIN_PREFIX, "");
+                    User admin = (User) userService.loadUserByUsername(username);
+                    if (admin == null) {
+                        throw new NotFoundException("博主身份Token已失效，请重新登录！");
+                    }
+                //普通访客经文章密码验证后携带Token
+                }else {
+                    Long tokenBlogId = Long.parseLong(subject);
+                    //博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
+                    if (!tokenBlogId.equals(blogId)) {
+                        throw new NotFoundException("Token不匹配，请重新验证密码！");
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
     /**
-     * 查询对应页面评论是否开启
+     * 评论功能校验
      *
-     * @param page   页面分类（0普通文章，1关于我，2友链）
-     * @param blogId 如果page==0，需要博客id参数，校验文章是否公开状态
-     * @return 0:公开可查询状态 1:评论关闭 2:该博客不存在 3:文章受密码保护
+     * @param jwt jwt
+     * @param commentDTO commentDTO
      */
-    private int judgeCommentEnabled(Integer page, Long blogId) {
-        //普通博客
-        if (page == 0) {
-            Boolean commentEnabled = blogService.getCommentEnabledByBlogId(blogId);
-            Boolean published = blogService.getPublishedByBlogId(blogId);
-            //未查询到此博客 or 博客未公开
-            if (commentEnabled == null || published == null || Boolean.FALSE.equals(published)) {
-                return 2;
-            } else if (!commentEnabled) {
-                //博客评论已关闭
-                return 1;
-            }
-            //判断文章是否存在密码
-            String password = blogService.getBlogPassword(blogId);
-            if (!"".equals(password)) {
-                return 3;
-            }
-            //关于我页面
-        } else if (page == 1) {
-            //页面评论已关闭
-            if (!aboutService.getAboutCommentEnabled()) {
-                return 1;
-            }
-            //友链页面
-        } else if (page == 2) {
-            FriendInfoVO friendInfoVO = friendService.getFriendInfo(true, false);
-            if (Boolean.FALSE.equals(friendInfoVO.getCommentEnabled())) {
-                return 1;
-            }
+    private void checkComment(CommentDTO commentDTO, HttpServletRequest request, String jwt) {
+        //查询对应页面评论是否开启
+        CommentOpenStateEnum openState = commentUtils.judgeCommentState(commentDTO.getPage(), commentDTO.getBlogId());
+        switch (openState){
+            case NOT_FOUND:
+                throw new NotFoundException("该博客不存在");
+            case CLOSE:
+                throw new NotFoundException("评论已关闭");
+            case PASSWORD:
+                //文章受密码保护,验证Token合法性
+                checkToken(jwt, commentDTO, request);
+                break;
+            case OPEN:
+                //评论正常开放
+                //有Token则为博主评论，或文章原先为密码保护，后取消保护，但客户端仍存在Token
+                    if (JwtUtils.judgeTokenIsExist(jwt)) {
+                        String subject;
+                        try {
+                            subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            throw new NotFoundException("Token已失效，请重新验证密码！");
+                        }
+                        //博主评论，根据博主信息设置评论属性
+                        if (subject.startsWith(JwtConstants.ADMIN_PREFIX)) {
+                            //Token验证通过，获取Token中用户名
+                            String username = subject.replace(JwtConstants.ADMIN_PREFIX, "");
+                            User admin = (User) userService.loadUserByUsername(username);
+                            if (admin == null) {
+                                throw new NotFoundException("博主身份Token已失效，请重新登录！");
+                            }
+                            //博主身份赋值
+                            commentUtils.setAdminComment(commentDTO, request, admin);
+                            postCommentDTO.setIsVisitorComment(false);
+                        //文章原先为密码保护，后取消保护，但客户端仍存在Token，则忽略Token
+                        }else {
+                            //访客评论
+                            //对访客的评论昵称、邮箱合法性校验
+                            if (StringUtils.isEmpty(commentDTO.getNickname(), commentDTO.getEmail()) || commentDTO.getNickname().length() > 15) {
+                                throw new NotFoundException("参数有误");
+                            }
+                            commentUtils.setVisitorComment(commentDTO, request);
+                            postCommentDTO.setIsVisitorComment(true);
+                        }
+                    } else {
+                        //访客评论
+                        //对访客的评论昵称、邮箱合法性校验
+                        if (StringUtils.isEmpty(commentDTO.getNickname(), commentDTO.getEmail()) || commentDTO.getNickname().length() > 15) {
+                            throw new NotFoundException("参数有误");
+                        }
+                        commentUtils.setVisitorComment(commentDTO, request);
+                        postCommentDTO.setIsVisitorComment(true);
+                    }
+                    break;
+            default:
+                break;
         }
-        return 0;
     }
 
     /**
      * 文章受密码保护，需要验证Token
-     *
      * @param jwt jwt
-     * @param blogId blogId
+     * @param commentDTO commentDTO
+     * @param request request
      */
-    private void checkToken(String jwt, Long blogId) {
+    private void checkToken(String jwt, CommentDTO commentDTO, HttpServletRequest request) {
         if (!JwtUtils.judgeTokenIsExist(jwt)) {
             throw new NotFoundException("此文章受密码保护，请验证密码！(jwt为空)");
         }
+        String subject;
+        try {
+            subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new NotFoundException("Token已失效，请重新验证密码！");
+        }
         //校验是否为博主身份
-        checkCommentToken(jwt);
-        //博主身份Token
-        if (!postCommentDTO.getSubject().startsWith(CommonConstant.ADMIN)) {
-            //经密码验证后的Token
-            Long tokenBlogId = Long.parseLong(postCommentDTO.getSubject());
+        //博主评论，不受密码保护限制，根据博主信息设置评论属性
+        if (subject.startsWith(JwtConstants.ADMIN_PREFIX)) {
+            //Token验证通过，获取Token中用户名
+            String username = subject.replace(JwtConstants.ADMIN_PREFIX, "");
+            User admin = (User) userService.loadUserByUsername(username);
+            if (admin == null) {
+                throw new NotFoundException("博主身份Token已失效，请重新登录！");
+            }
+            //博主身份赋值
+            commentUtils.setAdminComment(commentDTO, request, admin);
+            postCommentDTO.setIsVisitorComment(false);
+        //普通访客经文章密码验证后携带Token
+        //对访客的评论昵称、邮箱合法性校验
+        }else {
+            if (StringUtils.isEmpty(commentDTO.getNickname(), commentDTO.getEmail()) || commentDTO.getNickname().length() > 15) {
+                throw new NotFoundException("昵称、邮箱等参数有误");
+            }
+            //对于受密码保护的文章，则Token是必须的
+            Long tokenBlogId = Long.parseLong(subject);
             //博客id不匹配，验证不通过，可能博客id改变或客户端传递了其它密码保护文章的Token
-            if (!tokenBlogId.equals(blogId)) {
+            if (!tokenBlogId.equals(commentDTO.getBlogId())) {
                 throw new NotFoundException("Token不匹配，请重新验证密码！");
             }
+            commentUtils.setVisitorComment(commentDTO, request);
+            postCommentDTO.setIsVisitorComment(true);
         }
     }
 
@@ -198,56 +248,26 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         //判断是否为父评论
         Comment parentComment = parentCommentCheck(commentDTO);
         //评论功能校验 页面及密码保护校验
-        checkComment(jwt, commentDTO.getBlogId(), commentDTO.getPage());
-        //博主身份赋值
-        if(postCommentDTO.getAdmin() != null){
-            setAdminComment(commentDTO, request, postCommentDTO.getAdmin());
-        }else {
-            //对访客的评论昵称、邮箱合法性校验
-            if (StringUtils.isEmpty(commentDTO.getNickname(), commentDTO.getEmail()) || commentDTO.getNickname().length() > 15) {
-                throw new NotFoundException("昵称、邮箱等参数有误");
-            }
-            setVisitorComment(commentDTO, request);
-            postCommentDTO.setIsVisitorComment(true);
-        }
-        //普通文章
-        if (postCommentDTO.getJudgeResult() == 0) {
-            //有Token则为博主评论，或文章原先为密码保护，后取消保护，但客户端仍存在Token
-            if (JwtUtils.judgeTokenIsExist(jwt)) {
-                //校验是否为博主身份
-                checkCommentToken(jwt);
-                //博主评论，根据博主信息设置评论属性
-                if (postCommentDTO.getAdmin() != null){
-                    setAdminComment(commentDTO, request, postCommentDTO.getAdmin());
-                    postCommentDTO.setIsVisitorComment(false);
-                }else {
-                    //文章原先为密码保护，后取消保护，但客户端仍存在Token，则忽略Token
-                    //对访客的评论昵称、邮箱合法性校验
-                    commonParamCheck(commentDTO,request);
-                }
-            } else {
-                //访客评论
-                //对访客的评论昵称、邮箱合法性校验
-                commonParamCheck(commentDTO,request);
-            }
-        }
+        checkComment(commentDTO, request, jwt);
+
         self().saveComment(commentDTO);
         judgeSendMail(commentDTO, postCommentDTO.getIsVisitorComment(), parentComment);
     }
 
+    //todo 提取方法逻辑不合理，待整改
     private void checkCommentToken(String jwt) {
         String subject;
         try {
-            subject = JwtUtils.getTokenBody(jwt, CodeConstant.SECRET_KEY).getSubject();
+            subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
             postCommentDTO.setSubject(subject);
         } catch (Exception e) {
             throw new NotFoundException("Token已失效，请重新验证密码！",e);
         }
-        if (subject.startsWith(CommonConstant.ADMIN)) {
-            String username = subject.replace(CommonConstant.ADMIN, "");
+        if (subject.startsWith(JwtConstants.ADMIN_PREFIX)) {
+            String username = subject.replace(JwtConstants.ADMIN_PREFIX, "");
             User admin = (User) userService.loadUserByUsername(username);
             if (admin == null) {
-                throw new NotFoundException(CommonConstant.SUBJECT_MSG);
+                throw new NotFoundException(CommonConstants.SUBJECT_MSG);
             }
             postCommentDTO.setAdmin(admin);
         }
@@ -271,62 +291,6 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         return parentComment;
     }
 
-    /**
-     * 设置博主评论属性
-     *
-     * @param commentDTO 评论DTO
-     * @param request    获取ip
-     * @param admin      博主信息
-     */
-    private void setAdminComment(CommentDTO commentDTO, HttpServletRequest request, User admin) {
-        commentDTO.setAdminComment(true);
-        commentDTO.setCreateTime(new Date());
-        commentDTO.setPublished(true);
-        commentDTO.setAvatar(admin.getAvatar());
-        commentDTO.setWebsite("/");
-        commentDTO.setNickname(admin.getNickname());
-        commentDTO.setEmail(admin.getEmail());
-        commentDTO.setIp(IpAddressUtils.getIpAddress(request));
-        commentDTO.setNotice(false);
-    }
-
-    /**
-     * 设置访客评论属性
-     *
-     * @param commentDTO 评论DTO
-     * @param request    用于获取ip
-     */
-    private void setVisitorComment(CommentDTO commentDTO, HttpServletRequest request) {
-        String commentNickname = commentDTO.getNickname();
-        try {
-            if (QqInfoUtils.isQqNumber(commentNickname)) {
-                commentDTO.setQq(commentNickname);
-                commentDTO.setNickname(QqInfoUtils.getQqNickname(commentNickname));
-                commentDTO.setAvatar(QqInfoUtils.getQqAvatarUrlByGithubUpload(commentNickname, githubToken, githubUsername, githubRepos, githubReposPath));
-            } else {
-                commentDTO.setNickname(commentDTO.getNickname().trim());
-                setCommentRandomAvatar(commentDTO);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            commentDTO.setNickname(commentDTO.getNickname().trim());
-            setCommentRandomAvatar(commentDTO);
-        }
-
-        //set website
-        String website = commentDTO.getWebsite().trim();
-        if (!"".equals(website) && !website.startsWith("http://") && !website.startsWith("https://")) {
-            website = "http://" + website;
-        }
-        commentDTO.setAdminComment(false);
-        commentDTO.setCreateTime(new Date());
-        //默认不需要审核
-        commentDTO.setPublished(true);
-        commentDTO.setWebsite(website);
-        commentDTO.setEmail(commentDTO.getEmail().trim());
-        commentDTO.setIp(IpAddressUtils.getIpAddress(request));
-    }
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveComment(CommentDTO commentDTO) {
@@ -335,13 +299,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         }
     }
 
-    private void commonParamCheck(CommentDTO commentDTO, HttpServletRequest request) {
-        if (StringUtils.isEmpty(commentDTO.getNickname(), commentDTO.getEmail()) || commentDTO.getNickname().length() > 15) {
-            throw new NotFoundException("参数有误");
-        }
-        setVisitorComment(commentDTO, request);
-        postCommentDTO.setIsVisitorComment(true);
-    }
+
 
     /**
      * 判断是否发送邮件
@@ -392,7 +350,8 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         return comments;
     }
 
-    private Comment getCommentById(Long id) {
+    @Override
+    public Comment getCommentById(Long id) {
         Comment comment = commentMapper.getCommentById(id);
         if (comment == null) {
             throw new PersistenceException("评论不存在");
@@ -479,15 +438,15 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         if (commentDTO.getPage() == 0) {
             //普通博客
             title = parentComment.getBlog().getTitle();
-            path = CommonConstant.BLOG + commentDTO.getBlogId();
+            path = CommonConstants.BLOG + commentDTO.getBlogId();
         } else if (commentDTO.getPage() == 1) {
             //关于我页面
             title = "关于我";
-            path = CommonConstant.ABOUT;
+            path = CommonConstants.ABOUT;
         } else if (commentDTO.getPage() == 2) {
             //友链页面
             title = "友人帐";
-            path = CommonConstant.FRIENDS;
+            path = CommonConstants.FRIENDS;
         }
         Map<String, Object> map = new HashMap<>(16);
         map.put("parentNickname", parentComment.getNickname());
@@ -531,17 +490,6 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         return comments;
     }
 
-    /**
-     * 对于昵称不是QQ号的评论，根据昵称Hash设置头像
-     *
-     * @param commentDTO 评论DTO
-     */
-    private void setCommentRandomAvatar(CommentDTO commentDTO) {
-        //设置随机头像
-        long nicknameHash = HashUtils.getMurmurHash32(commentDTO.getNickname());//根据评论昵称取Hash，保证每一个昵称对应一个头像
-        long num = nicknameHash % 6 + 1;//计算对应的头像
-        String avatar = "/img/comment-avatar/" + num + ".jpg";
-        commentDTO.setAvatar(avatar);
-    }
+
 
 }

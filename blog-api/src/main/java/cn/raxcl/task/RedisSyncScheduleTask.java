@@ -1,7 +1,7 @@
 package cn.raxcl.task;
 
 import org.springframework.stereotype.Component;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.RedisService;
 
@@ -27,7 +27,7 @@ public class RedisSyncScheduleTask {
 	 * 从Redis同步博客文章浏览量到数据库   定时任务反射调用
 	 */
 	public void syncBlogViewsToDatabase() {
-		String redisKey = RedisKeyConstant.BLOG_VIEWS_MAP;
+		String redisKey = RedisKeyConstants.BLOG_VIEWS_MAP;
 		Map<Object, Object> blogViewsMap = redisService.getMapByHash(redisKey);
 		Set<Object> keys = blogViewsMap.keySet();
 		for (Object keyObj : keys) {

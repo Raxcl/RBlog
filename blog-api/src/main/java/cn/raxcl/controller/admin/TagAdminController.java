@@ -1,6 +1,6 @@
 package cn.raxcl.controller.admin;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,7 +90,7 @@ public class TagAdminController {
 		if (tag1 != null && !tag1.getId().equals(tag.getId())) {
 			return Result.error("该标签已存在");
 		}
-		if (CommonConstant.SAVE.equals(type)) {
+		if (CommonConstants.SAVE.equals(type)) {
 			tagService.saveTag(tag);
 			return Result.success("添加成功");
 		} else {

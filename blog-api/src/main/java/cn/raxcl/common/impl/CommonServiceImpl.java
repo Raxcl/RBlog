@@ -1,7 +1,7 @@
 package cn.raxcl.common.impl;
 
 import cn.raxcl.common.CommonService;
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.model.temp.LogDTO;
 import cn.raxcl.model.temp.PageDTO;
 import cn.raxcl.util.IpAddressUtils;
@@ -37,7 +37,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public PageDTO pageBefore(String[] date) {
         PageDTO pageDTO = new PageDTO();
-        if (date.length == CommonConstant.TWO) {
+        if (date.length == CommonConstants.TWO) {
             pageDTO.setStartDate(date[0]).setEndDate(date[1]);
         }
         pageDTO.setOrderBy("create_time desc");

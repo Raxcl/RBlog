@@ -4,11 +4,11 @@ package cn.raxcl.constant;
  * @author c-long.chan
  * @date 2022-01-04 19:08:50
  */
-public class CommonConstant {
+public class CommonConstants {
+
+    private CommonConstants(){}
 
     public static final String IMAGE = "image";
-
-    private CommonConstant(){}
 
     public static final String ROLE_ADMIN = "ROLE_admin";
 
@@ -22,12 +22,9 @@ public class CommonConstant {
      */
     public static final String CDN_URL4_GITHUB = "https://cdn.jsdelivr.net/gh/%s/%s%s/%s";
 
-    /**
-     * 博主身份前缀
-     */
-    public static final String ADMIN = "admin:";
     public static final String PATH_ADMIN = "/admin";
 
+    //todo 待删除
     public static final String SUBJECT_MSG = "博主身份Token已失效，请重新登录！";
 
     public static final String ABOUT = "/about";

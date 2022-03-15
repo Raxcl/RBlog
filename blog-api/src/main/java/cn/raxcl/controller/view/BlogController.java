@@ -1,8 +1,7 @@
 package cn.raxcl.controller.view;
 
-import cn.raxcl.constant.CodeConstant;
-import cn.raxcl.constant.CommonConstant;
-import org.springframework.beans.factory.annotation.Value;
+import cn.raxcl.constant.CodeConstants;
+import cn.raxcl.constant.CommonConstants;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,7 +74,7 @@ public class BlogController {
 		String password = blogService.getBlogPassword(blogPasswordDTO.getBlogId());
 		if (password.equals(blogPasswordDTO.getPassword())) {
 			//生成有效时间一个月的Token
-			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, CodeConstant.SECRET_KEY);
+			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, CodeConstants.SECRET_KEY);
 			return Result.success("密码正确", jwt);
 		} else {
 			return Result.exception(403, "密码错误");
@@ -92,7 +91,7 @@ public class BlogController {
 	@GetMapping("/searchBlog")
 	public Result searchBlog(@RequestParam String query) {
 		//校验关键字字符串合法性
-		if (StringUtils.isEmpty(query) || StringUtils.hasSpecialChar(query) || query.trim().length() > CommonConstant.TWENTY) {
+		if (StringUtils.isEmpty(query) || StringUtils.hasSpecialChar(query) || query.trim().length() > CommonConstants.TWENTY) {
 			return Result.error("参数错误");
 		}
 		List<SearchBlogVO> searchBlogVOList = blogService.getSearchBlogListByQueryAndIsPublished(query.trim());

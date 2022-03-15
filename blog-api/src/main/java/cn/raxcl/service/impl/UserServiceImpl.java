@@ -1,5 +1,6 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.exception.NotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,6 +41,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		if (!HashUtils.matchBc(password, user.getPassword())) {
 			throw new UsernameNotFoundException("密码错误");
+		}
+		return user;
+	}
+
+	@Override
+	public User findUserById(Long id) {
+		User user = userMapper.findById(id);
+		if (user == null) {
+			throw new NotFoundException("用户不存在");
 		}
 		return user;
 	}

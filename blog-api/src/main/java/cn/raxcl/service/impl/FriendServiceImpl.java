@@ -4,7 +4,7 @@ import cn.raxcl.model.dto.FriendDTO;
 import cn.raxcl.model.vo.FriendVO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.raxcl.constant.RedisKeyConstant;
+import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.entity.Friend;
 import cn.raxcl.entity.SiteSetting;
 import cn.raxcl.exception.PersistenceException;
@@ -90,7 +90,7 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	public FriendInfoVO getFriendInfo(boolean cache, boolean md) {
 		//友链页面信息key
-		String redisKey = RedisKeyConstant.FRIEND_INFO_MAP;
+		String redisKey = RedisKeyConstants.FRIEND_INFO_MAP;
 		if (cache) {
 			FriendInfoVO friendInfoVOFromRedis = redisService.getObjectByValue(redisKey, FriendInfoVO.class);
 			if (friendInfoVOFromRedis != null) {
@@ -138,6 +138,6 @@ public class FriendServiceImpl implements FriendService {
 	 * 删除友链页面缓存
 	 */
 	private void deleteFriendInfoRedisCache() {
-		redisService.deleteCacheByKey(RedisKeyConstant.FRIEND_INFO_MAP);
+		redisService.deleteCacheByKey(RedisKeyConstants.FRIEND_INFO_MAP);
 	}
 }

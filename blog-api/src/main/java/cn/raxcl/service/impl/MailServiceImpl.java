@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.MailService;
@@ -45,18 +45,18 @@ public class MailServiceImpl implements MailService {
 
         String path = "";
         String title = "";
-        if (commentDTO.getPage().equals(CommonConstant.ZERO)) {
+        if (commentDTO.getPage().equals(CommonConstants.ZERO)) {
             //普通博客
             title = blogService.getTitleByBlogId(commentDTO.getBlogId());
-            path = CommonConstant.BLOG + commentDTO.getBlogId();
-        } else if (commentDTO.getPage().equals(CommonConstant.ONE)) {
+            path = CommonConstants.BLOG + commentDTO.getBlogId();
+        } else if (commentDTO.getPage().equals(CommonConstants.ONE)) {
             //关于我页面
             title = "关于我";
-            path = CommonConstant.ABOUT;
-        } else if (commentDTO.getPage().equals(CommonConstant.TWO)) {
+            path = CommonConstants.ABOUT;
+        } else if (commentDTO.getPage().equals(CommonConstants.TWO)) {
             //友链页面
             title = "友人帐";
-            path = CommonConstant.FRIENDS;
+            path = CommonConstants.FRIENDS;
         }
         Map<String, Object> map = new HashMap<>(16);
         map.put("title", title);
@@ -67,7 +67,7 @@ public class MailServiceImpl implements MailService {
         map.put("email", commentDTO.getEmail());
         map.put("status", Boolean.TRUE.equals(commentDTO.getPublished()) ? "公开" : "待审核");
         map.put("url", websiteUrl + path);
-        map.put("manageUrl", cmsUrl + CommonConstant.COMMENTS);
+        map.put("manageUrl", cmsUrl + CommonConstants.COMMENTS);
         String toAccount = mailProperties.getUsername();
         String subject = blogName + " 收到新评论";
         mailUtils.sendHtmlTemplateMail(map, toAccount, subject, "owner.html");

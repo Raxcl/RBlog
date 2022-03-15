@@ -1,12 +1,11 @@
 package cn.raxcl.aspect;
 
-import cn.raxcl.constant.CodeConstant;
+import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.exception.NotFoundException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -77,7 +76,7 @@ public class OperationLogAspect {
 			throw new NotFoundException("attributes为空 ---OperationLogAspect.class");
 		}
 		HttpServletRequest request = attributes.getRequest();
-		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), CodeConstant.SECRET_KEY).getSubject();
+		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), CodeConstants.SECRET_KEY).getSubject();
 		String uri = request.getRequestURI();
 		String method = request.getMethod();
 		String description = operationLogger.value();

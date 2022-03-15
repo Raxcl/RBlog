@@ -1,6 +1,6 @@
 package cn.raxcl.util.markdown.ext.cover.internal;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import org.commonmark.node.Node;
 import org.commonmark.node.Nodes;
 import org.commonmark.node.SourceSpans;
@@ -32,7 +32,7 @@ public class CoverDelimiterProcessor implements DelimiterProcessor {
 
 	@Override
 	public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
-		if (openingRun.length() >= CommonConstant.TWO && closingRun.length() >= CommonConstant.TWO) {
+		if (openingRun.length() >= CommonConstants.TWO && closingRun.length() >= CommonConstants.TWO) {
 			// Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
 			Text opener = openingRun.getOpener();
 

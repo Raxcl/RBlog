@@ -1,6 +1,6 @@
 package cn.raxcl.controller.admin;
 
-import cn.raxcl.constant.CommonConstant;
+import cn.raxcl.constant.CommonConstants;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,7 +90,7 @@ public class CategoryAdminController {
 		if (category1 != null && !category1.getId().equals(category.getId())) {
 			return Result.error("该分类已存在");
 		}
-		if (CommonConstant.SAVE.equals(type)) {
+		if (CommonConstants.SAVE.equals(type)) {
 			categoryService.saveCategory(category);
 			return Result.success("分类添加成功");
 		} else {
