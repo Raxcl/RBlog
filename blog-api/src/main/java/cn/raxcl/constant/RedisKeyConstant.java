@@ -1,7 +1,7 @@
 package cn.raxcl.constant;
 
 /**
- * @Description: Redis key配置
+ * Redis key配置
  * @author Raxcl
  * @date 2021-12-31 17:38:30
  */

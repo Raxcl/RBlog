@@ -5,9 +5,9 @@ import org.commonmark.renderer.text.TextContentNodeRendererContext;
 import org.commonmark.renderer.text.TextContentWriter;
 
 /**
- * @Description: 文本节点渲染
+ * 文本节点渲染
  * @author Raxcl
- * @date 2022-01-07 19:25:31
+ * @date 2022-03-15 12:10:10
  */
 public class CoverTextContentNodeRenderer extends AbstractCoverNodeRenderer {
     private final TextContentNodeRendererContext context;

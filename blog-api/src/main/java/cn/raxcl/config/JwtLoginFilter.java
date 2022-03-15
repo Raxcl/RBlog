@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @Description: JWT登录过滤器
+ * JWT登录过滤器
  * @author Raxcl
  * @date 2022-01-07 17:43:08
  */

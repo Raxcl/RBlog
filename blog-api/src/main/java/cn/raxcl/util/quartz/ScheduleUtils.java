@@ -14,7 +14,7 @@ import org.quartz.TriggerKey;
 import cn.raxcl.entity.ScheduleJob;
 
 /**
- * @Description: 定时任务操作工具类
+ * 定时任务操作工具类
  * @author Raxcl
  * @date 2022-01-07 19:43:17
  */

@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * @Description: 图片下载保存工具类
+ * 图片下载保存工具类
  * @author Raxcl
  * @date 2022-01-05 14:46:10
  */

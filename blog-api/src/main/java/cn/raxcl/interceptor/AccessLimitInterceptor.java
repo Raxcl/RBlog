@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
- * @Description: 访问控制拦截器
+ * 访问控制拦截器
  * @author Raxcl
  * @date 2022-01-07 18:41:25
  */

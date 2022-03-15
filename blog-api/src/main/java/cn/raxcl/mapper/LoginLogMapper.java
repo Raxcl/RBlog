@@ -7,7 +7,7 @@ import cn.raxcl.entity.LoginLog;
 import java.util.List;
 
 /**
- * @Description: 登录日志持久层接口
+ * 登录日志持久层接口
  * @author Raxcl
  * @date 2022-01-07 20:02:39
  */

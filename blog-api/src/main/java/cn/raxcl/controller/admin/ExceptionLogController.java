@@ -14,7 +14,7 @@ import cn.raxcl.util.common.Result;
 import cn.raxcl.service.ExceptionLogService;
 
 /**
- * @Description: 异常日志后台管理
+ * 异常日志后台管理
  * @author Raxcl
  * @date 2022-01-07 15:52:14
  */

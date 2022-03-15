@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Description: 用于需要记录访客访问日志的方法
+ * 用于需要记录访客访问日志的方法
  * @author Raxcl
  * @date 2022-01-07 16:59:57
  */

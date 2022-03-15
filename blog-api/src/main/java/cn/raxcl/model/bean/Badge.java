@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: GitHub徽标
+ * GitHub徽标
  * @author Raxcl
  * @date 2022-01-07 18:43:43
  */

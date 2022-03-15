@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 访问记录
+ * 访问记录
  * @author Raxcl
  * @date 2022-01-07 10:13:21
  */

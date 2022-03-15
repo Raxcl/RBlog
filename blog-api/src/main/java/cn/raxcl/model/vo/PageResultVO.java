@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * @Description: 分页结果
+ * 分页结果
  * @author Raxcl
  * @date 2022-01-07 09:33:46
  */

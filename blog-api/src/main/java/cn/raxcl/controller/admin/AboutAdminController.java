@@ -12,7 +12,7 @@ import cn.raxcl.service.AboutService;
 import java.util.Map;
 
 /**
- * @Description: 关于我页面后台管理
+ * 关于我页面后台管理
  * @author Raxcl
  * @date 2022-01-07 08:51:09
  */

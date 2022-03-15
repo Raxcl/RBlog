@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 博客详情
+ * 博客详情
  * @author Raxcl
  * @date 2022-01-07 09:27:58
  */

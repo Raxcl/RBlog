@@ -14,7 +14,7 @@ import cn.raxcl.service.OperationLogService;
 import java.util.List;
 
 /**
- * @Description: 操作日志业务层实现
+ * 操作日志业务层实现
  * @author Raxcl
  * @date 2022-01-07 15:02:36
  */

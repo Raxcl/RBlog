@@ -7,7 +7,7 @@ import cn.raxcl.entity.About;
 import java.util.List;
 
 /**
- * @Description: 关于我持久层接口
+ * 关于我持久层接口
  * @author Raxcl
  * @date 2022-01-07 08:58:08
  */

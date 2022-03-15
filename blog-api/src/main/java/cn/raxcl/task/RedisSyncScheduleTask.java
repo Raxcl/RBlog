@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @Description: Redis相关定时任务
+ * Redis相关定时任务
  * @author Raxcl
  * @date 2022-02-16 17:30:34
  */

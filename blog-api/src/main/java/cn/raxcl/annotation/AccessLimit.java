@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Description: 访问控制
+ * 访问控制
  * @author Raxcl
  * @date 2022-01-07 16:59:46
  */

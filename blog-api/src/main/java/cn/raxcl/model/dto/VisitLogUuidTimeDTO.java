@@ -9,7 +9,7 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * @Description: 访客更新DTO
+ * 访客更新DTO
  * @author Raxcl
  * @date 2022-01-07 09:26:49
  */

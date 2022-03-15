@@ -7,7 +7,7 @@ import cn.raxcl.entity.OperationLog;
 import java.util.List;
 
 /**
- * @Description: 操作日志持久层接口
+ * 操作日志持久层接口
  * @author Raxcl
  * @date 2022-01-07 14:54:41
  */

@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 友链业务层实现
+ * 友链业务层实现
  * @author Raxcl
  * @date 2021-12-31 17:45:13
  */

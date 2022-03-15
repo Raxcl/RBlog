@@ -19,7 +19,7 @@ import cn.raxcl.service.CategoryService;
 import cn.raxcl.util.StringUtils;
 
 /**
- * @Description: 博客分类后台管理
+ * 博客分类后台管理
  * @author Raxcl
  * @date 2022-01-07 08:59:32
  */

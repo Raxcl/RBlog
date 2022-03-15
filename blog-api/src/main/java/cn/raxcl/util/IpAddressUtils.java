@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 import java.util.Objects;
 
 /**
- * @Description: ip记录
+ * ip记录
  * @author Raxcl
  * @date 2022-01-11 11:10:26
  */

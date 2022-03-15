@@ -13,7 +13,7 @@ import cn.raxcl.service.SiteSettingService;
 import java.util.*;
 
 /**
- * @Description: 站点设置后台管理
+ * 站点设置后台管理
  * @author Raxcl
  * @date 2022-01-07 10:33:36
  */

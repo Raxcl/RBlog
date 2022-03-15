@@ -10,7 +10,7 @@ import cn.raxcl.util.common.Result;
 import cn.raxcl.service.BlogService;
 
 /**
- * @Description: 标签
+ * 标签
  * @author Raxcl
  * @date 2022-01-07 15:43:11
  */

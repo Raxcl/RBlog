@@ -14,7 +14,7 @@ import cn.raxcl.util.common.Result;
 import cn.raxcl.service.LoginLogService;
 
 /**
- * @Description: 登录日志后台管理
+ * 登录日志后台管理
  * @author Raxcl
  * @date 2022-01-07 12:29:13
  */

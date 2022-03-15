@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 博客文章后台管理
+ * 博客文章后台管理
  * @author Raxcl
  * @date 2022-01-06 16:23:04
  */

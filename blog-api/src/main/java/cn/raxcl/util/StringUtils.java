@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * @Description: 字符串校验
+ * 字符串校验
  * @author Raxcl
  * @date 2022-01-07 19:51:34
  */

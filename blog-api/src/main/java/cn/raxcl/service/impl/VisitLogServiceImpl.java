@@ -15,7 +15,7 @@ import cn.raxcl.service.VisitLogService;
 import java.util.List;
 
 /**
- * @Description: 访问日志业务层实现
+ * 访问日志业务层实现
  * @author Raxcl
  * @date 2022-01-07 12:38:25
  */

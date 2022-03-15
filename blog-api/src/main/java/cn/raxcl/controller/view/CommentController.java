@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * @Description: 评论
+ * 评论
  * @author  Raxcl
  * @date 2021-12-31 16:02:54
  */
@@ -42,13 +42,13 @@ public class CommentController {
 
 	/**
 	 * 提交评论
-	 * 单个ip，30秒内允许提交1次评论
+	 * 单个ip，10秒内允许提交1次评论
 	 * @param commentDTO 评论DTO
 	 * @param request 获取ip
 	 * @param jwt     博主身份Token
 	 * @return Result
 	 */
-	@AccessLimit(seconds = 30, maxCount = 1, msg = "30秒内只能提交一次评论")
+	@AccessLimit(seconds = 10, maxCount = 1, msg = "10秒内只能提交一次评论")
 	@PostMapping("/comment")
 	public Result postComment(@RequestBody CommentDTO commentDTO,
 	                          HttpServletRequest request,

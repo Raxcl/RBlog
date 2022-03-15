@@ -7,7 +7,7 @@ import cn.raxcl.entity.SiteSetting;
 import java.util.List;
 
 /**
- * @Description: 站点设置持久层接口
+ * 站点设置持久层接口
  * @author Raxcl
  * @date 2022-01-07 10:30:19
  */

@@ -20,7 +20,7 @@ import cn.raxcl.util.StringUtils;
 import java.util.List;
 
 /**
- * @Description: 博客评论后台管理
+ * 博客评论后台管理
  * @author Raxcl
  * @date 2022-01-07 20:02:52
  */

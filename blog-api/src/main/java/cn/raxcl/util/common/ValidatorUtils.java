@@ -8,7 +8,7 @@ import javax.validation.Validator;
 import java.util.Set;
 
 /**
- * @Description: 数据校验
+ * 数据校验
  * @author Raxcl
  * @date 2022-01-11 10:36:19
  */

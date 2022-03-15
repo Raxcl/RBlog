@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: copyright
+ * copyright
  * @author Raxcl
  * @date 2022-01-07 18:43:50
  */

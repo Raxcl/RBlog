@@ -13,7 +13,7 @@ import cn.raxcl.service.LoginLogService;
 import cn.raxcl.service.impl.UserServiceImpl;
 
 /**
- * @Description: Spring Security配置类
+ * Spring Security配置类
  * @author Raxcl
  * @date 2022-01-07 17:57:58
  */

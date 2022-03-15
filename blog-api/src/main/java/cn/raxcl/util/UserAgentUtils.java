@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description: UserAgent解析工具类
+ * UserAgent解析工具类
  * @author Raxcl
  * @date 2022-01-11 12:45:47
  */

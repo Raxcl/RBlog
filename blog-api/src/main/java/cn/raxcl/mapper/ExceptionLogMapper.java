@@ -7,7 +7,7 @@ import cn.raxcl.entity.ExceptionLog;
 import java.util.List;
 
 /**
- * @Description: 异常日志持久层接口
+ * 异常日志持久层接口
  * @author Raxcl
  * @date 2022-01-07 15:58:13
  */

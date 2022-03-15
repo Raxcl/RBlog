@@ -12,7 +12,7 @@ import cn.raxcl.model.vo.ArchiveBlogVO;
 import java.util.List;
 
 /**
- * @Description: 博客文章持久层接口
+ * 博客文章持久层接口
  * @author Raxcl
  * @date 2022-01-06 19:51:38
  */

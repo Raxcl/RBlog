@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * @Description: 评论DTO
+ * 评论DTO
  * @author Raxcl
  * @date 2021-12-31 15:16:54
  */

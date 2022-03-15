@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
- * @Description: AOP记录操作日志
+ * AOP记录操作日志
  * @author Raxcl
  * @date 2022-01-04 14:53:25
  */

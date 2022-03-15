@@ -9,7 +9,7 @@ import cn.raxcl.model.vo.PageCommentVO;
 import java.util.List;
 
 /**
- * @Description: 博客评论持久层接口
+ * 博客评论持久层接口
  * @author Raxcl
  * @date 2022-01-06 10:12:40
  */

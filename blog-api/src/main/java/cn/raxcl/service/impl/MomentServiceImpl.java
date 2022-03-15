@@ -13,7 +13,7 @@ import cn.raxcl.util.markdown.MarkdownUtils;
 import java.util.List;
 
 /**
- * @Description: 博客动态业务层实现
+ * 博客动态业务层实现
  * @author Raxcl
  * @date 2022-01-07 13:20:06
  */

@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import cn.raxcl.interceptor.AccessLimitInterceptor;
 
 /**
- * @Description: 配置CORS跨域支持、拦截器
+ * 配置CORS跨域支持、拦截器
  * @author Raxcl
  * @date 2022-01-07 17:59:49
  */

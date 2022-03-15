@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 受保护文章密码DTO
+ * 受保护文章密码DTO
  * @author Raxcl
  * @date 2022-01-07 09:12:49
  */

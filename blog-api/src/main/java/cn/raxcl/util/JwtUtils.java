@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * @Description: JWT工具类
+ * JWT工具类
  * @author Raxcl
  * @date 2022-01-04 11:08:34
  */

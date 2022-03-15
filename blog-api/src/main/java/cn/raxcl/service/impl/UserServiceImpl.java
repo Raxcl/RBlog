@@ -10,7 +10,7 @@ import cn.raxcl.service.UserService;
 import cn.raxcl.util.HashUtils;
 
 /**
- * @Description: 用户业务层接口实现类
+ * 用户业务层接口实现类
  * @author Raxcl
  * @date 2022-01-07 19:57:57
  */

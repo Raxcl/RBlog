@@ -8,7 +8,7 @@ import cn.raxcl.util.common.SpringContextUtils;
 import java.lang.reflect.Method;
 
 /**
- * @Description: 执行定时任务
+ * 执行定时任务
  * @author Raxcl
  * @date 2022-01-07 19:43:01
  */

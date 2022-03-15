@@ -13,7 +13,7 @@ import cn.raxcl.util.common.Result;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @Description: 对Controller层全局异常处理,捕获异常后，返回json数据类型
+ * 对Controller层全局异常处理,捕获异常后，返回json数据类型
  * @author Raxcl
  * @date 2022-01-07 18:36:57
  */

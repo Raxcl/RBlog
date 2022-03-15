@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Description: 博客DTO
+ * 博客DTO
  * @author Raxcl
  * @date 2022-01-06 16:44:57
  */

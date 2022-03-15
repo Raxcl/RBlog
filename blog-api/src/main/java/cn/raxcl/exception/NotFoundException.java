@@ -1,7 +1,7 @@
 package cn.raxcl.exception;
 
 /**
- * @Description: 404异常
+ * 404异常
  * @author Raxcl
  * @date 2022-01-07 18:36:01
  */

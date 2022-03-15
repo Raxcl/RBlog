@@ -7,7 +7,7 @@ import cn.raxcl.entity.Moment;
 import java.util.List;
 
 /**
- * @Description: 博客动态持久层接口
+ * 博客动态持久层接口
  * @author Raxcl
  * @date 2022-01-07 13:08:50
  */

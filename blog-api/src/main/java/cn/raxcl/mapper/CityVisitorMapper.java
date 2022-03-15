@@ -7,7 +7,7 @@ import cn.raxcl.entity.CityVisitor;
 import java.util.List;
 
 /**
- * @Description: 城市访客数量统计持久层接口
+ * 城市访客数量统计持久层接口
  * @author Raxcl
  * @date 2022-01-07 15:55:29
  */

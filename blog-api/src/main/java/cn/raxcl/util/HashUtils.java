@@ -4,7 +4,7 @@ import org.apache.commons.codec.digest.MurmurHash3;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * @Description: Hash工具类
+ * Hash工具类
  * @author Raxcl
  * @date 2022-01-11 10:52:18
  */

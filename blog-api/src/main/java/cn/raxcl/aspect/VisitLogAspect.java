@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * @Description: AOP记录访问日志
+ * AOP记录访问日志
  * @author Raxcl
  * @date 2022-01-07 17:08:31
  */

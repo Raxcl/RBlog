@@ -19,7 +19,7 @@ import cn.raxcl.service.TagService;
 import cn.raxcl.util.StringUtils;
 
 /**
- * @Description: 博客标签后台管理
+ * 博客标签后台管理
  * @author Raxcl
  * @date 2022-01-07 15:16:50
  */

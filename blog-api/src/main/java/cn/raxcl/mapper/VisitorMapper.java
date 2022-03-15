@@ -8,7 +8,7 @@ import cn.raxcl.model.dto.VisitLogUuidTimeDTO;
 import java.util.List;
 
 /**
- * @Description: 访客统计持久层接口
+ * 访客统计持久层接口
  * @author Raxcl
  * @date 2022-01-07 15:35:52
  */

@@ -6,7 +6,7 @@ import cn.raxcl.mapper.VisitRecordMapper;
 import cn.raxcl.service.VisitRecordService;
 
 /**
- * @Description: 访问记录业务层实现
+ * 访问记录业务层实现
  * @author Raxcl
  * @date 2022-01-07 16:01:50
  */

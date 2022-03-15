@@ -8,7 +8,7 @@ import cn.raxcl.model.vo.TagBlogCountVO;
 import java.util.List;
 
 /**
- * @Description: 博客标签持久层接口
+ * 博客标签持久层接口
  * @author Raxcl
  * @date 2022-01-07 15:19:07
  */

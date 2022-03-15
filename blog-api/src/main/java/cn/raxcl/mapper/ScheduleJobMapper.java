@@ -7,7 +7,7 @@ import cn.raxcl.entity.ScheduleJob;
 import java.util.List;
 
 /**
- * @Description: 定时任务持久层接口
+ * 定时任务持久层接口
  * @author Raxcl
  * @date 2022-01-07 19:58:21
  */

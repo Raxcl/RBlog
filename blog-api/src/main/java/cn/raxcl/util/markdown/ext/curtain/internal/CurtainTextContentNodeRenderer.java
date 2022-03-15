@@ -5,9 +5,9 @@ import org.commonmark.renderer.text.TextContentNodeRendererContext;
 import org.commonmark.renderer.text.TextContentWriter;
 
 /**
- * @Description: 文本节点渲染
+ * 文本节点渲染
  * @author Raxcl
- * @date 2022-01-07 19:31:24
+ * @date 2022-03-15 11:41:07
  */
 public class CurtainTextContentNodeRenderer extends AbstractCurtainNodeRenderer {
     private final TextContentNodeRendererContext context;

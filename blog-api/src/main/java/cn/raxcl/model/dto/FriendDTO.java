@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 友链DTO
+ * 友链DTO
  * @author Raxcl
  * @date 2022-01-07 09:17:48
  */

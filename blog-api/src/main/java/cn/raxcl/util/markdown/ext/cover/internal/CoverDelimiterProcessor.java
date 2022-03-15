@@ -2,13 +2,15 @@ package cn.raxcl.util.markdown.ext.cover.internal;
 
 import cn.raxcl.constant.CommonConstant;
 import org.commonmark.node.Node;
+import org.commonmark.node.Nodes;
+import org.commonmark.node.SourceSpans;
 import org.commonmark.node.Text;
 import org.commonmark.parser.delimiter.DelimiterProcessor;
 import org.commonmark.parser.delimiter.DelimiterRun;
 import cn.raxcl.util.markdown.ext.cover.Cover;
 
 /**
- * @Description: 定界
+ * 定界
  * @author Raxcl
  * @date 2022-01-07 19:18:40
  */
@@ -28,28 +30,33 @@ public class CoverDelimiterProcessor implements DelimiterProcessor {
         return 2;
     }
 
-    @Override
-    public int getDelimiterUse(DelimiterRun opener, DelimiterRun closer) {
-        if (opener.length() >= CommonConstant.TWO && closer.length() >= CommonConstant.TWO) {
-            // Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
-            return 2;
-        } else {
-            return 0;
-        }
-    }
+	@Override
+	public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
+		if (openingRun.length() >= CommonConstant.TWO && closingRun.length() >= CommonConstant.TWO) {
+			// Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
+			Text opener = openingRun.getOpener();
 
-    @Override
-    public void process(Text opener, Text closer, int delimiterCount) {
-        // Wrap nodes between delimiters in cover.
-        Node cover = new Cover();
+			// Wrap nodes between delimiters in cover.
+			Node cover = new Cover();
 
-        Node tmp = opener.getNext();
-        while (tmp != null && tmp != closer) {
-            Node next = tmp.getNext();
-            cover.appendChild(tmp);
-            tmp = next;
-        }
+			return sourceSpansMethod(openingRun, closingRun, opener, cover);
+		}
+		return 0;
+	}
 
-        opener.insertAfter(cover);
-    }
+	public static int sourceSpansMethod(DelimiterRun openingRun, DelimiterRun closingRun, Text opener, Node cover) {
+		SourceSpans sourceSpans = new SourceSpans();
+		sourceSpans.addAllFrom(openingRun.getOpeners(2));
+
+		for (Node node : Nodes.between(opener, closingRun.getCloser())) {
+			cover.appendChild(node);
+			sourceSpans.addAll(node.getSourceSpans());
+		}
+
+		sourceSpans.addAllFrom(closingRun.getClosers(2));
+		cover.setSourceSpans(sourceSpans.getSourceSpans());
+
+		opener.insertAfter(cover);
+		return 2;
+	}
 }

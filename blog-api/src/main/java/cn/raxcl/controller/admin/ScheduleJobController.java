@@ -22,7 +22,7 @@ import cn.raxcl.util.common.ValidatorUtils;
 import java.util.Date;
 
 /**
- * @Description: 定时任务动态管理
+ * 定时任务动态管理
  * @author Raxcl
  * @date 2022-01-07 15:04:17
  */

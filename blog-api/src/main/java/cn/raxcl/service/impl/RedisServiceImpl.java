@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description: 读写Redis相关操作
+ * 读写Redis相关操作
  * @author Raxcl
  * @date 2022-01-04 10:55:51
  */

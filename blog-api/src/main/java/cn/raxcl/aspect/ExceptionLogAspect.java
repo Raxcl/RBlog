@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @Description: AOP记录异常日志
+ * AOP记录异常日志
  * @author Raxcl
  * @date 2022-01-07 17:00:37
  */

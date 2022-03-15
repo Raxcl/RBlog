@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 友链
+ * 友链
  * @author Raxcl
  * @date 2022-01-07 10:17:43
  */

@@ -7,7 +7,7 @@ import cn.raxcl.entity.VisitRecord;
 import java.util.List;
 
 /**
- * @Description: 访问记录持久层接口
+ * 访问记录持久层接口
  * @author Raxcl
  * @date 2022-01-07 16:00:44
  */

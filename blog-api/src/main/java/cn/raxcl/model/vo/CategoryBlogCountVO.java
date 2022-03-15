@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @Description: 分类和博客数量
+ * 分类和博客数量
  * @author Raxcl
  * @date 2022-01-07 09:33:29
  */

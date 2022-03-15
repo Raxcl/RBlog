@@ -21,7 +21,7 @@ import cn.raxcl.service.impl.UserServiceImpl;
 import cn.raxcl.util.JwtUtils;
 
 /**
- * @Description: 动态
+ * 动态
  * @author Raxcl
  * @date 2022-01-07 15:43:03
  */

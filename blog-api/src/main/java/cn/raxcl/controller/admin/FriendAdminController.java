@@ -19,7 +19,7 @@ import cn.raxcl.service.FriendService;
 import java.util.Map;
 
 /**
- * @Description: 友链页面后台管理
+ * 友链页面后台管理
  * @author Raxcl
  * @date 2022-01-07 10:19:27
  */

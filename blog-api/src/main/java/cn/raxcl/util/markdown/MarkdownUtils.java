@@ -1,7 +1,5 @@
 package cn.raxcl.util.markdown;
 
-import cn.raxcl.util.markdown.ext.cover.CoverExtension;
-import cn.raxcl.util.markdown.ext.curtain.CurtainExtension;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.strikethrough.StrikethroughExtension;
 import org.commonmark.ext.gfm.tables.TableBlock;
@@ -13,6 +11,8 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.AttributeProvider;
 import org.commonmark.renderer.html.HtmlRenderer;
+import cn.raxcl.util.markdown.ext.cover.CoverExtension;
+import cn.raxcl.util.markdown.ext.curtain.CurtainExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @Description: Markdown转换
+ * Markdown转换
  * @author Raxcl
- * @date 2022-01-07 19:32:33
+ * @date 2022-03-15 11:18:18
  */
 public class MarkdownUtils {
 	private MarkdownUtils(){}
@@ -34,7 +34,6 @@ public class MarkdownUtils {
 	 * 转换table的HTML
 	 */
 	private static final List<Extension> TABLE_EXTENSION = Collections.singletonList(TablesExtension.create());
-	private static final String JI = "#";
 	/**
 	 * 任务列表
 	 */
@@ -51,6 +50,8 @@ public class MarkdownUtils {
 	 * 遮盖层
 	 */
 	private static final Set<Extension> COVER_EXTENSION = Collections.singleton(CoverExtension.create());
+
+	private static final String JI = "#";
 
 	private static final Parser PARSER = Parser.builder()
 			.extensions(TABLE_EXTENSION)

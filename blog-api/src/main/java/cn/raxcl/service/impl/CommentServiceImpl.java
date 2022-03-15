@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * @author Raxcl
- * @Description: 博客评论业务层实现
+ * 博客评论业务层实现
  * @date 2022-01-07 19:58:05
  */
 @Service
@@ -191,7 +191,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         //评论内容合法性校验
         if (StringUtils.isEmpty(commentDTO.getContent()) || commentDTO.getContent().length() > 250 ||
                 commentDTO.getPage() == null || commentDTO.getParentCommentId() == null) {
-            throw new NotFoundException("参数有误");
+            throw new NotFoundException("评论内容不合法");
         }
         //是否访客的评论 访客，管理员  默认为管理员
         postCommentDTO.setIsVisitorComment(false);
@@ -205,7 +205,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         }else {
             //对访客的评论昵称、邮箱合法性校验
             if (StringUtils.isEmpty(commentDTO.getNickname(), commentDTO.getEmail()) || commentDTO.getNickname().length() > 15) {
-                throw new NotFoundException("参数有误");
+                throw new NotFoundException("昵称、邮箱等参数有误");
             }
             setVisitorComment(commentDTO, request);
             postCommentDTO.setIsVisitorComment(true);

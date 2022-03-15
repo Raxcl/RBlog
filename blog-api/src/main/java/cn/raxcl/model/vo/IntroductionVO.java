@@ -9,7 +9,7 @@ import cn.raxcl.model.bean.Favorite;
 import java.util.List;
 
 /**
- * @Description: 侧边栏资料卡
+ * 侧边栏资料卡
  * @author Raxcl
  * @date 2022-01-07 09:33:38
  */

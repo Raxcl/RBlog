@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.concurrent.Future;
 
 /**
- * @Description: 定时任务执行与结果记录
+ * 定时任务执行与结果记录
  * @author Raxcl
  * @date 2022-02-15 09:52:05
  */

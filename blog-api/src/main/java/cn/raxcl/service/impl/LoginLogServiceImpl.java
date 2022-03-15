@@ -14,7 +14,7 @@ import cn.raxcl.service.LoginLogService;
 import java.util.List;
 
 /**
- * @Description: 登录日志业务层实现
+ * 登录日志业务层实现
  * @author Raxcl
  * @date 2022-01-07 12:33:13
  */

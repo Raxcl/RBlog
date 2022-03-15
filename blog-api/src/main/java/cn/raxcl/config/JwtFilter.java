@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 /**
- * @Description: JWT请求过滤器
+ * JWT请求过滤器
  * @author Raxcl
  * @date 2022-01-07 17:39:09
  */

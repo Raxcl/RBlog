@@ -5,7 +5,7 @@ import lombok.*;
 import java.util.Date;
 
 /**
- * @Description: 访问日志
+ * 访问日志
  * @author Raxcl
  * @date 2022-01-07 10:04:44
  */

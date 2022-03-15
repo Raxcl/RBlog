@@ -1,17 +1,17 @@
 package cn.raxcl.util.markdown.ext.cover;
 
-import cn.raxcl.util.markdown.ext.cover.internal.CoverDelimiterProcessor;
-import cn.raxcl.util.markdown.ext.cover.internal.CoverHtmlNodeRenderer;
-import cn.raxcl.util.markdown.ext.cover.internal.CoverTextContentNodeRenderer;
 import org.commonmark.Extension;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.text.TextContentRenderer;
+import cn.raxcl.util.markdown.ext.cover.internal.CoverDelimiterProcessor;
+import cn.raxcl.util.markdown.ext.cover.internal.CoverHtmlNodeRenderer;
+import cn.raxcl.util.markdown.ext.cover.internal.CoverTextContentNodeRenderer;
 
 /**
- * @Description: 自定义遮盖层拓展
+ * 自定义遮盖层拓展
  * @author Raxcl
- * @date 2022-01-07 19:29:20
+ * @date 2022-03-15 11:41:58
  */
 public class CoverExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
 	private CoverExtension() {

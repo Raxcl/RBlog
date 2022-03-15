@@ -1,16 +1,15 @@
-package cn.raxcl.controller.admin;
+package cn.raxcl.controller.view;
 
 import cn.raxcl.constant.CodeConstant;
 import cn.raxcl.constant.CommonConstant;
-import cn.raxcl.entity.User;
-import cn.raxcl.model.dto.LoginInfoDTO;
-import cn.raxcl.service.UserService;
-import cn.raxcl.util.JwtUtils;
-import cn.raxcl.util.common.Result;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import cn.raxcl.entity.User;
+import cn.raxcl.model.dto.LoginInfoDTO;
+import cn.raxcl.util.common.Result;
+import cn.raxcl.service.UserService;
+import cn.raxcl.util.JwtUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,15 +17,14 @@ import java.util.Map;
 /**
  * 前台登录
  * @author Raxcl
- * @date 2022-03-15 12:35:50
+ * @date 2022-03-15 13:32:43
  */
 @RestController
-@RequestMapping("/admin")
-public class LoginAdminController {
+public class LoginController {
 
 	private final UserService userService;
 
-	public LoginAdminController(UserService userService) {
+	public LoginController(UserService userService) {
 		this.userService = userService;
 	}
 

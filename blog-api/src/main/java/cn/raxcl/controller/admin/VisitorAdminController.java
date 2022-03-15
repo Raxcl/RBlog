@@ -14,7 +14,7 @@ import cn.raxcl.util.common.Result;
 import cn.raxcl.service.VisitorService;
 
 /**
- * @Description: 访客统计
+ * 访客统计
  * @author Raxcl
  * @date 2022-01-07 15:17:19
  */

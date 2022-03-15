@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import cn.raxcl.entity.User;
 
 /**
- * @Description: 用户持久层接口
+ * 用户持久层接口
  * @author Raxcl
  * @date 2022-01-07 12:07:42
  */

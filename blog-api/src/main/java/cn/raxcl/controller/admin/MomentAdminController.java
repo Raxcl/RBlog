@@ -18,7 +18,7 @@ import cn.raxcl.service.MomentService;
 import java.util.Date;
 
 /**
- * @Description: 博客动态后台管理
+ * 博客动态后台管理
  * @author Raxcl
  * @date 2022-01-07 13:07:17
  */

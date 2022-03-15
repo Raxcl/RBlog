@@ -9,7 +9,7 @@ import cn.raxcl.entity.Friend;
 import java.util.List;
 
 /**
- * @Description: 友链持久层接口
+ * 友链持久层接口
  * @author Raxcl
  * @date 2022-01-07 10:23:39
  */

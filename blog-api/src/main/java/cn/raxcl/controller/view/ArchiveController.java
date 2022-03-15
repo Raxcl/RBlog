@@ -9,7 +9,7 @@ import cn.raxcl.service.BlogService;
 import java.util.Map;
 
 /**
- * @Description: 归档页面
+ * 归档页面
  * @author Raxcl
  * @date 2022-01-07 10:15:29
  */

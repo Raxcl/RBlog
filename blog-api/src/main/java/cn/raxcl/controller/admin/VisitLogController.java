@@ -15,7 +15,7 @@ import cn.raxcl.util.common.Result;
 import cn.raxcl.service.VisitLogService;
 
 /**
- * @Description: 访问日志后台管理
+ * 访问日志后台管理
  * @author Raxcl
  * @date 2022-01-07 15:17:23
  */

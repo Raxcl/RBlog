@@ -7,7 +7,7 @@ import cn.raxcl.entity.Category;
 import java.util.List;
 
 /**
- * @Description: 博客分类持久层接口
+ * 博客分类持久层接口
  * @author Raxcl
  * @date 2022-01-07 20:02:47
  */

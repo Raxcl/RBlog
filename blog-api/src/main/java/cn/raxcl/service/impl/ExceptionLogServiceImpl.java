@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 异常日志业务层实现
+ * 异常日志业务层实现
  * @author Raxcl
  * @date 2022-01-07 15:58:16
  */

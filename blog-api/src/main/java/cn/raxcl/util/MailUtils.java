@@ -13,7 +13,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Map;
 
 /**
- * @Description: 邮件工具类
+ * 邮件工具类
  * @author Raxcl
  * @date 2022-01-07 19:50:48
  */

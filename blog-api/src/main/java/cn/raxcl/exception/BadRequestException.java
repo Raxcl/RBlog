@@ -1,7 +1,7 @@
 package cn.raxcl.exception;
 
 /**
- * @Description: 非法请求异常
+ * 非法请求异常
  * @author Raxcl
  * @date 2022-01-07 18:34:51
  */
