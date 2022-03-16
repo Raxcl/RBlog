@@ -1,4 +1,4 @@
-package cn.raxcl.aspect;
+package cn.raxcl.annotation;
 
 import org.springframework.aop.framework.AopContext;
 

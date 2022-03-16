@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.aspect.AopProxy;
+import cn.raxcl.annotation.AopProxy;
 import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.constant.RedisKeyConstants;
 import cn.raxcl.util.common.Result;

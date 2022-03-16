@@ -1,11 +1,11 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.config.properties.BlogProperties;
 import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.service.BlogService;
 import cn.raxcl.service.MailService;
 import cn.raxcl.util.MailUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +18,17 @@ import java.util.Map;
  */
 @Service
 public class MailServiceImpl implements MailService {
-    //todo 待修改
-    @Value("${blog.name}")
-    public String blogName;
-    @Value("${blog.cms}")
-    public String cmsUrl;
-    @Value("${blog.view}")
-    public String websiteUrl;
 
     private final BlogService blogService;
     private final MailProperties mailProperties;
     private final MailUtils mailUtils;
+    private final BlogProperties blogProperties;
 
-    public MailServiceImpl(BlogService blogService, MailProperties mailProperties, MailUtils mailUtils) {
+    public MailServiceImpl(BlogService blogService, MailProperties mailProperties, MailUtils mailUtils, BlogProperties blogProperties) {
         this.blogService = blogService;
         this.mailProperties = mailProperties;
         this.mailUtils = mailUtils;
+        this.blogProperties = blogProperties;
     }
 
     /**
@@ -67,10 +62,10 @@ public class MailServiceImpl implements MailService {
         map.put("ip", commentDTO.getIp());
         map.put("email", commentDTO.getEmail());
         map.put("status", Boolean.TRUE.equals(commentDTO.getPublished()) ? "公开" : "待审核");
-        map.put("url", websiteUrl + path);
-        map.put("manageUrl", cmsUrl + CommonConstants.COMMENTS);
+        map.put("url", blogProperties.getView() + path);
+        map.put("manageUrl", blogProperties.getCms() + CommonConstants.COMMENTS);
         String toAccount = mailProperties.getUsername();
-        String subject = blogName + " 收到新评论";
+        String subject = blogProperties.getName() + " 收到新评论";
         mailUtils.sendHtmlTemplateMail(map, toAccount, subject, "owner.html");
     }
 

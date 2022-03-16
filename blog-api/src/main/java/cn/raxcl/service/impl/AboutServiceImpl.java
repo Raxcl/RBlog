@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.aspect.AopProxy;
+import cn.raxcl.annotation.AopProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstants;

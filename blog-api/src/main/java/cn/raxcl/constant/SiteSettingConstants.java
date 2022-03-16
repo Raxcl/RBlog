@@ -3,7 +3,7 @@ package cn.raxcl.constant;
 /**
  * 站点设置常量
  *
- * @author: Naccl
+ * @author Raxcl
  * @date: 2022-01-28
  */
 public class SiteSettingConstants {

@@ -57,6 +57,7 @@ public class CommonConstants {
     public static final String PATH_TOP = "application/json;charset=utf-8";
 
     public static final String REQUEST_URL = "Request URL : {}, Exception :";
+    public static final String ACCESS_CONTROL_EXPOSE_HEADERS = "Access-Control-Expose-Headers";
 
 
 }

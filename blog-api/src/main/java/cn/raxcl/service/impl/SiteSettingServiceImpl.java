@@ -1,6 +1,6 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.aspect.AopProxy;
+import cn.raxcl.annotation.AopProxy;
 import cn.raxcl.constant.SiteSettingConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

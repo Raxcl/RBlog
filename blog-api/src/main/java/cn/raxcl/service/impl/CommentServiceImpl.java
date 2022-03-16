@@ -1,5 +1,6 @@
 package cn.raxcl.service.impl;
 
+import cn.raxcl.config.properties.BlogProperties;
 import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.constant.JwtConstants;
 import cn.raxcl.entity.User;
@@ -13,7 +14,7 @@ import cn.raxcl.util.*;
 import cn.raxcl.util.comment.CommentUtils;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.page.PageMethod;
-import cn.raxcl.aspect.AopProxy;
+import cn.raxcl.annotation.AopProxy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,27 +32,23 @@ import java.util.*;
  */
 @Service
 public class CommentServiceImpl implements CommentService, AopProxy<CommentServiceImpl> {
-    //待修改
-    @Value("${blog.name}")
-    public String blogName;
-    @Value("${blog.cms}")
-    public String cmsUrl;
-    @Value("${blog.view}")
-    public String websiteUrl;
 
     private final CommentMapper commentMapper;
     private final UserServiceImpl userService;
     private final PostCommentDTO postCommentDTO;
     private final MailService mailService;
     private final CommentUtils commentUtils;
+    private final BlogProperties blogProperties;
 
-    public CommentServiceImpl(CommentMapper commentMapper,  UserServiceImpl userService, PostCommentDTO postCommentDTO,
-                              MailService mailService, CommentUtils commentUtils) {
+
+    public CommentServiceImpl(CommentMapper commentMapper, UserServiceImpl userService, PostCommentDTO postCommentDTO,
+                              MailService mailService, CommentUtils commentUtils, BlogProperties blogProperties) {
         this.commentMapper = commentMapper;
         this.userService = userService;
         this.postCommentDTO = postCommentDTO;
         this.mailService = mailService;
         this.commentUtils = commentUtils;
+        this.blogProperties = blogProperties;
     }
 
     @Override
@@ -459,9 +456,9 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         map.put("time", commentDTO.getCreateTime());
         map.put("parentContent", parentComment.getContent());
         map.put("content", commentDTO.getContent());
-        map.put("url", websiteUrl + path);
+        map.put("url", blogProperties.getView() + path);
         String toAccount = parentComment.getEmail();
-        String subject = "您在 " + blogName + " 的评论有了新回复";
+        String subject = "您在 " + blogProperties.getName() + " 的评论有了新回复";
         mailService.sendHtmlTemplateMail(map, toAccount, subject, "guest.html");
     }
 
