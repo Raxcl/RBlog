@@ -1,7 +1,6 @@
 package cn.raxcl.aspect;
 
 import cn.raxcl.constant.CommonConstants;
-import cn.raxcl.constant.JwtConstants;
 import cn.raxcl.enums.VisitBehavior;
 import cn.raxcl.model.dto.VisitLogRemark;
 import org.aspectj.lang.ProceedingJoinPoint;

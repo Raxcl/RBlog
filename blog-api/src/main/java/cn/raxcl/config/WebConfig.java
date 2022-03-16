@@ -1,5 +1,6 @@
 package cn.raxcl.config;
 
+import cn.raxcl.config.properties.UploadProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -16,27 +17,11 @@ import cn.raxcl.interceptor.AccessLimitInterceptor;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 	private final AccessLimitInterceptor accessLimitInterceptor;
-	private String accessPath;
-	private String resourcesLocations;
+	private final UploadProperties uploadProperties;
 
-	public WebConfig(AccessLimitInterceptor accessLimitInterceptor) {
+	public WebConfig(AccessLimitInterceptor accessLimitInterceptor, UploadProperties uploadProperties) {
 		this.accessLimitInterceptor = accessLimitInterceptor;
-	}
-
-	/**
-	 * @param accessPath 请求地址映射
-	 */
-	@Value("${upload.access.path}")
-	public void setAccessPath(String accessPath) {
-		this.accessPath = accessPath;
-	}
-
-	/**
-	 * @param resourcesLocations 本地文件路径映射
-	 */
-	@Value("${upload.resources.locations}")
-	public void setResourcesLocations(String resourcesLocations) {
-		this.resourcesLocations = resourcesLocations;
+		this.uploadProperties = uploadProperties;
 	}
 
 	/**
@@ -70,6 +55,6 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler(accessPath).addResourceLocations(resourcesLocations);
+		registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
 	}
 }
