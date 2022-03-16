@@ -1,7 +1,7 @@
 package cn.raxcl.config;
 
-import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.JwtConstants;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -72,7 +72,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 	                                        FilterChain chain, Authentication authResult) throws IOException {
-		String jwt = JwtUtils.generateToken(authResult.getName(), authResult.getAuthorities(), CodeConstants.EXPIRE_TIME, CodeConstants.SECRET_KEY);
+		String jwt = JwtUtils.generateToken(authResult.getName(), authResult.getAuthorities(), JwtConstants.EXPIRE_TIME, JwtConstants.SECRET_KEY);
 		response.setContentType(CommonConstants.PATH_TOP);
 		User user = (User) authResult.getPrincipal();
 		user.setPassword(null);

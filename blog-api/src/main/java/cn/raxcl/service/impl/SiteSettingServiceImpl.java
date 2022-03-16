@@ -1,7 +1,7 @@
 package cn.raxcl.service.impl;
 
 import cn.raxcl.aspect.AopProxy;
-import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.SiteSettingConstants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.raxcl.constant.RedisKeyConstants;
@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 /**
  * 站点设置业务层实现
  * @author Raxcl
- * @date 2022-01-07 18:48:13
+ * @date 2022-03-16 15:11:07
  */
 @Service
 public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<SiteSettingServiceImpl> {
@@ -104,24 +104,24 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 	}
 
 	private void siteInfoDispose(SiteSetting s, IntroductionVO introductionVO, List<Favorite> favorites, List<String> rollTexts) {
-		if (CommonConstants.AVATAR.equals(s.getNameEn())) {
+		if (SiteSettingConstants.AVATAR.equals(s.getNameEn())) {
 			introductionVO.setAvatar(s.getValue());
-		} else if (CommonConstants.NAME.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.NAME.equals(s.getNameEn())) {
 			introductionVO.setName(s.getValue());
-		} else if (CommonConstants.GITHUB.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.GITHUB.equals(s.getNameEn())) {
 			introductionVO.setGithub(s.getValue());
-		} else if (CommonConstants.QQ.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.QQ.equals(s.getNameEn())) {
 			introductionVO.setQq(s.getValue());
-		} else if (CommonConstants.BILIBILI.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.BILI_BILI.equals(s.getNameEn())) {
 			introductionVO.setBilibili(s.getValue());
-		} else if (CommonConstants.NETEASE.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.NET_EASE.equals(s.getNameEn())) {
 			introductionVO.setNetease(s.getValue());
-		} else if (CommonConstants.EMAIL.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.EMAIL.equals(s.getNameEn())) {
 			introductionVO.setEmail(s.getValue());
-		} else if (CommonConstants.FAVORITE.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.FAVORITE.equals(s.getNameEn())) {
 			Favorite favorite = JacksonUtils.readValue(s.getValue(), Favorite.class);
 			favorites.add(favorite);
-		} else if (CommonConstants.ROLL_TEXT.equals(s.getNameEn())) {
+		} else if (SiteSettingConstants.ROLL_TEXT.equals(s.getNameEn())) {
 			Matcher m = PATTERN.matcher(s.getValue());
 			while (m.find()) {
 				rollTexts.add(m.group(1));

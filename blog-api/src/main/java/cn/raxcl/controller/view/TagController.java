@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.enums.VisitBehavior;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class TagController {
 	 * @param pageNum 页码
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "查看标签")
+	@VisitLogger(VisitBehavior.TAG)
 	@GetMapping("/tag")
 	public Result tag(@RequestParam String tagName,
 	                  @RequestParam(defaultValue = "1") Integer pageNum) {

@@ -1,7 +1,7 @@
 package cn.raxcl.config;
 
-import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.JwtConstants;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,7 +41,7 @@ public class JwtFilter extends GenericFilterBean {
 		String jwt = request.getHeader("Authorization");
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
-				Claims claims = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY);
+				Claims claims = JwtUtils.getTokenBody(jwt, JwtConstants.SECRET_KEY);
 				String username = claims.getSubject();
 				List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
 				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, authorities);

@@ -1,6 +1,5 @@
 package cn.raxcl.service.impl;
 
-import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.constant.CommonConstants;
 import cn.raxcl.constant.JwtConstants;
 import cn.raxcl.entity.User;
@@ -94,7 +93,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
                 }
                 String subject;
                 try {
-                    subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+                    subject = JwtUtils.getTokenBody(jwt, JwtConstants.SECRET_KEY).getSubject();
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new NotFoundException("Token已失效，请重新验证密码！");
@@ -144,7 +143,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
                     if (JwtUtils.judgeTokenIsExist(jwt)) {
                         String subject;
                         try {
-                            subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+                            subject = JwtUtils.getTokenBody(jwt, JwtConstants.SECRET_KEY).getSubject();
                         } catch (Exception e) {
                             e.printStackTrace();
                             throw new NotFoundException("Token已失效，请重新验证密码！");
@@ -197,7 +196,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         }
         String subject;
         try {
-            subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+            subject = JwtUtils.getTokenBody(jwt, JwtConstants.SECRET_KEY).getSubject();
         } catch (Exception e) {
             e.printStackTrace();
             throw new NotFoundException("Token已失效，请重新验证密码！");
@@ -259,7 +258,7 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
     private void checkCommentToken(String jwt) {
         String subject;
         try {
-            subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+            subject = JwtUtils.getTokenBody(jwt, JwtConstants.SECRET_KEY).getSubject();
             postCommentDTO.setSubject(subject);
         } catch (Exception e) {
             throw new NotFoundException("Token已失效，请重新验证密码！",e);

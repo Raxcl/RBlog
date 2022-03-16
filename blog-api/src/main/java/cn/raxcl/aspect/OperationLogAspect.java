@@ -1,6 +1,6 @@
 package cn.raxcl.aspect;
 
-import cn.raxcl.constant.CodeConstants;
+import cn.raxcl.constant.JwtConstants;
 import cn.raxcl.exception.NotFoundException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -76,7 +76,7 @@ public class OperationLogAspect {
 			throw new NotFoundException("attributes为空 ---OperationLogAspect.class");
 		}
 		HttpServletRequest request = attributes.getRequest();
-		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), CodeConstants.SECRET_KEY).getSubject();
+		String username = JwtUtils.getTokenBody(request.getHeader("Authorization"), JwtConstants.SECRET_KEY).getSubject();
 		String uri = request.getRequestURI();
 		String method = request.getMethod();
 		String description = operationLogger.value();

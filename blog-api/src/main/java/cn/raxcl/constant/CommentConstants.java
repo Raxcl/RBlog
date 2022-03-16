@@ -7,6 +7,7 @@ package cn.raxcl.constant;
  * @date 2022-03-15 23:46:31
  */
 public class CommentConstants {
+	private CommentConstants(){}
 	/**
 	 * 评论提醒方式-Telegram
 	 */

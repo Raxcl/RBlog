@@ -1,7 +1,9 @@
 package cn.raxcl.aspect;
 
-import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.JwtConstants;
+import cn.raxcl.enums.VisitBehavior;
+import cn.raxcl.model.dto.VisitLogRemark;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -65,7 +67,7 @@ public class VisitLogAspect {
 	@Around(value = "logPointcut(visitLogger)", argNames = "joinPoint,visitLogger")
 	public Object logAround(ProceedingJoinPoint joinPoint, VisitLogger visitLogger) throws Throwable {
 		currentTime.set(System.currentTimeMillis());
-		Object result = joinPoint.proceed();
+		Result result = (Result) joinPoint.proceed();
 		int times = (int) (System.currentTimeMillis() - currentTime.get());
 		currentTime.remove();
 		//获取请求对象
@@ -153,23 +155,16 @@ public class VisitLogAspect {
 	 * @param times times
 	 * @return VisitLog
 	 */
-	private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Object result,
-	                           int times, String identification) {
-		String behavior = visitLogger.behavior();
+	private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitLogger visitLogger, HttpServletRequest request, Result result,
+							   int times, String identification) {
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		String ip = IpAddressUtils.getIpAddress(request);
+		String userAgent = request.getHeader("User-Agent");
 		Map<String, Object> requestParams = AopUtils.getRequestParams(joinPoint);
-		Map<String, String> map = judgeBehavior(behavior, visitLogger.content(), requestParams, result);
-		VisitLog log = VisitLog.builder()
-				.uuid(identification)
-				.uri(request.getRequestURI())
-				.method(request.getMethod())
-				.behavior(behavior)
-				.content(map.get("content"))
-				.remark(map.get("remark"))
-				.ip(IpAddressUtils.getIpAddress(request))
-				.times(times)
-				.createTime(new Date())
-				.userAgent(request.getHeader("User-Agent"))
-				.build();
+		VisitLogRemark visitLogRemark = judgeBehavior(visitLogger.value(), requestParams, result);
+		VisitLog log = new VisitLog(identification, uri, method, visitLogger.value().getBehavior(),
+				visitLogRemark.getContent(), visitLogRemark.getRemark(), ip, times, userAgent);
 		log.setParam(StringUtils.substring(JacksonUtils.writeValueAsString(requestParams), 0, 2000));
 		return log;
 	}
@@ -177,51 +172,50 @@ public class VisitLogAspect {
 	/**
 	 * 根据访问行为，设置对应的访问内容或备注
 	 *
-	 * @param behavior behavior
-	 * @param content content
-	 * @param requestParams requestParams
-	 * @param result result
-	 * @return Map<String, String>
+	 * @param behavior
+	 * @param requestParams
+	 * @param result
+	 * @return
 	 */
-	private Map<String, String> judgeBehavior(String behavior, String content, Map<String, Object> requestParams, Object result) {
-		Map<String, String> map = new HashMap<>(16);
+	private VisitLogRemark judgeBehavior(VisitBehavior behavior, Map<String, Object> requestParams, Result result) {
 		String remark = "";
-		boolean isViewAndIsFirstPage = CommonConstants.VIEW_PAGE.equals(behavior) && CommonConstants.FIRST_PAGE.equals(content);
-		if ( isViewAndIsFirstPage || CommonConstants.DO_NEW.equals(content)) {
-			int pageNum = (int) requestParams.get(CommonConstants.PAGE_NUM);
-			remark = "第" + pageNum + "页";
-		} else if (CommonConstants.VIEW_BLOG.equals(behavior)) {
-			Result res = (Result) result;
-			if (CodeConstants.SUCCESS.equals(res.getCode())) {
-				BlogDetailVO blog = (BlogDetailVO) res.getData();
-				String title = blog.getTitle();
-				content = title;
-				remark = "文章标题：" + title;
-			}
-		} else if (CommonConstants.SOURCE_BLOG.equals(behavior)) {
-			Result res = (Result) result;
-			if (CodeConstants.SUCCESS.equals(res.getCode())) {
-				String query = (String) requestParams.get("query");
-				content = query;
-				remark = "搜索内容：" + query;
-			}
-		} else if (CommonConstants.VIEW_CATEGORY.equals(behavior)) {
-			String categoryName = (String) requestParams.get("categoryName");
-			int pageNum = (int) requestParams.get(CommonConstants.PAGE_NUM);
-			content = categoryName;
-			remark = "分类名称：" + categoryName + "，第" + pageNum + "页";
-		} else if (CommonConstants.VIEW_TAG.equals(behavior)) {
-			String tagName = (String) requestParams.get("tagName");
-			int pageNum = (int) requestParams.get(CommonConstants.PAGE_NUM);
-			content = tagName;
-			remark = "标签名称：" + tagName + "，第" + pageNum + "页";
-		} else if (CommonConstants.CLICK_FRIEND.equals(behavior)) {
-			String nickname = (String) requestParams.get("nickname");
-			content = nickname;
-			remark = "友链名称：" + nickname;
+		String content = behavior.getContent();
+		switch (behavior) {
+			case INDEX:
+			case MOMENT:
+				remark = "第" + requestParams.get("pageNum") + "页";
+				break;
+			case BLOG:
+				if (result.getCode() == 200) {
+					BlogDetailVO blog = (BlogDetailVO) result.getData();
+					String title = blog.getTitle();
+					content = title;
+					remark = "文章标题：" + title;
+				}
+				break;
+			case SEARCH:
+				if (result.getCode() == 200) {
+					String query = (String) requestParams.get("query");
+					content = query;
+					remark = "搜索内容：" + query;
+				}
+				break;
+			case CATEGORY:
+				String categoryName = (String) requestParams.get("categoryName");
+				content = categoryName;
+				remark = "分类名称：" + categoryName + "，第" + requestParams.get("pageNum") + "页";
+				break;
+			case TAG:
+				String tagName = (String) requestParams.get("tagName");
+				content = tagName;
+				remark = "标签名称：" + tagName + "，第" + requestParams.get("pageNum") + "页";
+				break;
+			case CLICK_FRIEND:
+				String nickname = (String) requestParams.get("nickname");
+				content = nickname;
+				remark = "友链名称：" + nickname;
+				break;
 		}
-		map.put("remark", remark);
-		map.put("content", content);
-		return map;
+		return new VisitLogRemark(content, remark);
 	}
 }

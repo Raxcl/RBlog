@@ -1,7 +1,7 @@
 package cn.raxcl.controller.view;
 
-import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.constant.JwtConstants;
+import cn.raxcl.enums.VisitBehavior;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,14 +42,14 @@ public class MomentController {
 	 * @param jwt     博主访问Token
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "访问页面", content = "动态")
+	@VisitLogger(VisitBehavior.MOMENT)
 	@GetMapping("/moments")
 	public Result moments(@RequestParam(defaultValue = "1") Integer pageNum,
 	                      @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
 		boolean adminIdentity = false;
 		if (JwtUtils.judgeTokenIsExist(jwt)) {
 			try {
-				String subject = JwtUtils.getTokenBody(jwt, CodeConstants.SECRET_KEY).getSubject();
+				String subject = JwtUtils.getTokenBody(jwt, JwtConstants.SECRET_KEY).getSubject();
 				//博主身份Token
 				if (subject.startsWith(JwtConstants.ADMIN_PREFIX)) {
 					String username = subject.replace("admin:", "");
@@ -75,7 +75,7 @@ public class MomentController {
 	 * @return Result
 	 */
 	@AccessLimit(seconds = 86400, maxCount = 1, msg = "不可以重复点赞哦")
-	@VisitLogger(behavior = "点赞动态")
+	@VisitLogger(VisitBehavior.LIKE_MOMENT)
 	@PostMapping("/moment/like/{id}")
 	public Result like(@PathVariable Long id) {
 		momentService.addLikeByMomentId(id);

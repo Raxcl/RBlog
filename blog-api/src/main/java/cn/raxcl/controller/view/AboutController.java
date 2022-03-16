@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.enums.VisitBehavior;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
@@ -24,7 +25,7 @@ public class AboutController {
 	 *
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "访问页面", content = "关于我")
+	@VisitLogger(VisitBehavior.ABOUT)
 	@GetMapping("/about")
 	public Result about() {
 		return Result.success("获取成功", aboutService.getAboutInfo());

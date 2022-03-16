@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.enums.VisitBehavior;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.raxcl.annotation.VisitLogger;
@@ -26,7 +27,7 @@ public class ArchiveController {
 	 *
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "访问页面", content = "文章归档")
+	@VisitLogger(VisitBehavior.ARCHIVE)
 	@GetMapping("/archives")
 	public Result archives() {
 		Map<String, Object> archiveBlogMap = blogService.getArchiveBlogAndCountByIsPublished();

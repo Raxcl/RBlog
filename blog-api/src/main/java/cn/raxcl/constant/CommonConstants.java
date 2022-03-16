@@ -41,15 +41,6 @@ public class CommonConstants {
 
     public static final String SAVE = "save";
     public static final String IDENTIFICATION = "identification";
-    public static final String AVATAR = "avatar";
-    public static final String NAME = "name";
-    public static final String GITHUB = "github";
-    public static final String QQ = "qq";
-    public static final String BILIBILI = "bilibili";
-    public static final String NETEASE = "netease";
-    public static final String EMAIL = "email";
-    public static final String FAVORITE = "favorite";
-    public static final String ROLL_TEXT = "rollText";
 
     public static final String VIEW_PAGE = "访问页面";
     public static final String FIRST_PAGE = "首页";

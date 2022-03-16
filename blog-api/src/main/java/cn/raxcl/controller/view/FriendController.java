@@ -1,5 +1,6 @@
 package cn.raxcl.controller.view;
 
+import cn.raxcl.enums.VisitBehavior;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +32,7 @@ public class FriendController {
 	 * 获取友链页面
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "访问页面", content = "友链")
+	@VisitLogger(VisitBehavior.FRIEND)
 	@GetMapping("/friends")
 	public Result friends() {
 		List<FriendVO> friendVOList = friendService.getFriendVOList();
@@ -48,7 +49,7 @@ public class FriendController {
 	 * @param nickname 友链昵称
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "点击友链")
+	@VisitLogger(VisitBehavior.CLICK_FRIEND)
 	@PostMapping("/friend")
 	public Result addViews(@RequestParam String nickname) {
 		friendService.updateViewsByNickname(nickname);

@@ -1,7 +1,8 @@
 package cn.raxcl.controller.view;
 
-import cn.raxcl.constant.CodeConstants;
 import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.JwtConstants;
+import cn.raxcl.enums.VisitBehavior;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +41,7 @@ public class BlogController {
 	 * @param pageNum 页码
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "访问页面", content = "首页")
+	@VisitLogger(VisitBehavior.INDEX)
 	@GetMapping("/blogs")
 	public Result blogs(@RequestParam(defaultValue = "1") Integer pageNum) {
 		PageResultVO<BlogInfoVO> pageResultVO = blogService.getBlogInfoListByIsPublished(pageNum);
@@ -54,7 +55,7 @@ public class BlogController {
 	 * @param jwt 密码保护文章的访问Token
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "查看博客")
+	@VisitLogger(VisitBehavior.BLOG)
 	@GetMapping("/blog")
 	public Result getBlog(@RequestParam Long id,
 	                      @RequestHeader(value = "Authorization", defaultValue = "") String jwt) {
@@ -68,13 +69,13 @@ public class BlogController {
 	 * @param blogPasswordDTO 博客id、密码
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "校验博客密码")
+	@VisitLogger(VisitBehavior.CHECK_PASSWORD)
 	@PostMapping("/checkBlogPassword")
 	public Result checkBlogPassword(@RequestBody BlogPasswordDTO blogPasswordDTO) {
 		String password = blogService.getBlogPassword(blogPasswordDTO.getBlogId());
 		if (password.equals(blogPasswordDTO.getPassword())) {
 			//生成有效时间一个月的Token
-			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, CodeConstants.SECRET_KEY);
+			String jwt = JwtUtils.generateToken(blogPasswordDTO.getBlogId().toString(), 1000 * 3600 * 24 * 30L, JwtConstants.SECRET_KEY);
 			return Result.success("密码正确", jwt);
 		} else {
 			return Result.exception(403, "密码错误");
@@ -87,7 +88,7 @@ public class BlogController {
 	 * @param query 关键字字符串
 	 * @return Result
 	 */
-	@VisitLogger(behavior = "搜索博客")
+	@VisitLogger(VisitBehavior.SEARCH)
 	@GetMapping("/searchBlog")
 	public Result searchBlog(@RequestParam String query) {
 		//校验关键字字符串合法性
