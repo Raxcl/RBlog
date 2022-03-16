@@ -216,7 +216,7 @@
                     -->
                     <!--指定远程docker api地址-->
                     <dockerHost>https://81.71.87.241:2376</dockerHost>
-                    <dockerCertPath>D:\environment\ca</dockerCertPath>
+                    <dockerCertPath>C:\environment\ca</dockerCertPath>
 
                     <!--这里是复制jar包到docker容器指定目录配置-->
                     <resources>
