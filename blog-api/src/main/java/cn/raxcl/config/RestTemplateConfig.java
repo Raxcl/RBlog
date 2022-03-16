@@ -1,7 +1,6 @@
 package cn.raxcl.config;
 
 import cn.raxcl.config.properties.ProxyProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -18,13 +17,16 @@ import java.net.Proxy;
  */
 @Configuration
 public class RestTemplateConfig {
-	@Autowired
-	private ProxyProperties proxyProperties;
+	private final ProxyProperties proxyProperties;
+
+	public RestTemplateConfig(ProxyProperties proxyProperties) {
+		this.proxyProperties = proxyProperties;
+	}
 
 	/**
 	 * 默认的RestTemplate
 	 *
-	 * @return
+	 * @return RestTemplate
 	 */
 	@Bean
 	public RestTemplate restTemplate() {
@@ -34,7 +36,7 @@ public class RestTemplateConfig {
 	/**
 	 * 配置了代理和超时时间的RestTemplate
 	 *
-	 * @return
+	 * @return RestTemplate
 	 */
 	@Bean
 	public RestTemplate restTemplateByProxy() {

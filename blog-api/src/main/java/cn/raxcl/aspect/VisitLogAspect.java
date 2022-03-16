@@ -1,6 +1,7 @@
 package cn.raxcl.aspect;
 
 import cn.raxcl.constant.CommonConstants;
+import cn.raxcl.constant.JwtConstants;
 import cn.raxcl.enums.VisitBehavior;
 import cn.raxcl.model.dto.VisitLogRemark;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -132,7 +133,7 @@ public class VisitLogAspect {
 		//添加访客标识码UUID至响应头
 		Objects.requireNonNull(response).addHeader(CommonConstants.IDENTIFICATION, uuid);
 		//暴露自定义header供页面资源使用
-		response.addHeader("Access-Control-Expose-Headers", CommonConstants.IDENTIFICATION);
+		response.addHeader(CommonConstants.ACCESS_CONTROL_EXPOSE_HEADERS, CommonConstants.IDENTIFICATION);
 		//校验Redis中是否存在uuid
 		boolean redisHas = redisService.hasValueInSet(RedisKeyConstants.IDENTIFICATION_SET, uuid);
 		if (!redisHas) {
@@ -171,10 +172,10 @@ public class VisitLogAspect {
 	/**
 	 * 根据访问行为，设置对应的访问内容或备注
 	 *
-	 * @param behavior
-	 * @param requestParams
-	 * @param result
-	 * @return
+	 * @param behavior behavior
+	 * @param requestParams requestParams
+	 * @param result result
+	 * @return VisitLogRemark
 	 */
 	private VisitLogRemark judgeBehavior(VisitBehavior behavior, Map<String, Object> requestParams, Result result) {
 		String remark = "";
@@ -182,10 +183,10 @@ public class VisitLogAspect {
 		switch (behavior) {
 			case INDEX:
 			case MOMENT:
-				remark = "第" + requestParams.get("pageNum") + "页";
+				remark = "第" + requestParams.get(CommonConstants.PAGE_NUM) + "页";
 				break;
 			case BLOG:
-				if (result.getCode() == 200) {
+				if (JwtConstants.SUCCESS.equals(result.getCode())) {
 					BlogDetailVO blog = (BlogDetailVO) result.getData();
 					String title = blog.getTitle();
 					content = title;
@@ -193,7 +194,7 @@ public class VisitLogAspect {
 				}
 				break;
 			case SEARCH:
-				if (result.getCode() == 200) {
+				if (JwtConstants.SUCCESS.equals(result.getCode())) {
 					String query = (String) requestParams.get("query");
 					content = query;
 					remark = "搜索内容：" + query;
@@ -213,6 +214,8 @@ public class VisitLogAspect {
 				String nickname = (String) requestParams.get("nickname");
 				content = nickname;
 				remark = "友链名称：" + nickname;
+				break;
+			default:
 				break;
 		}
 		return new VisitLogRemark(content, remark);

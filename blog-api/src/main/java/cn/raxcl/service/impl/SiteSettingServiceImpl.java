@@ -79,7 +79,7 @@ public class SiteSettingServiceImpl implements SiteSettingService, AopProxy<Site
 		List<String> rollTexts = new ArrayList<>();
 		for (SiteSetting s : siteSettings) {
 			if (s.getType() == 1) {
-				if ("copyright".equals(s.getNameEn())) {
+				if (SiteSettingConstants.COPYRIGHT.equals(s.getNameEn())) {
 					Copyright copyright = JacksonUtils.readValue(s.getValue(), Copyright.class);
 					siteInfo.put(s.getNameEn(), copyright);
 				} else {
