@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @ToString
 @Configuration
-@ConfigurationProperties(prefix = "upload.file")
+@ConfigurationProperties(prefix = "upload")
 public class UploadProperties {
 	/**
 	 * 本地文件路径

@@ -32,11 +32,12 @@ import java.util.*;
  */
 @Service
 public class CommentServiceImpl implements CommentService, AopProxy<CommentServiceImpl> {
-    @Value("${custom.blog.name}")
+    //待修改
+    @Value("${blog.name}")
     public String blogName;
-    @Value("${custom.url.cms}")
+    @Value("${blog.cms}")
     public String cmsUrl;
-    @Value("${custom.url.website}")
+    @Value("${blog.view}")
     public String websiteUrl;
 
     private final CommentMapper commentMapper;
@@ -345,6 +346,10 @@ public class CommentServiceImpl implements CommentService, AopProxy<CommentServi
         for (PageCommentVO c : comments) {
             List<PageCommentVO> tmpComments = new ArrayList<>();
             getReplyComments(tmpComments, c.getReplyComments());
+            //对于两列评论来说，按时间顺序排列应该比树形更合理些
+            //排序一下
+            Comparator<PageCommentVO> comparator = Comparator.comparing(PageCommentVO::getCreateTime);
+            tmpComments.sort(comparator);
             c.setReplyComments(tmpComments);
         }
         return comments;

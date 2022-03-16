@@ -18,11 +18,12 @@ import java.util.Map;
  */
 @Service
 public class MailServiceImpl implements MailService {
-    @Value("${custom.blog.name}")
+    //todo 待修改
+    @Value("${blog.name}")
     public String blogName;
-    @Value("${custom.url.cms}")
+    @Value("${blog.cms}")
     public String cmsUrl;
-    @Value("${custom.url.website}")
+    @Value("${blog.view}")
     public String websiteUrl;
 
     private final BlogService blogService;
