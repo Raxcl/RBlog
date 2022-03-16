@@ -48,7 +48,6 @@ public class UploadUtils {
 	 * 通过指定方式存储图片
 	 *
 	 * @param image 需要保存的图片
-	 * @throws Exception
 	 */
 	public static String upload(ImageResource image) throws Exception {
 		return uploadChannel.upload(image);
@@ -58,10 +57,11 @@ public class UploadUtils {
 	 * 从网络获取图片数据
 	 *
 	 * @param url 图片URL
-	 * @return
+	 * @return ImageResource
 	 */
 	public static ImageResource getImageByRequest(String url) {
 		ResponseEntity<byte[]> responseEntity = restTemplate.getForEntity(url, byte[].class);
+		//todo
 		if (UploadConstants.IMAGE.equals(responseEntity.getHeaders().getContentType().getType())) {
 			return new ImageResource(responseEntity.getBody(), responseEntity.getHeaders().getContentType().getSubtype());
 		}

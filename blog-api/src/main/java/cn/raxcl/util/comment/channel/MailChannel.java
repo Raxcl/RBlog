@@ -1,6 +1,5 @@
 package cn.raxcl.util.comment.channel;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -22,12 +21,15 @@ import java.util.Map;
 @Lazy
 @Component
 public class MailChannel implements CommentNotifyChannel {
-	@Autowired
-	private BlogProperties blogProperties;
-	@Autowired
-	private MailProperties mailProperties;
-	@Autowired
-	private MailUtils mailUtils;
+	private final BlogProperties blogProperties;
+	private final MailProperties mailProperties;
+	private final MailUtils mailUtils;
+
+	public MailChannel(BlogProperties blogProperties, MailProperties mailProperties, MailUtils mailUtils) {
+		this.blogProperties = blogProperties;
+		this.mailProperties = mailProperties;
+		this.mailUtils = mailUtils;
+	}
 
 	/**
 	 * 发送邮件提醒我自己
@@ -44,7 +46,7 @@ public class MailChannel implements CommentNotifyChannel {
 		map.put("content", commentDTO.getContent());
 		map.put("ip", commentDTO.getIp());
 		map.put("email", commentDTO.getEmail());
-		map.put("status", commentDTO.getPublished() ? "公开" : "待审核");
+		map.put("status", Boolean.TRUE.equals(commentDTO.getPublished()) ? "公开" : "待审核");
 		map.put("url", blogProperties.getView() + commentPageEnum.getPath());
 		map.put("manageUrl", blogProperties.getCms() + "/comments");
 		String toAccount = mailProperties.getUsername();

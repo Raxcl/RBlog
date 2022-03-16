@@ -1,8 +1,5 @@
 package cn.raxcl.util.comment;
 
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import cn.raxcl.config.properties.BlogProperties;
@@ -36,28 +33,27 @@ import java.util.Map;
 @Component
 @DependsOn("springContextUtils")
 public class CommentUtils {
-    @Autowired
-    private BlogProperties blogProperties;
-    @Autowired
-    private MailUtils mailUtils;
-    @Autowired
-    private AboutService aboutService;
-    @Autowired
-    private FriendService friendService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    RedisService redisService;
+    private final BlogProperties blogProperties;
+    private final MailUtils mailUtils;
+    private final AboutService aboutService;
+    private final FriendService friendService;
+    private final UserService userService;
+    private final RedisService redisService;
 
     private static BlogService blogService;
 
-    private CommentNotifyChannel notifyChannel = ChannelFactory.getChannel("mail");
-    /**
-     * 新评论是否默认公开
-     */
-    private Boolean commentDefaultOpen = true;
+    private final CommentNotifyChannel notifyChannel = ChannelFactory.getChannel("mail");
 
-    @Autowired
+    public CommentUtils(BlogProperties blogProperties, MailUtils mailUtils, AboutService aboutService,
+                        FriendService friendService, UserService userService, RedisService redisService) {
+        this.blogProperties = blogProperties;
+        this.mailUtils = mailUtils;
+        this.aboutService = aboutService;
+        this.friendService = friendService;
+        this.userService = userService;
+        this.redisService = redisService;
+    }
+    //todo
     public void setBlogService(BlogService blogService) {
         CommentUtils.blogService = blogService;
     }
@@ -77,7 +73,7 @@ public class CommentUtils {
      * @param parentComment    父评论
      */
     public void judgeSendNotify(CommentDTO commentDTO, boolean isVisitorComment, cn.raxcl.entity.Comment parentComment) {
-        if (parentComment != null && !parentComment.getAdminComment() && parentComment.getNotice()) {
+        if (parentComment != null && !parentComment.getAdminComment() && Boolean.TRUE.equals(parentComment.getNotice())) {
             //我回复访客的评论，且对方接收提醒，邮件提醒对方(3)
             //访客回复访客的评论(即使是他自己先前的评论)，且对方接收提醒，邮件提醒对方(6)
             sendMailToParentComment(parentComment, commentDTO);
@@ -188,7 +184,7 @@ public class CommentUtils {
             case PageConstants.FRIEND:
                 //友链页面
                 FriendInfoVO friendInfoVO = friendService.getFriendInfo(true, false);
-                if (!friendInfoVO.getCommentEnabled()) {
+                if (Boolean.FALSE.equals(friendInfoVO.getCommentEnabled())) {
                     //页面评论已关闭
                     return CommentOpenStateEnum.CLOSE;
                 }
@@ -294,6 +290,8 @@ public class CommentUtils {
         }
         commentDTO.setAdminComment(false);
         commentDTO.setCreateTime(new Date());
+        //新评论是否默认公开
+        Boolean commentDefaultOpen = true;
         commentDTO.setPublished(commentDefaultOpen);
         commentDTO.setWebsite(website);
         commentDTO.setEmail(commentDTO.getEmail().trim());

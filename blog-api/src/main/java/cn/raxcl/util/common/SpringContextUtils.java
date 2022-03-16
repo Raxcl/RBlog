@@ -15,12 +15,12 @@ public class SpringContextUtils implements ApplicationContextAware {
 
 	private static ApplicationContext applicationContext;
 
+	//todo
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException{
 		SpringContextUtils.setContent(applicationContext);
 	}
 
-	//todo 看看到底有什么用
 	private static void setContent(ApplicationContext applicationContext) {
 		SpringContextUtils.applicationContext = applicationContext;
 	}
@@ -45,7 +45,7 @@ public class SpringContextUtils implements ApplicationContextAware {
 		return applicationContext.isSingleton(name);
 	}
 
-	public static Class<? extends Object> getType(String name) {
+	public static Class<?> getType(String name) {
 		return applicationContext.getType(name);
 	}
 

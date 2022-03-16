@@ -3,10 +3,13 @@ package cn.raxcl.enums;
 /**
  * 访问行为枚举类
  *
- * @author: Naccl
- * @date: 2022-01-08
+ * @author Raxcl
+ * @date: 2022-03-16 17:43:26
  */
 public enum VisitBehavior {
+	/**
+	 * UNKNOWN
+	 */
 	UNKNOWN("UNKNOWN", "UNKNOWN"),
 
 	INDEX("访问页面", "首页"),
@@ -27,11 +30,11 @@ public enum VisitBehavior {
 	/**
 	 * 访问行为
 	 */
-	private String behavior;
+	private final String behavior;
 	/**
 	 * 访问内容
 	 */
-	private String content;
+	private final String content;
 
 	VisitBehavior(String behavior, String content) {
 		this.behavior = behavior;

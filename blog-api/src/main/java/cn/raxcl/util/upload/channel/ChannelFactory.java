@@ -14,7 +14,7 @@ public class ChannelFactory {
 	 * 创建文件上传方式
 	 *
 	 * @param channelName 方式名称
-	 * @return
+	 * @return FileUploadChannel
 	 */
 	public static FileUploadChannel getChannel(String channelName) {
 		if (UploadConstants.LOCAL.equalsIgnoreCase(channelName)) {

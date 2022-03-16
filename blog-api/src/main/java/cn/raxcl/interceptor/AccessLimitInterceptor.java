@@ -26,6 +26,7 @@ public class AccessLimitInterceptor extends HandlerInterceptorAdapter {
 		this.redisService = redisService;
 	}
 
+	//todo
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		if (handler instanceof HandlerMethod) {

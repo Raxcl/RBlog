@@ -7,10 +7,21 @@ package cn.raxcl.enums;
  * @date 2022-03-15 23:47:24
  */
 public enum CommentPageEnum {
+	/**
+	 * 未知
+	 */
 	UNKNOWN("UNKNOWN", "UNKNOWN"),
-
+	/**
+	 * 博客页面
+	 */
 	BLOG("", ""),
+	/**
+	 * 关于我页面
+	 */
 	ABOUT("关于我", "/about"),
+	/**
+	 * 友人帐页面
+	 */
 	FRIEND("友人帐", "/friends"),
 	;
 
@@ -25,7 +36,7 @@ public enum CommentPageEnum {
 	public String getTitle() {
 		return title;
 	}
-
+	//todo
 	public void setTitle(String title) {
 		this.title = title;
 	}

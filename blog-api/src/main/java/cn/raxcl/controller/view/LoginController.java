@@ -36,6 +36,7 @@ public class LoginController {
 	 */
 	@PostMapping("/login")
 	public Result login(@RequestBody LoginInfoDTO loginInfoDTO) {
+		//todo 待修改
 		User user = userService.findUserByUsernameAndPassword(loginInfoDTO.getUsername(), loginInfoDTO.getPassword());
 		if (!CommonConstants.ROLE_ADMIN.equals(user.getRole())) {
 			return Result.exception(403, "无权限");
