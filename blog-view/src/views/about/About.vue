@@ -2,7 +2,7 @@
 	<div>
 		<div class="ui top attached segment m-padded-lr-big">
 			<h2 class="m-text-500" style="text-align: center">{{ about.title }}</h2>
-			<meting-js server="netease" type="song" :id="about.musicId" theme="#25CCF7" v-if="about.musicId!==''"></meting-js>
+			<meting-js server="tencent" type="song" :id="about.musicId" theme="#25CCF7" v-if="about.musicId!==''" ></meting-js>
 			<div class="typo content m-margin-top-large" v-viewer v-html="about.content"></div>
 		</div>
 		<!--评论-->

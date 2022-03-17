@@ -8,7 +8,7 @@
 			<el-row :gutter="20" style="width: 50%">
 				<el-col :span="12">
 					<el-form-item label="网易云歌曲ID" prop="musicId">
-						<el-input v-model="form.musicId" type="number" placeholder="请输入网易云歌曲ID（可选）"></el-input>
+						<el-input v-model="form.musicId" placeholder="请输入网易云歌曲ID（可选）"></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :span="12">
@@ -66,11 +66,6 @@
 			submit() {
 				this.$refs.formRef.validate(valid => {
 					if (valid) {
-						//纯数字
-						const reg = /^\d{1,}$/
-						if (!reg.test(this.form.musicId)) {
-							return this.msgError("歌曲ID有误")
-						}
 						updateAbout(this.form).then(res => {
 							if (res.code === 200) {
 								this.msgSuccess(res.msg)
