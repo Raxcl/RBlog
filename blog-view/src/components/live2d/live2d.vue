@@ -230,7 +230,7 @@ export default {
       this.myModelsAdjust = true;
     },
     chooseLoadRandTextures(){
-      this.isMyModels ? this.loadRandTextures() : this.myLoadRandTextures()
+      this.myModelsAdjust ? this.myLoadRandTextures() : this.loadRandTextures()
     },
     loadRandTextures (isAfterRandModel = false) {
       const url = `${this.apiPath}/rand_textures/?id=${this.modelId}-${this.modelTexturesId}`
