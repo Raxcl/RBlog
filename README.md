@@ -1,18 +1,44 @@
 # raxcl-blog
+<p align="center">
+	<img src="https://img.shields.io/badge/JDK-1.8+-orange">
+	<img src="https://img.shields.io/badge/SpringBoot-2.2.7.RELEASE-brightgreen">
+	<img src="https://img.shields.io/badge/MyBatisPlus-3.5.5-red">
+	<img src="https://img.shields.io/badge/Vue-2.6.11-brightgreen">
+	<img src="https://img.shields.io/badge/license-MIT-blue">	
+</p>
 
-## 新增的功能
-vue-live2d看板娘,仓库地址:[vue-live2d](https://github.com/Raxcl/vue-live2d)
-logo
+
 
 ## 简介
+为了拥有一个属于自己的网站，基于springboot + vue 开发了前后端分离博客系统
 
-基于springboot + vue 开发的前后端分离博客系统,模板源于[NBlog](https://github.com/Naccl/NBlog)
 
-预览地址：
 
-前台：[https://raxcl.cn](https://raxcl.cn)
+## 博客预览
+博客地址：[https://raxcl.cn](https://raxcl.cn)
 
 后台管理平台：[https://admin.raxcl.cn](https://admin.raxcl.cn) 账号`Visitor`密码`666666`
+
+本项目长期维护，欢迎fork代码和star！。
+
+
+
+## 快速开始
+
+1. 创建 MySQL 数据库`r_blog`，并执行`/blog-api/r_blog.sql`初始化表数据
+2. 修改配置信息`blog-api/src/main/resources/application-dev.yml`
+3. 安装 Redis 并启动
+4. 启动后端服务
+5. 分别在`blog-cms`和`blog-view`目录下执行`npm install`安装依赖
+6. 分别在`blog-cms`和`blog-view`目录下执行`npm run serve`启动前后台页面
+
+
+
+## 新增的功能
+[vue-live2d](https://github.com/Raxcl/vue-live2d)
+
+[logo](https://codepen.io)
+
 
 
 ## 后端
@@ -51,34 +77,6 @@ JS 依赖及参考的 css：[axios](https://github.com/axios/axios)、[moment](h
 
 
 
-### 后台 UI
-
-后台 CMS 引自Naccl大佬的模板: [my-vue-admin-template](https://github.com/Naccl/my-vue-admin-template) 
-
-UI 框架为 [Element UI](https://github.com/ElemeFE/element)
-
-
-
-### 前台 UI
-
-[Semantic UI](https://semantic-ui.com/)：主要使用，页面布局样式，个人感觉挺好看的 UI 框架，比较适合前台界面的开发，语义化的 css，前一版博客系统使用过，可惜该框架 Vue 版的开发完成度不高，见 [Semantic UI Vue](https://semantic-ui-vue.github.io/#/)
-
-[Element UI](https://github.com/ElemeFE/element)：部分使用，一些小组件，弥补了 Semantic UI 的不足，便于快速实现效果
-
-文章排版：基于 [typo.css](https://github.com/sofish/typo.css) 修改
-
-
-## 快速开始
-
-1. 创建 MySQL 数据库`r_blog`，并执行`/blog-api/r_blog.sql`初始化表数据
-2. 修改配置信息`blog-api/src/main/resources/application-dev.yml`
-3. 安装 Redis 并启动
-4. 启动后端服务
-5. 分别在`blog-cms`和`blog-view`目录下执行`npm install`安装依赖
-6. 分别在`blog-cms`和`blog-view`目录下执行`npm run serve`启动前后台页面
-
-
-
 ## 注意事项
 
 一些常见问题：
@@ -102,15 +100,9 @@ UI 框架为 [Element UI](https://github.com/ElemeFE/element)
 
 
 
-## And...
-
-自用博客，长期维护，欢迎勘误
-
-
-
-## Thanks
-
-感谢 [JetBrains](https://www.jetbrains.com/) 提供的非商业开源软件 License
+## 致谢
+感谢码神的[视频](https://www.bilibili.com/video/BV1Gb4y1d7zb?spm_id_from=0.0.header_right.fav_list.click)让我学会如何构建和部署一个博客，重构美化过程也参考了很多大佬的博客，如[NBlog](https://github.com/Naccl/NBlog)、[SKyBlog](https://github.com/yubifeng/SkyBlog)
+等等...
 
 感谢上面提到的每个开源项目
 
