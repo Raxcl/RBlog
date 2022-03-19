@@ -7,8 +7,12 @@
 	<img src="https://img.shields.io/badge/license-MIT-blue">	
 </p>
 
+
+
 ## 简介
 为了拥有一个属于自己的网站，基于springboot + vue 开发了前后端分离博客系统
+
+
 
 ## 博客预览
 博客地址：[https://raxcl.cn](https://raxcl.cn)
@@ -16,6 +20,8 @@
 后台管理平台：[https://admin.raxcl.cn](https://admin.raxcl.cn) 账号`Visitor`密码`666666`
 
 本项目长期维护，欢迎fork代码和star！。
+
+
 
 ## 快速开始
 
@@ -26,10 +32,14 @@
 5. 分别在`blog-cms`和`blog-view`目录下执行`npm install`安装依赖
 6. 分别在`blog-cms`和`blog-view`目录下执行`npm run serve`启动前后台页面
 
+
+
 ## 新增的功能
 [vue-live2d](https://github.com/Raxcl/vue-live2d)
 
 [logo](https://codepen.io)
+
+
 
 ## 后端
 
@@ -56,6 +66,7 @@
 ```
 
 
+
 ## 前端
 
 核心框架：Vue2.x、Vue Router、Vuex
@@ -63,6 +74,7 @@
 Vue 项目基于 @vue/cli4.x 构建
 
 JS 依赖及参考的 css：[axios](https://github.com/axios/axios)、[moment](https://github.com/moment/moment)、[nprogress](https://github.com/rstacruz/nprogress)、[v-viewer](https://github.com/fengyuanchen/viewerjs)、[prismjs](https://github.com/PrismJS/prism)、[APlayer](https://github.com/DIYgod/APlayer)、[MetingJS](https://github.com/metowolf/MetingJS)、[lodash](https://github.com/lodash/lodash)、[mavonEditor](https://github.com/hinesboy/mavonEditor)、[vue-live2d](https://github.com/Raxcl/vue-live2d)、[jinrishici](https://www.jinrishici.com)
+
 
 
 ## 注意事项
@@ -85,6 +97,7 @@ JS 依赖及参考的 css：[axios](https://github.com/axios/axios)、[moment](h
 - 在 Markdown 中加入`<meting-js server="netease" type="song" id="歌曲id" theme="#25CCF7"></meting-js>` （注意以正文形式添加，而不是代码片段）可以在文章中添加 [APlayer](https://github.com/DIYgod/APlayer) 音乐播放器，`netease`为网易云音乐，其它配置及具体用法参考 [MetingJS](https://github.com/metowolf/MetingJS)
 - 提供了两种隐藏文字效果：在 Markdown 中使用`@@`包住文字，文字会被渲染成“黑幕”效果，鼠标悬浮在上面时才会显示；使用`%%`包住文字，文字会被“蓝色覆盖层”遮盖，只有鼠标选中状态才会反色显示。例如：`@@隐藏文字@@`，`%%隐藏文字%%`
 - 大部分个性化配置可以在后台“站点设置”中修改，小部分由于考虑到首屏加载速度（如首页大图）需要修改前端源码
+
 
 
 ## 致谢
