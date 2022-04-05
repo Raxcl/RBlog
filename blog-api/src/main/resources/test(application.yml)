@@ -1,0 +1,109 @@
+server:
+ port: 8090
+
+blog:
+  name: RBlog
+  # 部署上线需要修改为服务器ip或域名
+  # api对应后端服务端口 https://api.raxcl.cn/blog
+  api: http://localhost:${server.port}/RBlog
+  # cms对应后台管理端口 https://admin.raxcl.cn
+  cms: http://localhost:8080
+  # website对应前台端口 https://raxcl.cn
+  view: http://localhost:8081
+
+spring:
+  mvc:
+    servlet:
+      # 路径前缀
+      path: /RBlog
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://IP地址:端口号/数据库?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+    username: 用户名
+    password: 密码
+  redis:
+    host: 用户名
+    password: 密码
+    port: 端口号
+    timeout: 60s
+  # 阿里云邮箱，port=25在Windows系统下有效，Linux系统需要改为465并将下面两行取消注释，其它邮箱服务商配置参考关键字"spring mail 服务器"
+  # spring.mail.properties.mail.smtp.socketFactory.port=465
+  # spring.mail.properties.mail.smtp.ssl.enable=true
+  mail:
+    host: smtp.qq.com
+    # spring.mail.port=465
+    username: 邮箱账号
+    password: 密码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+   root: info
+   cn:
+    raxcl: debug
+  file:
+    name: log/blog-dev
+
+# 1000 * 60 * 60 * 24 * 3 三天
+token:
+  expireTime: 259200000
+  # 部署上线务必修改此配置，否则无法保证token安全性(加密盐）
+  secretKey: 3015b8ea-9ceb-4fa9-89ae-8c723ef1330e
+
+  # 静态文件上传访问路径 Linux环境如：/home/RBlog/upload/
+upload:
+  path: C:/file/RBlog/upload/
+  accessPath: /image/**
+  resourcesLocations: file:${upload.path}
+  # 评论中QQ头像存储方式: 本地:local GitHub:github
+  # 本地方式部署后无法访问（待解决，且容易浪费服务器磁盘）
+  channel: github
+  # GitHub token 教程见 https://raxcl.github.io/PictureHosting/#/pictureHosting/help
+  github:
+    token: ghp_IUWQ4MOar35RwDm7GjzTXhAAwZqms73Z9QnZ
+    username: Raxcl
+    # 需要用作图床的GitHub仓库名
+    repos: blog-resource
+    # 需要上传至仓库的路径 开头需要"/" 结尾不要"/"
+    repos-path: /comment/avatar
+# mysql数据备份
+mysql-backup:
+  host: ip地址
+  port: 端口号
+  qi-niu-yun:
+    path: C:\file\mysql_backup\mysql_dump
+    accessKey: jJt2s_dPIScrZVN_agbTogFaJWIF25Ta-moo_sWA
+    secretKey: YI7u5S8xUWthmtfbsGa0lKuwWT0CfOh-Zy2Lsbi9
+    bucket: raxcl-blog
+# 如果选择邮箱提醒方式，以下可以无需修改
+tg:
+ bot:
+  api: https://api.telegram.org/bot
+  # bot的token，可以从 @BotFather 处获取
+  token: 1234567890:qwertyuiopasdfghjklzxcvbnm
+  # 自己账号和bot的聊天会话id
+  chat-id: 1234567890
+  # 是否使用代理
+  use-proxy: false
+  # 是否使用反向代理
+  use-reverse-proxy: true
+  # 反向代理URL，请自行搭建，示例API随时可能关闭
+  reverse-proxy-url: https://tg-api-open.naccl.workers.dev
+# 代理配置，如不使用无需修改 (目前用于发送Telegram请求)
+http:
+ proxy:
+  server:
+   host: 127.0.0.1
+   port: 7890
+   timeout: 10000
