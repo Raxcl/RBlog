@@ -140,7 +140,7 @@
 		min-height: 100vh; /* 没有元素时，也把页面撑开至100% */
 		flex-direction: column;
 		font-family: "Delius Swash Caps", cursive;
-		background-image: url("https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/RBlogApp/img/background/E5F9E0D9AC7724D0E767E0A17C77D1D8.png")!important; ;
+		background-image: url("https://cdn.raxcl.cn/blog-resource/RBlogApp/img/background/E5F9E0D9AC7724D0E767E0A17C77D1D8.png")!important; ;
 		background-repeat: repeat-x;
 		background-attachment:fixed;
 		background-size:cover;
