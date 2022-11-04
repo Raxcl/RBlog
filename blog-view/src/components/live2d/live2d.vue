@@ -48,7 +48,7 @@ export default {
     return {
       tiptop : 20,
       direction: 'right',
-      // apiPath: 'https://raxcl.cn/live2d/indexes',
+      // apiPath: 'https://raxcl.cn/live2d/indexes', 
       apiPath: 'https://cdn.raxcl.cn/blog_live2d/indexes',
       homePage: 'https://github.com/Raxcl',
       tips: tips,
