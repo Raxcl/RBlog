@@ -38,11 +38,17 @@ import tips from './options/tips'
 import myModels from './options/myModels'
 export default {
   name: 'Live2d',
+  props: {
+    model: {
+      default: () => ['Potion-Maker/Pio', 'school-2017-costume-yellow'],
+      type: Array
+    }
+  },
   data () {
     return {
       tiptop : 20,
       direction: 'right',
-      apiPath: 'https://live2d.fghrsh.net/api',
+      apiPath: 'https://raxcl.cn/live2d/indexes',
       homePage: 'https://github.com/Raxcl',
       tips: tips,
       width: 0,
@@ -53,8 +59,8 @@ export default {
       tipText: '',
       tipShow: false,
       toolShow: false,
-      modelId: 1,
-      modelTexturesId: 53,
+      modelPath: '',
+      modelTexturesId: '',
       myModelId: 0,
       myModelTexturesId: 0,
       isMyModels: false,
@@ -98,6 +104,7 @@ export default {
     }
   },
   mounted () {
+    [this.modelPath, this.modelTexturesId] = this.model
     this.loadModel()
     this.setDirection()
     this.$nextTick(function () {
@@ -169,10 +176,10 @@ export default {
       })
     },
     loadModel () {
-      const { apiPath, modelId, modelTexturesId } = this
-      const url = `${apiPath}/get/?id=${modelId}-${modelTexturesId}`
+      const { apiPath, modelPath, modelTexturesId } = this
+      const url = `${apiPath}/${modelPath}/${modelTexturesId}.json`
       window.loadlive2d("vue-live2d-main", url)
-      console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`)
+      console.log(`Live2D 模型 ${modelPath}-${modelTexturesId} 加载完成`)
     },
     myLoadModel () {
       const {  myModelId, myModelTexturesId } = this
@@ -189,21 +196,19 @@ export default {
       this.isMyModels ? this.myLoadRandModel() : this.loadRandModel()
     },
     loadRandModel () {
-      const url = `${this.apiPath}/rand/?id=${this.modelId}`
-      axios.get(url).then((res) => {
-        const { id, message } = res.data.model
-        this.modelId = id
-        //调整高度
-        //高度问题无法解决（调整高度后模型加载不出）
-        // this.updateModelHeight();
-        this.showMessage(message, 4000)
-        this.loadRandTextures(true)
-        //定义下次按钮触发为新接口
-        this.isMyModels = true;
-        //定义调整高度按钮为原模型
-        this.myModelsAdjust = false;
-      }).catch(function (err) {
-        console.log(err)
+      this.http({
+        url: `${this.apiPath}/models.json`,
+        success: (data) => {
+          const models = data.filter(({ modelPath }) => modelPath !== this.modelPath)
+          const { modelPath, modelIntroduce } = models[Math.floor(Math.random() * models.length)]
+          this.modelPath = modelPath
+          this.showMessage(`${modelIntroduce}`, 4000)
+          this.loadRandTextures(true)
+          //定义下次按钮触发为新接口
+          this.isMyModels = true;
+          //定义调整高度按钮为原模型
+          this.myModelsAdjust = false;
+        }
       })
     },
     myLoadRandModel () {
@@ -233,16 +238,16 @@ export default {
       this.myModelsAdjust ? this.myLoadRandTextures() : this.loadRandTextures()
     },
     loadRandTextures (isAfterRandModel = false) {
-      const url = `${this.apiPath}/rand_textures/?id=${this.modelId}-${this.modelTexturesId}`
-      axios.get(url).then((res) => {
-        const { id } = res.data.textures
-        this.modelTexturesId = id
-        this.loadModel()
-        if (!isAfterRandModel) {
-          this.showMessage('我的新衣服好看嘛？', 4000)
+      this.http({
+        url: `${this.apiPath}/${this.modelPath}/textures.json`,
+        success: (data) => {
+          const modelTexturesIds = data.filter(modelTexturesId => modelTexturesId !== this.modelTexturesId)
+          this.modelTexturesId = modelTexturesIds[Math.floor(Math.random() * modelTexturesIds.length)]
+          this.loadModel()
+          if (!isAfterRandModel) {
+            this.showMessage('我的新衣服好看嘛？', 4000)
+          }
         }
-      }).catch(function (err) {
-        console.log(err)
       })
     },
     myLoadRandTextures (isAfterRandModel = false) {
@@ -334,6 +339,20 @@ export default {
           })
         }
       }
+    },
+    http ({ url, success }) {
+      const xhr = new XMLHttpRequest()
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if ((xhr.status >= 200 || xhr.status < 300) || xhr.status === 304) {
+            success && success(JSON.parse(xhr.response))
+          } else {
+            console.error(xhr)
+          }
+        }
+      }
+      xhr.open('GET', url)
+      xhr.send(null)
     }
   }
 }
