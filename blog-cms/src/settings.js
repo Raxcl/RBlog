@@ -9,7 +9,7 @@ module.exports = {
 	 * @type {string}
 	 * @description logo URL
 	 */
-	logo: 'https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/RBlogApp/img/favicon.ico',
+	logo: 'https://cdn.raxcl.cn/blog-resource/RBlogApp/img/favicon.ico',
 
 	/**
 	 * @type {boolean} true | false
