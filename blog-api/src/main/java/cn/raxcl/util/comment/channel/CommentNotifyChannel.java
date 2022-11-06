@@ -1,5 +1,6 @@
 package cn.raxcl.util.comment.channel;
 
+import cn.raxcl.enums.CommentPageEnum;
 import cn.raxcl.model.dto.CommentDTO;
 
 /**
@@ -14,5 +15,5 @@ public interface CommentNotifyChannel {
 	 *
 	 * @param commentDTO 当前收到的评论
 	 */
-	void notifyMyself(CommentDTO commentDTO);
+	void notifyMyself(CommentDTO commentDTO, CommentPageEnum commentPageEnum);
 }

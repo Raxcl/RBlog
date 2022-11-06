@@ -17,11 +17,15 @@ public class ChannelFactory {
 	 * @return FileUploadChannel
 	 */
 	public static FileUploadChannel getChannel(String channelName) {
-		if (UploadConstants.LOCAL.equalsIgnoreCase(channelName)) {
-			return SpringContextUtils.getBean("localChannel", FileUploadChannel.class);
-		} else if (UploadConstants.GITHUB.equalsIgnoreCase(channelName)) {
-			return SpringContextUtils.getBean("githubChannel", FileUploadChannel.class);
+		switch(channelName.toLowerCase()) {
+			case UploadConstants.LOCAL:
+				return SpringContextUtils.getBean(LocalChannel.class);
+			case UploadConstants.GITHUB:
+				return SpringContextUtils.getBean(GithubChannel.class);
+			case UploadConstants.TXYUN:
+				return SpringContextUtils.getBean(TxYunChannel.class);
+			default:
+				throw new RuntimeException("Unsupported value in [application.properties]: [upload.channel]");
 		}
-		throw new RuntimeException("Unsupported value in [application.properties]: [upload.channel]");
 	}
 }

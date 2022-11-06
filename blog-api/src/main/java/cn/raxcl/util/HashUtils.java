@@ -33,4 +33,11 @@ public class HashUtils {
 		return B_CRYPT_PASSWORD_ENCODER.encode(rawPassword);
 	}
 
+	public static void main(String[] args) {
+		String s = "$2a$10$FtXrq62IN1ijFpEOc6pl.uWYTj21AsfrNA57fWcigEyMQ9F4wrCLu";
+		String s1 = "$2a$10$ATLmCmxHfTGVCv/nBylJNe1WjBq0K.bAqTnUxOFu2.C4ZDKNFvSRW";
+		System.out.println(matchBc("062627", s1));
+		System.out.println(getBc("123456"));
+	}
+
 }

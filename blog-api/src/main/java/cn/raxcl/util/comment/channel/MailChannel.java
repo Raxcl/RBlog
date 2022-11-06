@@ -7,7 +7,6 @@ import cn.raxcl.config.properties.BlogProperties;
 import cn.raxcl.enums.CommentPageEnum;
 import cn.raxcl.model.dto.CommentDTO;
 import cn.raxcl.util.MailUtils;
-import cn.raxcl.util.comment.CommentUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +36,7 @@ public class MailChannel implements CommentNotifyChannel {
 	 * @param commentDTO 当前收到的评论
 	 */
 	@Override
-	public void notifyMyself(CommentDTO commentDTO) {
-		CommentPageEnum commentPageEnum = CommentUtils.getCommentPageEnum(commentDTO);
+	public void notifyMyself(CommentDTO commentDTO, CommentPageEnum commentPageEnum) {
 		Map<String, Object> map = new HashMap<>(9);
 		map.put("title", commentPageEnum.getTitle());
 		map.put("time", commentDTO.getCreateTime());

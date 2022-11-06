@@ -29,11 +29,13 @@ public class TelegramChannel implements CommentNotifyChannel {
     private final BlogProperties blogProperties;
     private final TelegramProperties telegramProperties;
     private final SimpleDateFormat simpleDateFormat;
+    private final CommentUtils commentUtils;
 
-    public TelegramChannel(TelegramUtils telegramUtils, BlogProperties blogProperties, TelegramProperties telegramProperties) {
+    public TelegramChannel(TelegramUtils telegramUtils, BlogProperties blogProperties, TelegramProperties telegramProperties, CommentUtils commentUtils) {
         this.telegramUtils = telegramUtils;
         this.blogProperties = blogProperties;
         this.telegramProperties = telegramProperties;
+        this.commentUtils = commentUtils;
 
         this.simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         this.simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -48,7 +50,7 @@ public class TelegramChannel implements CommentNotifyChannel {
      * @param commentDTO 当前收到的评论
      */
     @Override
-    public void notifyMyself(CommentDTO commentDTO) {
+    public void notifyMyself(CommentDTO commentDTO,CommentPageEnum commentPageEnum) {
         String url = telegramProperties.getApi() + telegramProperties.getToken() + TelegramUtils.SEND_MESSAGE;
         String content = getContent(commentDTO);
         Map<String, Object> messageBody = telegramUtils.getMessageBody(content);
@@ -56,7 +58,7 @@ public class TelegramChannel implements CommentNotifyChannel {
     }
 
     private String getContent(CommentDTO commentDTO) {
-        CommentPageEnum commentPageEnum = CommentUtils.getCommentPageEnum(commentDTO);
+        CommentPageEnum commentPageEnum = commentUtils.getCommentPageEnum(commentDTO);
         return String.format(
                 "<b>您的文章<a href=\"%s\">《%s》</a>有了新的评论~</b>\n" +
                         "\n" +

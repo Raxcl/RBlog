@@ -210,7 +210,7 @@ public class TelegramBotMsgHandler {
 			//提醒回复对象
 			commentUtils.judgeSendNotify(commentDTO, false, parentComment);
 
-			CommentPageEnum commentPageEnum = CommentUtils.getCommentPageEnum(commentDTO);
+			CommentPageEnum commentPageEnum = commentUtils.getCommentPageEnum(commentDTO);
 			return String.format(
 					"<b>回复成功！</b>\n" +
 							"\n" +

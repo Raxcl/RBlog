@@ -40,23 +40,21 @@ public class CommentUtils {
     private final UserService userService;
     private final RedisService redisService;
 
-    private static BlogService blogService;
+    private final BlogService blogService;
 
     private final CommentNotifyChannel notifyChannel = ChannelFactory.getChannel("mail");
 
     public CommentUtils(BlogProperties blogProperties, MailUtils mailUtils, AboutService aboutService,
-                        FriendService friendService, UserService userService, RedisService redisService) {
+                        FriendService friendService, UserService userService, RedisService redisService, BlogService blogService) {
         this.blogProperties = blogProperties;
         this.mailUtils = mailUtils;
         this.aboutService = aboutService;
         this.friendService = friendService;
         this.userService = userService;
         this.redisService = redisService;
+        this.blogService = blogService;
     }
-    //todo
-    public void setBlogService(BlogService blogService) {
-        CommentUtils.blogService = blogService;
-    }
+
 
     /**
      * 判断是否发送提醒
@@ -113,7 +111,7 @@ public class CommentUtils {
      * @param commentDTO 当前收到的评论
      */
     private void notifyMyself(CommentDTO commentDTO) {
-        notifyChannel.notifyMyself(commentDTO);
+        notifyChannel.notifyMyself(commentDTO, getCommentPageEnum(commentDTO));
     }
 
     /**
@@ -122,7 +120,7 @@ public class CommentUtils {
      * @param commentDTO 当前收到的评论
      * @return CommentPageEnum
      */
-    public static CommentPageEnum getCommentPageEnum(CommentDTO commentDTO) {
+    public CommentPageEnum getCommentPageEnum(CommentDTO commentDTO) {
         CommentPageEnum commentPageEnum = CommentPageEnum.UNKNOWN;
         switch (commentDTO.getPage()) {
             case 0:
