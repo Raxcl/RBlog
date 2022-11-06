@@ -1,5 +1,6 @@
 package cn.raxcl.util;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.MurmurHash3;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -16,7 +17,7 @@ public class HashUtils {
 
 
 	public static long getMurmurHash32(String str) {
-		int i = MurmurHash3.hash32(str);
+		int i = MurmurHash3.hash32x86(StringUtils.getBytesUtf8(str));
 		return i < 0 ? Integer.MAX_VALUE - (long) i : i;
 	}
 
@@ -35,8 +36,7 @@ public class HashUtils {
 
 	public static void main(String[] args) {
 		String s = "$2a$10$FtXrq62IN1ijFpEOc6pl.uWYTj21AsfrNA57fWcigEyMQ9F4wrCLu";
-		String s1 = "$2a$10$ATLmCmxHfTGVCv/nBylJNe1WjBq0K.bAqTnUxOFu2.C4ZDKNFvSRW";
-		System.out.println(matchBc("062627", s1));
+		System.out.println(matchBc("123456", s));
 		System.out.println(getBc("123456"));
 	}
 
