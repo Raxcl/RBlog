@@ -31,22 +31,34 @@
 			<div slot="header">
 				<span>又拍云存储配置</span>
 			</div>
-			<el-form :model="upyunConfig" label-width="100px">
-				<el-form-item label="操作员名称">
-					<el-input v-model="upyunConfig.username"></el-input>
+			<el-form :model="txyunConfig" label-width="100px">
+				<el-form-item label="secret-id">
+					<el-input v-model="txyunConfig.secretId"></el-input>
 				</el-form-item>
-				<el-form-item label="操作员密码">
-					<el-input v-model="upyunConfig.password"></el-input>
+				<el-form-item label="secret-key">
+					<el-input v-model="txyunConfig.secretKey"></el-input>
 				</el-form-item>
 				<el-form-item label="存储空间名">
-					<el-input v-model="upyunConfig.bucketName"></el-input>
+					<el-input v-model="txyunConfig.bucketName"></el-input>
 				</el-form-item>
 				<el-form-item label="CDN访问域名">
-					<el-input v-model="upyunConfig.domain"></el-input>
+					<el-input v-model="txyunConfig.domain"></el-input>
 				</el-form-item>
-				<el-button type="primary" size="medium" icon="el-icon-check" :disabled="!isUpyunSave" @click="saveUpyun(true)">保存配置</el-button>
-				<el-button type="info" size="medium" icon="el-icon-close" @click="saveUpyun(false)">清除配置</el-button>
+				<el-button type="primary" size="medium" icon="el-icon-check" :disabled="!isTxyunSave" @click="saveTxyun(true)">保存配置</el-button>
+				<el-button type="info" size="medium" icon="el-icon-close" @click="saveTxyun(false)">清除配置</el-button>
 			</el-form>
+		</el-card>
+
+		<el-card>
+			<el-upload class="upload-demo"
+						:file-list="newImages"
+						:on-preview="handlePreview"
+						:on-remove="handleRemove"
+						:on-success="handleAvatarSuccess"
+						:before-remove="beforeRemove"
+						:before-upload="beforeAvatarUpload">
+				<el-button size="small" type="primary">点击上传</el-button>
+			</el-upload>
 		</el-card>
 
 	</div>
@@ -65,17 +77,17 @@
 				},
 				isGithubSave: false,
 				hintShow: false,
-				upyunConfig: {
-					username: '',
-					password: '',
+				txyunConfig: {
+					secretId: '',
+					secretKey: '',
 					bucketName: '',
 					domain: ''
 				},
 			}
 		},
 		computed: {
-			isUpyunSave() {
-				return this.upyunConfig.username && this.upyunConfig.password && this.upyunConfig.bucketName && this.upyunConfig.domain
+			isTxyunSave() {
+				return this.txyunConfig.secretId && this.txyunConfig.secretKey && this.txyunConfig.bucketName && this.txyunConfig.domain
 			}
 		},
 		created() {
@@ -88,9 +100,9 @@
 				this.githubUserInfo = {login: '未配置'}
 			}
 
-			const upyunConfig = localStorage.getItem('upyunConfig')
-			if (upyunConfig) {
-				this.upyunConfig = JSON.parse(upyunConfig)
+			const txyunConfig = localStorage.getItem('txyunConfig')
+			if (txyunConfig) {
+				this.txyunConfig = JSON.parse(txyunConfig)
 			}
 
 			const userJson = window.localStorage.getItem('user') || '{}'
@@ -121,13 +133,13 @@
 				}
 			}
 			,
-			saveUpyun(save) {
+			saveTxyun(save) {
 				if (save) {
-					localStorage.setItem('upyunToken', btoa(`${this.upyunConfig.username}:${this.upyunConfig.password}`))
-					localStorage.setItem('upyunConfig', JSON.stringify(this.upyunConfig))
+					localStorage.setItem('upyunToken', btoa(`${this.txyunConfig.secretId}:${this.txyunConfig.secretKey}`))
+					localStorage.setItem('txyunConfig', JSON.stringify(this.txyunConfig))
 					this.msgSuccess('保存成功')
 				} else {
-					localStorage.removeItem('upyunConfig')
+					localStorage.removeItem('txyunConfig')
 					this.msgSuccess('清除成功')
 				}
 			}

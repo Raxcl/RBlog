@@ -12,6 +12,8 @@
   "dependencies": {
     "axios": "0.24.0",
     "core-js": "3.6.5",
+    "cos-js-sdk-v5": "^1.4.10",
+    "cos-nodejs-sdk-v5": "^2.11.15",
     "echarts": "4.9.0",
     "element-ui": "2.13.2",
     "font-awesome": "^4.7.0",
