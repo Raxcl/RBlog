@@ -3,6 +3,30 @@
 		<el-alert title="图床配置及用法请查看：https://github.com/Raxcl/PictureHosting" type="warning" show-icon v-if="hintShow"></el-alert>
 		<el-card>
 			<div slot="header">
+				<span>又拍云存储配置</span>
+			</div>
+			<el-form :model="txyunConfig" label-width="100px">
+				<el-form-item label="secret-id">
+					<el-input v-model="txyunConfig.secretId"></el-input>
+				</el-form-item>
+				<el-form-item label="secret-key">
+					<el-input v-model="txyunConfig.secretKey"></el-input>
+				</el-form-item>
+				<el-form-item label="存储空间名">
+					<el-input v-model="txyunConfig.bucketName"></el-input>
+				</el-form-item>
+				<el-form-item label="地域">
+					<el-input v-model="txyunConfig.region"></el-input>
+				</el-form-item>
+				<el-form-item label="CDN访问域名">
+					<el-input v-model="txyunConfig.domain"></el-input>
+				</el-form-item>
+				<el-button type="primary" size="medium" icon="el-icon-check" :disabled="!isTxyunSave" @click="saveTxyun(true)">保存配置</el-button>
+				<el-button type="info" size="medium" icon="el-icon-close" @click="saveTxyun(false)">清除配置</el-button>
+			</el-form>
+		</el-card>
+		<el-card>
+			<div slot="header">
 				<span>GitHub配置</span>
 			</div>
 			<el-row>
@@ -26,41 +50,6 @@
 				</el-col>
 			</el-row>
 		</el-card>
-
-		<el-card>
-			<div slot="header">
-				<span>又拍云存储配置</span>
-			</div>
-			<el-form :model="txyunConfig" label-width="100px">
-				<el-form-item label="secret-id">
-					<el-input v-model="txyunConfig.secretId"></el-input>
-				</el-form-item>
-				<el-form-item label="secret-key">
-					<el-input v-model="txyunConfig.secretKey"></el-input>
-				</el-form-item>
-				<el-form-item label="存储空间名">
-					<el-input v-model="txyunConfig.bucketName"></el-input>
-				</el-form-item>
-				<el-form-item label="CDN访问域名">
-					<el-input v-model="txyunConfig.domain"></el-input>
-				</el-form-item>
-				<el-button type="primary" size="medium" icon="el-icon-check" :disabled="!isTxyunSave" @click="saveTxyun(true)">保存配置</el-button>
-				<el-button type="info" size="medium" icon="el-icon-close" @click="saveTxyun(false)">清除配置</el-button>
-			</el-form>
-		</el-card>
-
-		<el-card>
-			<el-upload class="upload-demo"
-						:file-list="newImages"
-						:on-preview="handlePreview"
-						:on-remove="handleRemove"
-						:on-success="handleAvatarSuccess"
-						:before-remove="beforeRemove"
-						:before-upload="beforeAvatarUpload">
-				<el-button size="small" type="primary">点击上传</el-button>
-			</el-upload>
-		</el-card>
-
 	</div>
 </template>
 
@@ -81,13 +70,14 @@
 					secretId: '',
 					secretKey: '',
 					bucketName: '',
+					region: '',
 					domain: ''
 				},
 			}
 		},
 		computed: {
 			isTxyunSave() {
-				return this.txyunConfig.secretId && this.txyunConfig.secretKey && this.txyunConfig.bucketName && this.txyunConfig.domain
+				return this.txyunConfig.secretId && this.txyunConfig.secretKey && this.txyunConfig.bucketName && this.txyunConfig.region && this.txyunConfig.domain
 			}
 		},
 		created() {

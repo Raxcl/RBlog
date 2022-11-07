@@ -2,6 +2,7 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {Message} from 'element-ui'
+import COS from 'cos-js-sdk-v5';
 
 const request = axios.create({
 	baseURL: 'https://v0.api.upyun.com',
@@ -39,11 +40,7 @@ request.interceptors.response.use(response => {
 
 // 获取存储空间下指定目录的文件列表
 export function getBucketContents(bucket, path) {
-	path = path.startsWith('/') ? path : `/${path}`
-	return request({
-		url: `/${bucket}${path}`,
-		method: 'GET',
-	})
+	
 }
 
 // 删除文件

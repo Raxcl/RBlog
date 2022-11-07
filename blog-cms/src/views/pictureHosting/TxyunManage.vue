@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-row>
-			<el-select v-model="upyunConfig.bucketName" disabled style="min-width: 200px"></el-select>
+			<el-select v-model="txyunConfig.bucketName" disabled style="min-width: 200px"></el-select>
 			<el-cascader v-model="activePath" placeholder="请选择目录" :options="pathArr" :props="pathProps" style="min-width: 450px"></el-cascader>
 			<el-button type="primary" size="medium" icon="el-icon-search" @click="search">查询</el-button>
 			<el-button class="right-item" type="primary" size="medium" icon="el-icon-upload" @click="isDrawerShow=!isDrawerShow">上传</el-button>
@@ -55,16 +55,18 @@ import {getBucketContents, delFile, upload} from "@/api/upyun";
 import {isImgExt} from "@/util/validate";
 import {randomUUID} from "@/util/uuid";
 import {copy} from "@/util/copy";
+import COS from 'cos-js-sdk-v5';
 
 export default {
 	name: "UpyunManage",
 	components: {SvgIcon},
 	data() {
 		return {
-			upyunConfig: {
-				username: '',
-				password: '',
+			txyunConfig: {
+				secretId: '',
+				secretKey: '',
 				bucketName: '',
+				region: '',
 				domain: ''
 			},
 			pathArr: [{value: '', label: '根目录'}],
@@ -98,44 +100,58 @@ export default {
 		}
 	},
 	created() {
-		this.hintShow1 = localStorage.getItem('upyunHintShow1') ? false : true
-		this.hintShow2 = localStorage.getItem('upyunHintShow2') ? false : true
-
-		const upyunConfig = localStorage.getItem('upyunConfig')
-		if (upyunConfig) {
-			this.upyunConfig = JSON.parse(upyunConfig)
+		this.hintShow1 = localStorage.getItem('txyunHintShow1') ? false : true
+		this.hintShow2 = localStorage.getItem('txyunHintShow2') ? false : true
+		const txyunConfig = localStorage.getItem('txyunConfig')
+		if (txyunConfig) {
+			this.txyunConfig = JSON.parse(txyunConfig)
 		} else {
 			this.msgError('请先配置又拍云')
 			this.$router.push('/pictureHosting/setting')
 		}
+		
 	},
 	methods: {
 		//换成懒加载
-		async getReposContents(arr, path) {
-			await getBucketContents(this.upyunConfig.bucketName, path).then(res => {
-				res.files.forEach(item => {
-					if (item.type === 'folder') {
-						//让所有节点都是非叶子节点
-						arr.push({value: item.name, label: item.name, leaf: false})
-					}
-				})
-			})
-		},
+		// async getReposContents(arr, path) {
+		// 	await getBucketContents(this.txyunConfig.bucketName, path).then(res => {
+		// 		res.files.forEach(item => {
+		// 			if (item.type === 'folder') {
+		// 				//让所有节点都是非叶子节点
+		// 				arr.push({value: item.name, label: item.name, leaf: false})
+		// 			}
+		// 		})
+		// 	})
+		// },
+		// 获取存储空间下指定目录的文件列表
 		search() {
+			const {fileList, txyunConfig} = this
+			const cos = new COS({
+				SecretId: txyunConfig.secretId,
+				SecretKey: txyunConfig.secretKey,
+			});
 			this.fileList = []
 			let path = this.activePath.join('/')
-			getBucketContents(this.upyunConfig.bucketName, path).then(res => {
-				res.files.forEach(item => {
-					if (item.type !== 'folder' && isImgExt(item.name)) {
-						item.path = this.imgPath(item)
-						item.cdn_url = this.imgCdnUrl(item)
-						this.fileList.push(item)
-					}
+			path = path.startsWith('/') ? path : `/${path}`
+			path = 'blog-resource/RBlogApp/img/background/'
+			cos.getBucket({
+				Bucket: txyunConfig.bucketName, /* 必须 */
+				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
+				Prefix: path,           /* 非必须 */
+			}, function(err, data) {
+				console.log(err || data.Contents);
+				data.Contents.filter((item) => !item.Key.endsWith('/') && isImgExt(item.Key)).forEach(item => {
+					// item.path = this.imgPath(item)
+					item.cdn_url = `${txyunConfig.domain}${item.Key}`
+					item.name = item.Key.replace(path, '')
+					fileList.push(item)
 				})
-			})
+			});
+			this.fileList = fileList
+			
 		},
 		noDisplay(id) {
-			localStorage.setItem(`upyunHintShow${id}`, '1')
+			localStorage.setItem(`txyunHintShow${id}`, '1')
 		},
 		imgPath(file) {
 			let path = this.activePath.join('/')
@@ -144,7 +160,7 @@ export default {
 			return `${path}${file.name}`
 		},
 		imgCdnUrl(file) {
-			return `${this.upyunConfig.domain}${this.imgPath(file)}`
+			return `${this.txyunConfig.domain}${this.imgPath(file)}`
 		},
 		copy(type, file) {
 			// type 1 cdn link  2 Markdown
@@ -163,7 +179,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning',
 			}).then(() => {
-				delFile(this.upyunConfig.bucketName, file.path).then(() => {
+				delFile(this.txyunConfig.bucketName, file.path).then(() => {
 					this.msgSuccess('删除成功')
 					this.search()
 				})
@@ -190,7 +206,7 @@ export default {
 				fileName = randomUUID() + fileName.substr(fileName.lastIndexOf("."))
 			}
 
-			upload(this.upyunConfig.bucketName, this.realPath, fileName, data.file).then(() => {
+			upload(this.txyunConfig.bucketName, this.realPath, fileName, data.file).then(() => {
 				this.msgSuccess('上传成功')
 				data.onSuccess()
 			})
