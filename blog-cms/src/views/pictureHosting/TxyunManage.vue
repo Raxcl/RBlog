@@ -51,7 +51,7 @@
 
 <script>
 import SvgIcon from "@/components/SvgIcon";
-import {getBucketContents, delFile, upload} from "@/api/upyun";
+import {delFile} from "@/api/upyun";
 import {isImgExt} from "@/util/validate";
 import {randomUUID} from "@/util/uuid";
 import {copy} from "@/util/copy";

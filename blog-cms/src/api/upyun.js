@@ -38,10 +38,6 @@ request.interceptors.response.use(response => {
 	}
 )
 
-// 获取存储空间下指定目录的文件列表
-export function getBucketContents(bucket, path) {
-	
-}
 
 // 删除文件
 export function delFile(bucket, path) {
