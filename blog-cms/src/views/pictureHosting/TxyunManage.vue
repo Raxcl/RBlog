@@ -76,6 +76,10 @@ export default {
 				checkStrictly: true,
 				lazyLoad: async (node, resolve) => {
 					let path = node.path.join('/')
+					path = path.startsWith('/') ? path.slice(1) : path
+					if (path != '') {
+						path = path.endsWith('/') ? path : `${path}/`
+					}
 					let nodes = []
 					await this.getReposContents(nodes, path)
 					resolve(nodes)
@@ -105,6 +109,7 @@ export default {
 		const txyunConfig = localStorage.getItem('txyunConfig')
 		if (txyunConfig) {
 			this.txyunConfig = JSON.parse(txyunConfig)
+			this.txyunConfig.domain = this.txyunConfig.domain.endsWith('/') ? this.txyunConfig.domain : `${this.txyunConfig.domain}/`
 		} else {
 			this.msgError('请先配置又拍云')
 			this.$router.push('/pictureHosting/setting')
@@ -113,42 +118,58 @@ export default {
 	},
 	methods: {
 		//换成懒加载
-		// async getReposContents(arr, path) {
-		// 	await getBucketContents(this.txyunConfig.bucketName, path).then(res => {
-		// 		res.files.forEach(item => {
-		// 			if (item.type === 'folder') {
-		// 				//让所有节点都是非叶子节点
-		// 				arr.push({value: item.name, label: item.name, leaf: false})
-		// 			}
-		// 		})
-		// 	})
-		// },
-		// 获取存储空间下指定目录的文件列表
-		search() {
-			const {fileList, txyunConfig} = this
+		async getReposContents(arr, path) {
+			const {txyunConfig} = this
 			const cos = new COS({
 				SecretId: txyunConfig.secretId,
 				SecretKey: txyunConfig.secretKey,
 			});
-			this.fileList = []
+			await cos.getBucket({
+				Bucket: txyunConfig.bucketName, /* 必须 */
+				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
+				Prefix: path,           /* 非必须 */
+				Delimiter: '/'
+			}).then(data => {
+				console.log('查询成功',data);
+				data.CommonPrefixes.forEach((item) => {
+					item.name = item.Prefix.replace(path, '').slice(0,-1)
+					//让所有节点都是非叶子节点
+					arr.push({value: item.name, label: item.name, leaf: false})
+				});
+			}).catch(err => {
+				console.log('查询失败',err);
+			})
+		},
+		// 获取存储空间下指定目录的文件列表
+		search() {
+			const {txyunConfig} = this
+			const fileList = []
+			const cos = new COS({
+				SecretId: txyunConfig.secretId,
+				SecretKey: txyunConfig.secretKey,
+			});
 			let path = this.activePath.join('/')
-			path = path.startsWith('/') ? path : `/${path}`
-			path = 'blog-resource/RBlogApp/img/background/'
+			path = path.startsWith('/') ? path.slice(1) : path
+			if (path != '') {
+				path = path.endsWith('/') ? path : `${path}/`
+			}
 			cos.getBucket({
 				Bucket: txyunConfig.bucketName, /* 必须 */
 				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
 				Prefix: path,           /* 非必须 */
-			}, function(err, data) {
-				console.log(err || data.Contents);
+				Delimiter: '/'
+			}).then(data => {
+				console.log('查询成功',data);
 				data.Contents.filter((item) => !item.Key.endsWith('/') && isImgExt(item.Key)).forEach(item => {
 					// item.path = this.imgPath(item)
 					item.cdn_url = `${txyunConfig.domain}${item.Key}`
 					item.name = item.Key.replace(path, '')
 					fileList.push(item)
 				})
-			});
+			}).catch(err => {
+				console.log('查询失败',err);
+			})
 			this.fileList = fileList
-			
 		},
 		noDisplay(id) {
 			localStorage.setItem(`txyunHintShow${id}`, '1')
