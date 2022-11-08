@@ -108,8 +108,9 @@ public class IpAddressUtils {
 			return region;
 		} catch (Exception e) {
 			System.out.printf("{err: %s, ioCount: %d}\n", e, searcher.getIOCount());
-			throw new NotFoundException("查询ip地址异常", e);
+			log.error("getCityInfo exception:", e);
 		}
+		return "";
 	}
 
 //	public static void main(String[] args) throws Exception {
