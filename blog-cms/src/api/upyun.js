@@ -2,7 +2,7 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {Message} from 'element-ui'
-import COS from 'cos-js-sdk-v5';
+
 
 const request = axios.create({
 	baseURL: 'https://v0.api.upyun.com',

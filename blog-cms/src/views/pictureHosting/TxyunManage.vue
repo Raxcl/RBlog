@@ -55,7 +55,7 @@ import {getBucketContents, delFile, upload} from "@/api/upyun";
 import {isImgExt} from "@/util/validate";
 import {randomUUID} from "@/util/uuid";
 import {copy} from "@/util/copy";
-import COS from 'cos-js-sdk-v5';
+import cos from "@/api/cos";
 
 export default {
 	name: "UpyunManage",
@@ -120,10 +120,6 @@ export default {
 		//换成懒加载
 		async getReposContents(arr, path) {
 			const {txyunConfig} = this
-			const cos = new COS({
-				SecretId: txyunConfig.secretId,
-				SecretKey: txyunConfig.secretKey,
-			});
 			await cos.getBucket({
 				Bucket: txyunConfig.bucketName, /* 必须 */
 				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
@@ -144,10 +140,6 @@ export default {
 		search() {
 			const {txyunConfig} = this
 			const fileList = []
-			const cos = new COS({
-				SecretId: txyunConfig.secretId,
-				SecretKey: txyunConfig.secretKey,
-			});
 			let path = this.activePath.join('/')
 			path = path.startsWith('/') ? path.slice(1) : path
 			if (path != '') {
