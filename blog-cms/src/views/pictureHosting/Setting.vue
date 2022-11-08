@@ -125,7 +125,6 @@
 			,
 			saveTxyun(save) {
 				if (save) {
-					localStorage.setItem('upyunToken', btoa(`${this.txyunConfig.secretId}:${this.txyunConfig.secretKey}`))
 					localStorage.setItem('txyunConfig', JSON.stringify(this.txyunConfig))
 					this.msgSuccess('保存成功')
 				} else {

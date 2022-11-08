@@ -51,14 +51,13 @@
 
 <script>
 import SvgIcon from "@/components/SvgIcon";
-import {delFile} from "@/api/upyun";
 import {isImgExt} from "@/util/validate";
 import {randomUUID} from "@/util/uuid";
 import {copy} from "@/util/copy";
 import cos from "@/api/cos";
 
 export default {
-	name: "UpyunManage",
+	name: "TxyunManage",
 	components: {SvgIcon},
 	data() {
 		return {
@@ -98,12 +97,10 @@ export default {
 	computed: {
 		realPath() {
 			if (this.isCustomPath) {
-				console.log("自定义目录:", this.customPath)
 				return `${this.customPath}`
 			}
-			const pathTem = this.activePath.join('/')
-			const path = pathTem.startsWith('/') ? pathTem.slice(1) : pathTem
-			console.log("自定义目录1:", path)
+			let path = this.activePath.join('/')
+			path = path.startsWith('/') ? path.slice(1) : path
 			if (path != '') {
 				return `${path}/`
 			} else {
@@ -161,8 +158,8 @@ export default {
 			}).then(data => {
 				console.log('查询成功',data);
 				data.Contents.filter((item) => !item.Key.endsWith('/') && isImgExt(item.Key)).forEach(item => {
-					// item.path = this.imgPath(item)
-					item.cdn_url = `${txyunConfig.domain}${item.Key}`
+					item.path = item.Key
+					item.cdn_url = `${txyunConfig.domain}${item.path}`
 					item.name = item.Key.replace(path, '')
 					fileList.push(item)
 				})
@@ -173,15 +170,6 @@ export default {
 		},
 		noDisplay(id) {
 			localStorage.setItem(`txyunHintShow${id}`, '1')
-		},
-		imgPath(file) {
-			let path = this.activePath.join('/')
-			path = path.startsWith('/') ? path : `/${path}`
-			path = path.endsWith('/') ? path : `${path}/`
-			return `${path}${file.name}`
-		},
-		imgCdnUrl(file) {
-			return `${this.txyunConfig.domain}${this.imgPath(file)}`
 		},
 		copy(type, file) {
 			// type 1 cdn link  2 Markdown
@@ -194,15 +182,26 @@ export default {
 			copy(copyCont)
 			this.msgSuccess('复制成功')
 		},
+		// 删除文件
 		delFile(file) {
+			const {txyunConfig} = this
+			console.log("删除路径：", file.path)
 			this.$confirm("此操作将永久删除该文件, 是否删除?", "提示", {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning',
 			}).then(() => {
-				delFile(this.txyunConfig.bucketName, file.path).then(() => {
+				cos.deleteObject({
+					Bucket: txyunConfig.bucketName, /* 填写自己的bucket，必须字段 */
+					Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
+					Key: file.path,              /* 存储在桶里的对象键（例如1.jpg，a/b/test.txt），必须字段 */
+				}).then(data => {
+					console.log('删除成功',data);
 					this.msgSuccess('删除成功')
 					this.search()
+				}).catch(err => {
+					console.log('删除失败',err);
+					this.msgError('删除失败')
 				})
 			}).catch(() => {
 				this.$message({
@@ -228,7 +227,6 @@ export default {
 			}
 			const {txyunConfig} = this
 			let path = this.realPath;
-			// path = path.startsWith('/') ? path : `/${path}`
 			path = path.startsWith('/') ? path.slice(1) : path
 			path = path.endsWith('/') ? path : `${path}/`
 			console.log("上传路径：", path)

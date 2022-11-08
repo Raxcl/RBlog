@@ -143,8 +143,8 @@ const routes = [
 				meta: {title: 'GitHub', icon: 'el-icon-folder-opened'}
 			},
 			{
-				path: 'upyun',
-				name: 'UpyunManage',
+				path: 'txyun',
+				name: 'TxyunManage',
 				component: () => import('@/views/pictureHosting/TxyunManage'),
 				meta: {title: '腾讯云', icon: 'el-icon-folder-opened'}
 			},
