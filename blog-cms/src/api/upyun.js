@@ -51,13 +51,3 @@ export function delFile(bucket, path) {
 	})
 }
 
-// 上传文件至仓库指定目录下
-export function upload(bucket, path, fileName, data) {
-	path = path.startsWith('/') ? path : `/${path}`
-	path = path.endsWith('/') ? path : `${path}/`
-	return request({
-		url: `/${bucket}${path}${fileName}`,
-		method: 'PUT',
-		data
-	})
-}

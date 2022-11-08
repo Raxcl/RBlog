@@ -98,9 +98,17 @@ export default {
 	computed: {
 		realPath() {
 			if (this.isCustomPath) {
-				return `/${this.customPath}`
+				console.log("自定义目录:", this.customPath)
+				return `${this.customPath}`
 			}
-			return `${this.activePath.join('/')}/`
+			const pathTem = this.activePath.join('/')
+			const path = pathTem.startsWith('/') ? pathTem.slice(1) : pathTem
+			console.log("自定义目录1:", path)
+			if (path != '') {
+				return `${path}/`
+			} else {
+				return `${path}`
+			}
 		}
 	},
 	created() {
@@ -218,10 +226,27 @@ export default {
 			if (this.nameType === '2') {
 				fileName = randomUUID() + fileName.substr(fileName.lastIndexOf("."))
 			}
-
-			upload(this.txyunConfig.bucketName, this.realPath, fileName, data.file).then(() => {
+			const {txyunConfig} = this
+			let path = this.realPath;
+			// path = path.startsWith('/') ? path : `/${path}`
+			path = path.startsWith('/') ? path.slice(1) : path
+			path = path.endsWith('/') ? path : `${path}/`
+			console.log("上传路径：", path)
+			cos.uploadFile({
+				Bucket: txyunConfig.bucketName, /* 必须 */
+				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
+				Key: `${path}${fileName}`,              /* 存储在桶里的对象键（例如:1.jpg，a/b/test.txt，图片.jpg）支持中文，必须字段 */
+				Body: data.file, // 上传文件对象
+				SliceSize: 1024 * 1024 * 5,     /* 触发分块上传的阈值，超过5MB使用分块上传，小于5MB使用简单上传。可自行设置，非必须 */
+				onProgress: function(progressData) {
+					console.log(JSON.stringify(progressData));
+				}
+			}).then(() => {
+				console.log('上传成功');
 				this.msgSuccess('上传成功')
 				data.onSuccess()
+			}).catch(err => {
+				console.log('上传失败', err);
 			})
 		},
 	},
