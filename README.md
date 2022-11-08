@@ -22,7 +22,7 @@
 博客地址：[https://raxcl.cn](https://raxcl.cn)
 
 后台管理平台：[https://admin.raxcl.cn](https://admin.raxcl.cn) 账号`Visitor`密码`666666`
-
+博客上线部署过程可以参考：[https://blog.csdn.net/RAXCL/article/details/121276028](https://blog.csdn.net/RAXCL/article/details/121276028)
 本项目长期维护，欢迎fork代码和star！。
 
 
