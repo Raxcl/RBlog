@@ -3,7 +3,7 @@
 		<el-alert title="图床配置及用法请查看：https://github.com/Raxcl/PictureHosting" type="warning" show-icon v-if="hintShow"></el-alert>
 		<el-card>
 			<div slot="header">
-				<span>又拍云存储配置</span>
+				<span>腾讯云存储配置</span>
 			</div>
 			<el-form :model="txyunConfig" label-width="100px">
 				<el-form-item label="secret-id">
