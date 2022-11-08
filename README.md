@@ -12,12 +12,18 @@
 ## 简介
 为了拥有一个属于自己的网站，基于springboot + vue 开发了前后端分离博客系统
 
-
+## 更新功能
+1. mysql数据库持久化：每天定时任务将mysql备份至七牛云
+2. 图床改为腾讯云的cos，腾讯云cdn加持（免费cdn国内凉了，改为使用付费，不过还好不算贵，一个月不到 1RMB）
+3. 更新 ipregion2 版本，以及相关方法
+4. 升级 pox.xml 旧的依赖
 
 ## 博客预览
 博客地址：[https://raxcl.cn](https://raxcl.cn)
 
 后台管理平台：[https://admin.raxcl.cn](https://admin.raxcl.cn) 账号`Visitor`密码`666666`
+
+博客上线部署过程可以参考：[https://blog.csdn.net/RAXCL/article/details/121276028](https://blog.csdn.net/RAXCL/article/details/121276028)
 
 本项目长期维护，欢迎fork代码和star！。
 
