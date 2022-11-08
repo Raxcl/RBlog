@@ -59,32 +59,40 @@ logging:
 token:
   expireTime: 259200000
   # 部署上线务必修改此配置，否则无法保证token安全性(加密盐）
-  secretKey: 3015b8ea-9ceb-4fa9-89ae-8c723ef1330e
+  secretKey: xxxxxxxxxxx
 
   # 静态文件上传访问路径 Linux环境如：/home/RBlog/upload/
 upload:
   path: C:/file/RBlog/upload/
   accessPath: /image/**
   resourcesLocations: file:${upload.path}
-  # 评论中QQ头像存储方式: 本地:local GitHub:github
+  # 评论中QQ头像存储方式: 本地:local GitHub:github 腾讯云：txyun
   # 本地方式部署后无法访问（待解决，且容易浪费服务器磁盘）
-  channel: github
+  channel: txyun
   # GitHub token 教程见 https://raxcl.github.io/PictureHosting/#/pictureHosting/help
   github:
-    token: ghp_IUWQ4MOar35RwDm7GjzTXhAAwZqms73Z9QnZ
+    token: xxxxxxxxxxxxxx
     username: Raxcl
     # 需要用作图床的GitHub仓库名
     repos: blog-resource
     # 需要上传至仓库的路径 开头需要"/" 结尾不要"/"
     repos-path: /comment/avatar
+  txyun:
+    secretId: xxxxxxxx
+    secretKey: xxxxxxxxxxxx
+    bucket-name: xxxxxxxxx
+    region: ap-guangzhou
+    path: /comment/avatar
+    # 配置cdn加速
+    domain: https://cdn.xxxxxxx.com
 # mysql数据备份
 mysql-backup:
   host: ip地址
   port: 端口号
   qi-niu-yun:
     path: C:\file\mysql_backup\mysql_dump
-    accessKey: jJt2s_dPIScrZVN_agbTogFaJWIF25Ta-moo_sWA
-    secretKey: YI7u5S8xUWthmtfbsGa0lKuwWT0CfOh-Zy2Lsbi9
+    accessKey: xxxxxxxx
+    secretKey: xxxxxxxxxxxxx
     bucket: raxcl-blog
 # 如果选择邮箱提醒方式，以下可以无需修改
 tg:
