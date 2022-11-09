@@ -19,6 +19,7 @@ public class UserAgentUtils {
 	public UserAgentUtils() {
 		this.uaa = UserAgentAnalyzer
 				.newBuilder()
+				.useJava8CompatibleCaching()
 				.hideMatcherLoadStats()
 				.withField("OperatingSystemNameVersionMajor")
 				.withField("AgentNameVersion")
