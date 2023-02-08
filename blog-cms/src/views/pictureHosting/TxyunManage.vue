@@ -54,13 +54,14 @@ import SvgIcon from "@/components/SvgIcon";
 import {isImgExt} from "@/util/validate";
 import {randomUUID} from "@/util/uuid";
 import {copy} from "@/util/copy";
-import cos from "@/api/cos";
+import COS from 'cos-js-sdk-v5';
 
 export default {
 	name: "TxyunManage",
 	components: {SvgIcon},
 	data() {
 		return {
+			cos: {},
 			txyunConfig: {
 				secretId: '',
 				secretKey: '',
@@ -115,6 +116,10 @@ export default {
 		if (txyunConfig) {
 			this.txyunConfig = JSON.parse(txyunConfig)
 			this.txyunConfig.domain = this.txyunConfig.domain.endsWith('/') ? this.txyunConfig.domain : `${this.txyunConfig.domain}/`
+			this.cos = new COS({
+				SecretId: this.txyunConfig.secretId,
+				SecretKey: this.txyunConfig.secretKey,
+			})
 		} else {
 			this.msgError('请先配置腾讯云')
 			this.$router.push('/pictureHosting/setting')
@@ -125,7 +130,7 @@ export default {
 		//换成懒加载
 		async getReposContents(arr, path) {
 			const {txyunConfig} = this
-			await cos.getBucket({
+			await this.cos.getBucket({
 				Bucket: txyunConfig.bucketName, /* 必须 */
 				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
 				Prefix: path,           /* 非必须 */
@@ -150,7 +155,7 @@ export default {
 			if (path != '') {
 				path = path.endsWith('/') ? path : `${path}/`
 			}
-			cos.getBucket({
+			this.cos.getBucket({
 				Bucket: txyunConfig.bucketName, /* 必须 */
 				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
 				Prefix: path,           /* 非必须 */
@@ -191,7 +196,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning',
 			}).then(() => {
-				cos.deleteObject({
+				this.cos.deleteObject({
 					Bucket: txyunConfig.bucketName, /* 填写自己的bucket，必须字段 */
 					Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
 					Key: file.path,              /* 存储在桶里的对象键（例如1.jpg，a/b/test.txt），必须字段 */
@@ -230,7 +235,7 @@ export default {
 			path = path.startsWith('/') ? path.slice(1) : path
 			path = path.endsWith('/') ? path : `${path}/`
 			console.log("上传路径：", path)
-			cos.uploadFile({
+			this.cos.uploadFile({
 				Bucket: txyunConfig.bucketName, /* 必须 */
 				Region: txyunConfig.region,     /* 存储桶所在地域，必须字段 */
 				Key: `${path}${fileName}`,              /* 存储在桶里的对象键（例如:1.jpg，a/b/test.txt，图片.jpg）支持中文，必须字段 */
