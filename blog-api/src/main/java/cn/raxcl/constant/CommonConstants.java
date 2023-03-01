@@ -24,7 +24,7 @@ public class CommonConstants {
 
     public static final String SUBJECT_MSG = "博主身份Token已失效，请重新登录！";
     //todo
-    public static final String PATH_ADMIN = "/admin";
+    public static final String PATH_ADMIN = "/RBlog/admin";
     public static final String ABOUT = "/about";
     public static final String FRIENDS = "/friends";
     public static final String BLOG = "/blog/";
