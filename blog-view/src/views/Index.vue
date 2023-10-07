@@ -42,9 +42,10 @@
 		</div>
 
 		<!--APlayer-->
-		<div class="m-mobile-hide">
+		<!-- api失效 -->
+		<!-- <div class="m-mobile-hide">
 			<MyAPlayer/>
-		</div>
+		</div> -->
 		<!--回到顶部-->
 		<el-backtop style="box-shadow: none;background: none;">
 			<img src="/img/paper-plane.png" style="width: 40px;height: 40px;">
@@ -62,7 +63,7 @@
 	import Introduction from "@/components/sidebar/Introduction";
 	import Tags from "@/components/sidebar/Tags";
 	import RandomBlog from "@/components/sidebar/RandomBlog";
-	import MyAPlayer from "@/components/index/MyAPlayer";
+	// import MyAPlayer from "@/components/index/MyAPlayer";
 	import Tocbot from "@/components/sidebar/Tocbot";
 	import BlogPasswordDialog from "@/components/index/BlogPasswordDialog";
 	import {mapState} from 'vuex'
@@ -72,7 +73,9 @@
 
 	export default {
 		name: "Index",
-		components: {Header, BlogPasswordDialog, Tocbot, MyAPlayer, RandomBlog, Tags, Nav, Footer, Introduction, Live2d},
+		components: {Header, BlogPasswordDialog, Tocbot
+			// , MyAPlayer
+			, RandomBlog, Tags, Nav, Footer, Introduction, Live2d},
 		data() {
 			return {
 				siteInfo: {
