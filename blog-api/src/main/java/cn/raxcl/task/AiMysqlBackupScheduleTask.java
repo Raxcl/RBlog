@@ -56,7 +56,12 @@ public class AiMysqlBackupScheduleTask {
         //2. 备份数据至七牛云
         String localFilePath = filePath + File.separator + backName;
         boolean upload = upload(localFilePath, backName);
-        if (!upload){
+        //上传第二个文件
+        log.info("开始备份第二个数据库");
+        backName = "gn-" + backName;
+        localFilePath = filePath + File.separator + backName;
+        boolean upload1 = upload(localFilePath, backName);
+        if (!upload || !upload1){
             throw new NotFoundException("数据上传失败,请联系管理员");
         }
     }
