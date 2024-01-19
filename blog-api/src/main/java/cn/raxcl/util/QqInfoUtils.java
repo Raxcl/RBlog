@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
  * @author Raxcl
  * @date 2022-01-07 19:50:43
  */
-//todo 待修改
 public class QqInfoUtils {
 	private QqInfoUtils(){}
 	private static final RestTemplate REST_TEMPLATE = new RestTemplate();
