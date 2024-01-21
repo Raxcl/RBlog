@@ -42,7 +42,7 @@ public class FriendAdminController {
 	@GetMapping("/friends")
 	public Result friends(@RequestParam(defaultValue = "1") Integer pageNum,
 	                      @RequestParam(defaultValue = "10") Integer pageSize) {
-		String orderBy = "create_time asc";
+		String orderBy = "is_published desc, create_time desc";
 		PageMethod.startPage(pageNum, pageSize, orderBy);
 		PageInfo<Friend> pageInfo = new PageInfo<>(friendService.getFriendList());
 		return Result.success("请求成功", pageInfo);
