@@ -14,7 +14,7 @@
 
     <!--查询友链List-->
     <select id="getFriendList" resultMap="friend">
-        select id, nickname, description, website, avatar, is_published, views, create_time from friend
+        select id, nickname, description, website, avatar, is_published, views, create_time from friend order by is_published desc, create_time desc
     </select>
 
     <resultMap id="friendVO" type="cn.raxcl.model.vo.FriendVO">
