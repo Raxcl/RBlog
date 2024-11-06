@@ -6,7 +6,7 @@ module.exports = {
   prod: {
     name: "生产环境",
     script: "yarn build",
-    host: "81.71.87.241",
+    host: "42.194.225.242",
     port: 22,
     username: "root",
     password: "",

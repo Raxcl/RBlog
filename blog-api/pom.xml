@@ -227,8 +227,8 @@
                         <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     -->
                     <!--指定远程docker api地址-->
-                    <dockerHost>https://81.71.87.241:2376</dockerHost>
-                    <dockerCertPath>D:\environment\ca</dockerCertPath>
+                    <dockerHost>https://42.194.225.242:2376</dockerHost>
+                    <dockerCertPath>E:\environment\ca</dockerCertPath>
 
                     <!--这里是复制jar包到docker容器指定目录配置-->
                     <resources>
