@@ -35,13 +35,15 @@
 ## 快速开始
 
 1. 创建 MySQL 数据库`r_blog`，并执行`/blog-api/r_blog.sql`初始化表数据
-2. 修改配置信息`blog-api/src/main/resources/test(application.yml)`,需要改名为application.yml，然后修改必要配置信息
-3. 安装 Redis 并启动
+2. 安装 Redis、mysql 并启动
+3. 修改配置信息`blog-api/src/main/resources/application.yml`,需要修改必要配置信息
 4. 启动后端服务
 5. 分别在`blog-cms`和`blog-view`目录下执行`npm install`安装依赖
 6. 分别在`blog-cms`和`blog-view`目录下执行`npm run serve`启动前后台页面
 
-
+## 部署
+方式一：部署教程：[https://blog.csdn.net/RAXCL/article/details/121276028](https://blog.csdn.net/RAXCL/article/details/121276028)
+方式二：详见 项目 docker 和 docker-web 文件夹，感谢 @nanshaws 提供
 
 ## 新增的功能
 [vue-live2d](https://github.com/Raxcl/vue-live2d)
