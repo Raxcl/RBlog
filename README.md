@@ -7,7 +7,8 @@
 	<img src="https://img.shields.io/badge/license-MIT-blue">	
 </p>
 
-
+## 提醒
+该分支为个人分支，包含了大量个人代码，且不包含所有敏感信息，该分支无法运行，如果你是不小心点进来，请移至 master 分支
 
 ## 简介
 为了拥有一个属于自己的网站，基于springboot + vue 开发了前后端分离博客系统
