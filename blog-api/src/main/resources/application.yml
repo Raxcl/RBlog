@@ -31,7 +31,8 @@ spring:
   # spring.mail.properties.mail.smtp.ssl.enable=true
   mail:
     host: smtp.qq.com
-    # spring.mail.port=465
+    port: 465
+    protocol: smtps
     username: 邮箱账号
     password: 密码
     properties:
