@@ -1,5 +1,6 @@
 package cn.raxcl.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -19,6 +20,7 @@ import java.util.Map;
  */
 @Component
 @EnableAsync
+@Slf4j
 public class MailUtils {
 	private final JavaMailSender javaMailSender;
 	private final MailProperties mailProperties;
@@ -42,9 +44,12 @@ public class MailUtils {
 			messageHelper.setTo(toAccount);
 			messageHelper.setSubject(subject);
 			messageHelper.setText(process, true);
+			log.info("发送邮件给："+ toAccount);
 			javaMailSender.send(mimeMessage);
+			log.info("发送完成");
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.error("发送邮件失败：" + e.getMessage());
 		}
 	}
 }
