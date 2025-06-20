@@ -259,32 +259,32 @@ public class PdfDemoController {
                 switch (series) {
                     case 0: // 机会区域 - 紫色渐变
                         baseColor = new Color(138, 103, 180);
-                        lightColor = new Color(208, 183, 240);
+                        lightColor = new Color(208, 183, 240, 200);
                         break;
                     case 1: // 热门区域 - 橙色渐变  
                         baseColor = new Color(235, 135, 49);
-                        lightColor = new Color(255, 195, 129);
+                        lightColor = new Color(255, 195, 129, 200);
                         break;
                     case 2: // 观望评估 - 绿色渐变
                         baseColor = new Color(89, 201, 167);
-                        lightColor = new Color(149, 231, 207);
+                        lightColor = new Color(149, 231, 207, 200);
                         break;
                     case 3: // 趋于饱和 - 蓝色渐变
                         baseColor = new Color(85, 128, 235);
-                        lightColor = new Color(145, 178, 255);
+                        lightColor = new Color(145, 178, 255, 200);
                         break;
                     default:
                         baseColor = Color.GRAY;
                         lightColor = Color.LIGHT_GRAY;
                 }
                 
-                // 创建径向渐变效果模拟气泡
-                return new GradientPaint(0, 0, lightColor, 15, 15, baseColor, true);
+                // 创建更大范围的径向渐变效果模拟气泡
+                return new GradientPaint(-15, -15, lightColor, 25, 25, baseColor, true);
             }
         };
         
-        // 设置不同系列的气泡大小和透明度
-        double[] bubbleSizes = {20, 18, 16, 22}; // 不同系列的气泡大小
+        // 设置更大的气泡大小
+        double[] bubbleSizes = {45, 42, 38, 48}; // 显著增大气泡尺寸
         
         for (int i = 0; i < 4; i++) {
             double size = bubbleSizes[i];
@@ -292,15 +292,15 @@ public class PdfDemoController {
             renderer.setSeriesShape(i, new Ellipse2D.Double(-size/2, -size/2, size, size));
             
             // 设置描边效果增加立体感
-            renderer.setSeriesOutlineStroke(i, new BasicStroke(1.5f));
+            renderer.setSeriesOutlineStroke(i, new BasicStroke(2.0f));
             
             // 设置描边颜色（比填充色稍深）
             Color outlineColor;
             switch (i) {
-                case 0: outlineColor = new Color(108, 73, 150); break;  // 机会区域描边
-                case 1: outlineColor = new Color(205, 105, 19); break;  // 热门区域描边
-                case 2: outlineColor = new Color(59, 171, 137); break;  // 观望评估描边
-                case 3: outlineColor = new Color(55, 98, 205); break;   // 趋于饱和描边
+                case 0: outlineColor = new Color(108, 73, 150, 180); break;  // 机会区域描边
+                case 1: outlineColor = new Color(205, 105, 19, 180); break;  // 热门区域描边
+                case 2: outlineColor = new Color(59, 171, 137, 180); break;  // 观望评估描边
+                case 3: outlineColor = new Color(55, 98, 205, 180); break;   // 趋于饱和描边
                 default: outlineColor = Color.DARK_GRAY;
             }
             renderer.setSeriesOutlinePaint(i, outlineColor);
