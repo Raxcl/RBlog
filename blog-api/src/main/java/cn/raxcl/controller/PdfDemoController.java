@@ -1513,9 +1513,14 @@ public class PdfDemoController {
                 htmlContent = generateSimpleBrandInsightHtml(data);
             }
             
-            // TODO: 集成HTML转PDF服务（需要添加Playwright依赖）
-            // 暂时使用现有的PDF生成方式作为演示
-            byte[] pdfBytes = generateBrandInsightPdfWithiText(data);
+            // 使用HTML转PDF服务生成PDF
+            byte[] pdfBytes;
+            if (htmlToPdfService != null) {
+                pdfBytes = htmlToPdfService.convertHtmlToPdf(htmlContent);
+            } else {
+                // 备选方案：转换HTML为基本PDF（模拟HTML模板效果）
+                pdfBytes = convertHtmlToPdfBasic(htmlContent, data);
+            }
             
             // 设置响应头
             HttpHeaders headers = new HttpHeaders();
@@ -1775,6 +1780,258 @@ public class PdfDemoController {
         Paragraph timestamp = new Paragraph("生成时间: " + 
             java.time.LocalDateTime.now().format(
                 java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), contentFont);
+        document.add(timestamp);
+        
+        document.close();
+        return outputStream.toByteArray();
+    }
+    
+    /**
+     * 基本的HTML转PDF方法（备选方案，模拟HTML模板效果）
+     */
+    private byte[] convertHtmlToPdfBasic(String htmlContent, BrandInsightData data) throws Exception {
+        // 创建PDF文档
+        Document document = new Document(PageSize.A4, 20, 20, 30, 30);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+        document.open();
+        
+        // 设置中文字体
+        BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 22, com.itextpdf.text.Font.BOLD, BaseColor.WHITE);
+        com.itextpdf.text.Font subtitleFont = new com.itextpdf.text.Font(baseFont, 16, com.itextpdf.text.Font.BOLD);
+        com.itextpdf.text.Font contentFont = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.NORMAL);
+        com.itextpdf.text.Font smallFont = new com.itextpdf.text.Font(baseFont, 10, com.itextpdf.text.Font.NORMAL);
+        
+        // 模拟HTML模板的渐变背景效果
+        PdfContentByte canvas = writer.getDirectContent();
+        
+        // 添加头部渐变背景（模拟CSS gradient）
+        canvas.saveState();
+        // 创建渐变背景色（紫色渐变）
+        canvas.setRGBColorFill(102, 126, 234); // 起始颜色 #667eea
+        canvas.rectangle(0, document.getPageSize().getHeight() - 120, document.getPageSize().getWidth(), 120);
+        canvas.fill();
+        
+        // 添加渐变效果（通过多个矩形模拟）
+        for (int i = 0; i < 50; i++) {
+            float ratio = (float) i / 50;
+            int r = (int) (102 + (118 - 102) * ratio); // 从 #667eea 到 #764ba2
+            int g = (int) (126 + (75 - 126) * ratio);
+            int b = (int) (234 + (162 - 234) * ratio);
+            canvas.setRGBColorFill(r, g, b);
+            canvas.rectangle(0, document.getPageSize().getHeight() - 120 + i * 2.4f, document.getPageSize().getWidth(), 2.4f);
+            canvas.fill();
+        }
+        canvas.restoreState();
+        
+        // 添加Logo区域（模拟CSS圆形Logo）
+        try {
+            Image logoImage = Image.getInstance(data.getLogoUrl());
+            logoImage.scaleToFit(60, 60);
+            logoImage.setAbsolutePosition(
+                (document.getPageSize().getWidth() - 60) / 2, 
+                document.getPageSize().getHeight() - 90
+            );
+            // 简单的圆形效果（通过缩放模拟）
+            document.add(logoImage);
+        } catch (Exception e) {
+            // Logo加载失败时的处理
+        }
+        
+        // 企业名称（白色字体）
+        Paragraph companyName = new Paragraph(data.getMerchantName(), titleFont);
+        companyName.setAlignment(Element.ALIGN_CENTER);
+        companyName.setSpacingBefore(-50); // 调整位置
+        companyName.setSpacingAfter(10);
+        document.add(companyName);
+        
+        // 报告标题（白色字体）
+        Paragraph reportTitle = new Paragraph("品牌洞察报告", new com.itextpdf.text.Font(baseFont, 14, com.itextpdf.text.Font.NORMAL, BaseColor.WHITE));
+        reportTitle.setAlignment(Element.ALIGN_CENTER);
+        reportTitle.setSpacingAfter(5);
+        document.add(reportTitle);
+        
+        // 报告期间（白色字体）
+        Paragraph reportPeriod = new Paragraph("报告期间: " + data.getReportDate(), new com.itextpdf.text.Font(baseFont, 11, com.itextpdf.text.Font.NORMAL, BaseColor.WHITE));
+        reportPeriod.setAlignment(Element.ALIGN_CENTER);
+        reportPeriod.setSpacingAfter(60);
+        document.add(reportPeriod);
+        
+        // 品牌概览部分（模拟HTML卡片效果）
+        Paragraph overviewTitle = new Paragraph("品牌概览", subtitleFont);
+        overviewTitle.setSpacingBefore(20);
+        overviewTitle.setSpacingAfter(15);
+        // 添加左侧装饰线效果
+        overviewTitle.setIndentationLeft(10);
+        document.add(overviewTitle);
+        
+        // 概览卡片（模拟CSS grid）
+        com.itextpdf.text.pdf.PdfPTable overviewTable = new com.itextpdf.text.pdf.PdfPTable(2);
+        overviewTable.setWidthPercentage(100);
+        overviewTable.setSpacingBefore(10);
+        overviewTable.setSpacingAfter(20);
+        
+        // 品牌价值卡片
+        com.itextpdf.text.pdf.PdfPCell brandValueCell = new com.itextpdf.text.pdf.PdfPCell();
+        brandValueCell.setPadding(15);
+        brandValueCell.setBackgroundColor(new BaseColor(248, 249, 250)); // 模拟CSS背景色
+        brandValueCell.setBorder(Rectangle.BOX);
+        brandValueCell.setBorderColor(BaseColor.LIGHT_GRAY);
+        Paragraph brandValueLabel = new Paragraph("品牌价值", new com.itextpdf.text.Font(baseFont, 10, com.itextpdf.text.Font.NORMAL, BaseColor.GRAY));
+        brandValueLabel.setAlignment(Element.ALIGN_CENTER);
+        Paragraph brandValueValue = new Paragraph(data.getBrandValue(), new com.itextpdf.text.Font(baseFont, 16, com.itextpdf.text.Font.BOLD));
+        brandValueValue.setAlignment(Element.ALIGN_CENTER);
+        brandValueValue.setSpacingBefore(5);
+        brandValueCell.addElement(brandValueLabel);
+        brandValueCell.addElement(brandValueValue);
+        overviewTable.addCell(brandValueCell);
+        
+        // 市场份额卡片
+        com.itextpdf.text.pdf.PdfPCell marketShareCell = new com.itextpdf.text.pdf.PdfPCell();
+        marketShareCell.setPadding(15);
+        marketShareCell.setBackgroundColor(new BaseColor(248, 249, 250));
+        marketShareCell.setBorder(Rectangle.BOX);
+        marketShareCell.setBorderColor(BaseColor.LIGHT_GRAY);
+        Paragraph marketShareLabel = new Paragraph("市场份额", new com.itextpdf.text.Font(baseFont, 10, com.itextpdf.text.Font.NORMAL, BaseColor.GRAY));
+        marketShareLabel.setAlignment(Element.ALIGN_CENTER);
+        Paragraph marketShareValue = new Paragraph(data.getMarketShare() + "%", new com.itextpdf.text.Font(baseFont, 16, com.itextpdf.text.Font.BOLD));
+        marketShareValue.setAlignment(Element.ALIGN_CENTER);
+        marketShareValue.setSpacingBefore(5);
+        marketShareCell.addElement(marketShareLabel);
+        marketShareCell.addElement(marketShareValue);
+        overviewTable.addCell(marketShareCell);
+        
+        document.add(overviewTable);
+        
+        // 关键绩效指标（模拟HTML表格样式）
+        Paragraph metricsTitle = new Paragraph("关键绩效指标", subtitleFont);
+        metricsTitle.setSpacingBefore(20);
+        metricsTitle.setSpacingAfter(15);
+        metricsTitle.setIndentationLeft(10);
+        document.add(metricsTitle);
+        
+        if (data.getPerformanceMetrics() != null && !data.getPerformanceMetrics().isEmpty()) {
+            com.itextpdf.text.pdf.PdfPTable metricsTable = new com.itextpdf.text.pdf.PdfPTable(4);
+            metricsTable.setWidthPercentage(100);
+            metricsTable.setSpacingBefore(10);
+            metricsTable.setSpacingAfter(20);
+            
+            // 表头（模拟CSS渐变背景）
+            com.itextpdf.text.pdf.PdfPCell headerCell1 = new com.itextpdf.text.pdf.PdfPCell(new Phrase("指标名称", new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.BOLD, BaseColor.WHITE)));
+            headerCell1.setBackgroundColor(new BaseColor(102, 126, 234)); // 模拟渐变色
+            headerCell1.setPadding(12);
+            headerCell1.setBorder(Rectangle.NO_BORDER);
+            
+            com.itextpdf.text.pdf.PdfPCell headerCell2 = new com.itextpdf.text.pdf.PdfPCell(new Phrase("当前值", new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.BOLD, BaseColor.WHITE)));
+            headerCell2.setBackgroundColor(new BaseColor(102, 126, 234));
+            headerCell2.setPadding(12);
+            headerCell2.setBorder(Rectangle.NO_BORDER);
+            
+            com.itextpdf.text.pdf.PdfPCell headerCell3 = new com.itextpdf.text.pdf.PdfPCell(new Phrase("上期对比", new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.BOLD, BaseColor.WHITE)));
+            headerCell3.setBackgroundColor(new BaseColor(102, 126, 234));
+            headerCell3.setPadding(12);
+            headerCell3.setBorder(Rectangle.NO_BORDER);
+            
+            com.itextpdf.text.pdf.PdfPCell headerCell4 = new com.itextpdf.text.pdf.PdfPCell(new Phrase("趋势", new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.BOLD, BaseColor.WHITE)));
+            headerCell4.setBackgroundColor(new BaseColor(102, 126, 234));
+            headerCell4.setPadding(12);
+            headerCell4.setBorder(Rectangle.NO_BORDER);
+            
+            metricsTable.addCell(headerCell1);
+            metricsTable.addCell(headerCell2);
+            metricsTable.addCell(headerCell3);
+            metricsTable.addCell(headerCell4);
+            
+            // 数据行（模拟斑马纹效果）
+            boolean isEvenRow = false;
+            for (BrandInsightData.PerformanceMetric metric : data.getPerformanceMetrics()) {
+                BaseColor rowColor = isEvenRow ? new BaseColor(248, 249, 250) : BaseColor.WHITE;
+                
+                com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getName(), contentFont));
+                cell1.setBackgroundColor(rowColor);
+                cell1.setPadding(12);
+                cell1.setBorder(Rectangle.BOTTOM);
+                cell1.setBorderColor(new BaseColor(233, 236, 239));
+                
+                com.itextpdf.text.pdf.PdfPCell cell2 = new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getCurrentValue(), contentFont));
+                cell2.setBackgroundColor(rowColor);
+                cell2.setPadding(12);
+                cell2.setBorder(Rectangle.BOTTOM);
+                cell2.setBorderColor(new BaseColor(233, 236, 239));
+                
+                com.itextpdf.text.pdf.PdfPCell cell3 = new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getCompareValue(), contentFont));
+                cell3.setBackgroundColor(rowColor);
+                cell3.setPadding(12);
+                cell3.setBorder(Rectangle.BOTTOM);
+                cell3.setBorderColor(new BaseColor(233, 236, 239));
+                
+                // 趋势字体颜色（模拟CSS类）
+                BaseColor trendColor = metric.getTrend().contains("↗") ? 
+                    new BaseColor(40, 167, 69) : // 绿色
+                    (metric.getTrend().contains("↘") ? 
+                        new BaseColor(220, 53, 69) : // 红色
+                        new BaseColor(108, 117, 125)); // 灰色
+                        
+                com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getTrend(), new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.BOLD, trendColor)));
+                cell4.setBackgroundColor(rowColor);
+                cell4.setPadding(12);
+                cell4.setBorder(Rectangle.BOTTOM);
+                cell4.setBorderColor(new BaseColor(233, 236, 239));
+                
+                metricsTable.addCell(cell1);
+                metricsTable.addCell(cell2);
+                metricsTable.addCell(cell3);
+                metricsTable.addCell(cell4);
+                
+                isEvenRow = !isEvenRow;
+            }
+            
+            document.add(metricsTable);
+        }
+        
+        // 新页面
+        document.newPage();
+        
+        // 市场趋势分析
+        Paragraph trendTitle = new Paragraph("市场趋势分析", subtitleFont);
+        trendTitle.setSpacingBefore(20);
+        trendTitle.setSpacingAfter(15);
+        trendTitle.setIndentationLeft(10);
+        document.add(trendTitle);
+        
+        // 图表占位符（模拟CSS样式）
+        com.itextpdf.text.pdf.PdfPTable chartPlaceholder = new com.itextpdf.text.pdf.PdfPTable(1);
+        chartPlaceholder.setWidthPercentage(100);
+        com.itextpdf.text.pdf.PdfPCell chartCell = new com.itextpdf.text.pdf.PdfPCell();
+        chartCell.setMinimumHeight(120);
+        chartCell.setPadding(40);
+        chartCell.setBackgroundColor(new BaseColor(248, 249, 250));
+        chartCell.setBorder(Rectangle.BOX);
+        chartCell.setBorderColor(new BaseColor(222, 226, 230));
+        chartCell.setBorderWidth(2);
+        
+        Paragraph chartIcon = new Paragraph("📊", new com.itextpdf.text.Font(baseFont, 24));
+        chartIcon.setAlignment(Element.ALIGN_CENTER);
+        Paragraph chartText = new Paragraph("市场趋势图表", contentFont);
+        chartText.setAlignment(Element.ALIGN_CENTER);
+        chartText.setSpacingBefore(10);
+        
+        chartCell.addElement(chartIcon);
+        chartCell.addElement(chartText);
+        chartPlaceholder.addCell(chartCell);
+        document.add(chartPlaceholder);
+        
+        // 页脚（模拟CSS样式）
+        Paragraph footer = new Paragraph("© 2024 RBlog 企业版. 保留所有权利.", smallFont);
+        footer.setAlignment(Element.ALIGN_CENTER);
+        footer.setSpacingBefore(40);
+        document.add(footer);
+        
+        Paragraph timestamp = new Paragraph("生成时间: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), 
+            new com.itextpdf.text.Font(baseFont, 9, com.itextpdf.text.Font.NORMAL, BaseColor.GRAY));
+        timestamp.setAlignment(Element.ALIGN_CENTER);
+        timestamp.setSpacingBefore(5);
         document.add(timestamp);
         
         document.close();

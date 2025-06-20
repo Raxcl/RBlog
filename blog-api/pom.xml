@@ -257,6 +257,13 @@
             <artifactId>openhtmltopdf-java2d</artifactId>
             <version>1.0.10</version>
         </dependency>
+        
+        <!-- JSoup HTML解析依赖 -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.15.3</version>
+        </dependency>
 
     </dependencies>
 
