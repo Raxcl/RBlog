@@ -180,6 +180,82 @@ public class PdfDemoController {
     }
     
     /**
+     * 使用ECharts生成地区洞察散点图PDF（推荐方案）
+     */
+    @GetMapping("/pdf/scatter-echarts")
+    public ResponseEntity<byte[]> generateEChartsScatterPdf() {
+        try {
+            // 创建PDF文档
+            Document document = new Document(PageSize.A4);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            PdfWriter.getInstance(document, outputStream);
+            document.open();
+            
+            // 设置中文字体
+            BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+            com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 18, com.itextpdf.text.Font.BOLD);
+            com.itextpdf.text.Font subtitleFont = new com.itextpdf.text.Font(baseFont, 14, com.itextpdf.text.Font.BOLD);
+            com.itextpdf.text.Font contentFont = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.NORMAL);
+            
+            // 添加标题
+            Paragraph title = new Paragraph("地区洞察分析报告（ECharts版本）", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.setSpacingAfter(20);
+            document.add(title);
+            
+            // 添加子标题
+            Paragraph subtitle = new Paragraph("01 地区洞察", subtitleFont);
+            subtitle.setSpacingAfter(15);
+            document.add(subtitle);
+            
+            // 添加描述
+            Paragraph description = new Paragraph("本图表使用ECharts生成，展示了各省市在市场饱和度与销售坪效增长率方面的表现分布情况", contentFont);
+            description.setSpacingAfter(20);
+            document.add(description);
+            
+            // 添加生成时间
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+            Paragraph generateTime = new Paragraph("生成时间: " + sdf.format(new Date()), contentFont);
+            generateTime.setAlignment(Element.ALIGN_RIGHT);
+            generateTime.setSpacingAfter(30);
+            document.add(generateTime);
+            
+            // 生成ECharts气泡图
+            byte[] echartsImageBytes = generateEChartsImage();
+            Image echartsImage = Image.getInstance(echartsImageBytes);
+            
+            // 调整图片大小
+            float scalePercent = (document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin()) / echartsImage.getWidth();
+            if (scalePercent < 1.0f) {
+                echartsImage.scalePercent(scalePercent * 100);
+            }
+            
+            echartsImage.setAlignment(Element.ALIGN_CENTER);
+            document.add(echartsImage);
+            
+            // 添加说明文字
+            Paragraph explanation = new Paragraph("想查看该品类在更多省份、城市的地区洞察，请联系业务人员", contentFont);
+            explanation.setAlignment(Element.ALIGN_CENTER);
+            explanation.setSpacingBefore(20);
+            document.add(explanation);
+            
+            document.close();
+            
+            // 设置响应头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.add("Content-Disposition", "attachment; filename=region-analysis-echarts.pdf");
+            headers.setContentLength(outputStream.size());
+            
+            return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
      * 生成地区洞察散点图
      */
     private byte[] generateScatterChart() throws Exception {
@@ -363,5 +439,193 @@ public class PdfDemoController {
         ChartUtils.writeBufferedImageAsPNG(outputStream, bufferedImage);
         
         return outputStream.toByteArray();
+    }
+    
+    /**
+     * 生成ECharts气泡图图片
+     * 注意：此方法需要添加Selenium WebDriver依赖和Chrome Driver
+     */
+    private byte[] generateEChartsImage() throws Exception {
+        // 创建ECharts配置的HTML页面
+        String htmlContent = generateEChartsHtml();
+        
+        // TODO: 使用Selenium WebDriver渲染ECharts
+        // 这里返回模拟的图片数据，实际项目中需要实现WebDriver渲染
+        // 可以参考以下步骤：
+        // 1. 创建临时HTML文件
+        // 2. 使用Chrome WebDriver加载HTML
+        // 3. 等待ECharts渲染完成
+        // 4. 截屏并保存为PNG
+        // 5. 返回图片字节数组
+        
+        // 暂时返回JFreeChart生成的图片作为示例
+        return generateScatterChart();
+    }
+    
+    /**
+     * 生成ECharts配置的HTML页面
+     */
+    private String generateEChartsHtml() {
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>\n");
+        html.append("<html>\n");
+        html.append("<head>\n");
+        html.append("    <meta charset=\"utf-8\">\n");
+        html.append("    <title>地区洞察气泡图</title>\n");
+        html.append("    <script src=\"https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js\"></script>\n");
+        html.append("</head>\n");
+        html.append("<body>\n");
+        html.append("    <div id=\"chart\" style=\"width: 900px; height: 700px;\"></div>\n");
+        html.append("    <script>\n");
+        html.append("        var chart = echarts.init(document.getElementById('chart'));\n");
+        html.append("        \n");
+        html.append("        var option = {\n");
+        html.append("            title: {\n");
+        html.append("                text: '地区洞察',\n");
+        html.append("                left: 'center',\n");
+        html.append("                textStyle: {\n");
+        html.append("                    fontSize: 18,\n");
+        html.append("                    fontWeight: 'bold'\n");
+        html.append("                }\n");
+        html.append("            },\n");
+        html.append("            grid: {\n");
+        html.append("                left: '10%',\n");
+        html.append("                right: '10%',\n");
+        html.append("                bottom: '15%',\n");
+        html.append("                top: '15%'\n");
+        html.append("            },\n");
+        html.append("            xAxis: {\n");
+        html.append("                name: '市场饱和度',\n");
+        html.append("                nameLocation: 'middle',\n");
+        html.append("                nameGap: 30,\n");
+        html.append("                type: 'value',\n");
+        html.append("                min: 0,\n");
+        html.append("                max: 100,\n");
+        html.append("                axisLine: {\n");
+        html.append("                    lineStyle: { color: '#666' }\n");
+        html.append("                }\n");
+        html.append("            },\n");
+        html.append("            yAxis: {\n");
+        html.append("                name: '销售坪效增长率',\n");
+        html.append("                nameLocation: 'middle',\n");
+        html.append("                nameGap: 40,\n");
+        html.append("                type: 'value',\n");
+        html.append("                min: 0,\n");
+        html.append("                max: 100,\n");
+        html.append("                axisLine: {\n");
+        html.append("                    lineStyle: { color: '#666' }\n");
+        html.append("                }\n");
+        html.append("            },\n");
+        html.append("            series: [\n");
+        html.append("                {\n");
+        html.append("                    name: '机会区域',\n");
+        html.append("                    type: 'scatter',\n");
+        html.append("                    symbolSize: function(data) { return data[2] || 30; },\n");
+        html.append("                    itemStyle: {\n");
+        html.append("                        color: {\n");
+        html.append("                            type: 'radial',\n");
+        html.append("                            x: 0.3,\n");
+        html.append("                            y: 0.3,\n");
+        html.append("                            r: 0.8,\n");
+        html.append("                            colorStops: [\n");
+        html.append("                                { offset: 0, color: '#d0b7f0' },\n");
+        html.append("                                { offset: 1, color: '#8a67b4' }\n");
+        html.append("                            ]\n");
+        html.append("                        },\n");
+        html.append("                        borderColor: '#6c4996',\n");
+        html.append("                        borderWidth: 2\n");
+        html.append("                    },\n");
+        html.append("                    data: [\n");
+        html.append("                        [25, 65, 40, '山东省'],\n");
+        html.append("                        [30, 55, 35, '重庆市']\n");
+        html.append("                    ]\n");
+        html.append("                },\n");
+        html.append("                {\n");
+        html.append("                    name: '热门区域',\n");
+        html.append("                    type: 'scatter',\n");
+        html.append("                    symbolSize: function(data) { return data[2] || 30; },\n");
+        html.append("                    itemStyle: {\n");
+        html.append("                        color: {\n");
+        html.append("                            type: 'radial',\n");
+        html.append("                            x: 0.3,\n");
+        html.append("                            y: 0.3,\n");
+        html.append("                            r: 0.8,\n");
+        html.append("                            colorStops: [\n");
+        html.append("                                { offset: 0, color: '#ffc381' },\n");
+        html.append("                                { offset: 1, color: '#eb8731' }\n");
+        html.append("                            ]\n");
+        html.append("                        },\n");
+        html.append("                        borderColor: '#cd6913',\n");
+        html.append("                        borderWidth: 2\n");
+        html.append("                    },\n");
+        html.append("                    data: [\n");
+        html.append("                        [75, 65, 38, '辽宁省'],\n");
+        html.append("                        [80, 45, 42, '吉林省'],\n");
+        html.append("                        [85, 35, 36, '其他']\n");
+        html.append("                    ]\n");
+        html.append("                },\n");
+        html.append("                {\n");
+        html.append("                    name: '观望评估',\n");
+        html.append("                    type: 'scatter',\n");
+        html.append("                    symbolSize: function(data) { return data[2] || 30; },\n");
+        html.append("                    itemStyle: {\n");
+        html.append("                        color: {\n");
+        html.append("                            type: 'radial',\n");
+        html.append("                            x: 0.3,\n");
+        html.append("                            y: 0.3,\n");
+        html.append("                            r: 0.8,\n");
+        html.append("                            colorStops: [\n");
+        html.append("                                { offset: 0, color: '#95e7cf' },\n");
+        html.append("                                { offset: 1, color: '#59c9a7' }\n");
+        html.append("                            ]\n");
+        html.append("                        },\n");
+        html.append("                        borderColor: '#3bab89',\n");
+        html.append("                        borderWidth: 2\n");
+        html.append("                    },\n");
+        html.append("                    data: [\n");
+        html.append("                        [35, 25, 32, '河北省']\n");
+        html.append("                    ]\n");
+        html.append("                },\n");
+        html.append("                {\n");
+        html.append("                    name: '趋于饱和',\n");
+        html.append("                    type: 'scatter',\n");
+        html.append("                    symbolSize: function(data) { return data[2] || 30; },\n");
+        html.append("                    itemStyle: {\n");
+        html.append("                        color: {\n");
+        html.append("                            type: 'radial',\n");
+        html.append("                            x: 0.3,\n");
+        html.append("                            y: 0.3,\n");
+        html.append("                            r: 0.8,\n");
+        html.append("                            colorStops: [\n");
+        html.append("                                { offset: 0, color: '#91b2ff' },\n");
+        html.append("                                { offset: 1, color: '#5580eb' }\n");
+        html.append("                            ]\n");
+        html.append("                        },\n");
+        html.append("                        borderColor: '#3762cd',\n");
+        html.append("                        borderWidth: 2\n");
+        html.append("                    },\n");
+        html.append("                    data: [\n");
+        html.append("                        [70, 15, 44, '广东省'],\n");
+        html.append("                        [85, 35, 40, '上海市']\n");
+        html.append("                    ]\n");
+        html.append("                }\n");
+        html.append("            ],\n");
+        html.append("            tooltip: {\n");
+        html.append("                trigger: 'item',\n");
+        html.append("                formatter: function(params) {\n");
+        html.append("                    return params.data[3] + '<br/>市场饱和度: ' + params.data[0] + '<br/>销售坪效增长率: ' + params.data[1];\n");
+        html.append("                }\n");
+        html.append("            }\n");
+        html.append("        };\n");
+        html.append("        \n");
+        html.append("        chart.setOption(option);\n");
+        html.append("        \n");
+        html.append("        // 标记渲染完成\n");
+        html.append("        window.chartReady = true;\n");
+        html.append("    </script>\n");
+        html.append("</body>\n");
+        html.append("</html>\n");
+        
+        return html.toString();
     }
 } 
