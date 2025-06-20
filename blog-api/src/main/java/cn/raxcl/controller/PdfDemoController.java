@@ -24,6 +24,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.BasicStroke;
+import java.awt.GradientPaint;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -185,28 +186,28 @@ public class PdfDemoController {
         // 创建数据集
         DefaultXYDataset dataset = new DefaultXYDataset();
         
-        // 机会区域数据 (紫色)
+        // 机会区域数据 (紫色) - 大气泡表示高潜力
         double[][] opportunityData = {
             {25, 30}, // x坐标（市场饱和度）, y坐标（销售坪效增长率）
             {65, 55}  // 山东省、重庆市的大致位置
         };
         dataset.addSeries("机会区域", opportunityData);
         
-        // 热门区域数据 (橙色)
+        // 热门区域数据 (橙色) - 中大气泡表示活跃市场
         double[][] hotData = {
             {75, 80, 85}, 
             {65, 45, 35}  // 吉林省、辽宁省等
         };
         dataset.addSeries("热门区域", hotData);
         
-        // 观望评估数据 (绿色)
+        // 观望评估数据 (绿色) - 中等气泡
         double[][] waitData = {
             {35}, 
             {25}   // 河北省
         };
         dataset.addSeries("观望评估", waitData);
         
-        // 趋于饱和数据 (蓝色)
+        // 趋于饱和数据 (蓝色) - 较大气泡表示成熟市场
         double[][] saturatedData = {
             {70, 85}, 
             {15, 35}   // 广东省、上海市
@@ -248,18 +249,63 @@ public class PdfDemoController {
         plot.addDomainMarker(new org.jfree.chart.plot.ValueMarker(50.0, Color.GRAY, new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[]{5.0f, 5.0f}, 0.0f)));
         plot.addRangeMarker(new org.jfree.chart.plot.ValueMarker(40.0, Color.GRAY, new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, new float[]{5.0f, 5.0f}, 0.0f)));
         
-        // 设置渲染器和颜色
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
+        // 创建自定义渲染器实现气泡效果
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true) {
+            @Override
+            public java.awt.Paint getItemPaint(int series, int item) {
+                Color baseColor;
+                Color lightColor;
+                
+                switch (series) {
+                    case 0: // 机会区域 - 紫色渐变
+                        baseColor = new Color(138, 103, 180);
+                        lightColor = new Color(208, 183, 240);
+                        break;
+                    case 1: // 热门区域 - 橙色渐变  
+                        baseColor = new Color(235, 135, 49);
+                        lightColor = new Color(255, 195, 129);
+                        break;
+                    case 2: // 观望评估 - 绿色渐变
+                        baseColor = new Color(89, 201, 167);
+                        lightColor = new Color(149, 231, 207);
+                        break;
+                    case 3: // 趋于饱和 - 蓝色渐变
+                        baseColor = new Color(85, 128, 235);
+                        lightColor = new Color(145, 178, 255);
+                        break;
+                    default:
+                        baseColor = Color.GRAY;
+                        lightColor = Color.LIGHT_GRAY;
+                }
+                
+                // 创建径向渐变效果模拟气泡
+                return new GradientPaint(0, 0, lightColor, 15, 15, baseColor, true);
+            }
+        };
         
-        // 设置各系列的颜色和形状
-        renderer.setSeriesPaint(0, new Color(168, 133, 200)); // 机会区域 - 紫色
-        renderer.setSeriesPaint(1, new Color(255, 165, 79));  // 热门区域 - 橙色  
-        renderer.setSeriesPaint(2, new Color(119, 221, 187)); // 观望评估 - 绿色
-        renderer.setSeriesPaint(3, new Color(115, 148, 255)); // 趋于饱和 - 蓝色
+        // 设置不同系列的气泡大小和透明度
+        double[] bubbleSizes = {20, 18, 16, 22}; // 不同系列的气泡大小
         
-        // 设置数据点大小
         for (int i = 0; i < 4; i++) {
-            renderer.setSeriesShape(i, new Ellipse2D.Double(-8, -8, 16, 16));
+            double size = bubbleSizes[i];
+            // 创建气泡形状 - 使用椭圆
+            renderer.setSeriesShape(i, new Ellipse2D.Double(-size/2, -size/2, size, size));
+            
+            // 设置描边效果增加立体感
+            renderer.setSeriesOutlineStroke(i, new BasicStroke(1.5f));
+            
+            // 设置描边颜色（比填充色稍深）
+            Color outlineColor;
+            switch (i) {
+                case 0: outlineColor = new Color(108, 73, 150); break;  // 机会区域描边
+                case 1: outlineColor = new Color(205, 105, 19); break;  // 热门区域描边
+                case 2: outlineColor = new Color(59, 171, 137); break;  // 观望评估描边
+                case 3: outlineColor = new Color(55, 98, 205); break;   // 趋于饱和描边
+                default: outlineColor = Color.DARK_GRAY;
+            }
+            renderer.setSeriesOutlinePaint(i, outlineColor);
+            renderer.setSeriesShapesFilled(i, true);
+            renderer.setSeriesShapesVisible(i, true);
         }
         
         plot.setRenderer(renderer);
@@ -268,7 +314,7 @@ public class PdfDemoController {
         plot.getDomainAxis().setRange(0, 100);
         plot.getRangeAxis().setRange(0, 100);
         
-        // 生成图片
+        // 生成图片 - 增加分辨率获得更好的气泡效果
         BufferedImage bufferedImage = chart.createBufferedImage(900, 700);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ChartUtils.writeBufferedImageAsPNG(outputStream, bufferedImage);
