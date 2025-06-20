@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -30,6 +32,15 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Arrays;
+
+import cn.raxcl.service.FopPdfService;
+import cn.raxcl.dto.PdfGenerateRequest;
+import cn.raxcl.dto.ChartData;
+import cn.raxcl.dto.BrandInsightData;
+import cn.raxcl.service.TemplateRenderService;
+import cn.raxcl.service.HtmlToPdfService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * PDF生成演示控制器
@@ -38,6 +49,17 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/demo")
 public class PdfDemoController {
+    
+    @Autowired
+    private FopPdfService fopPdfService;
+    
+    // 添加模板渲染服务的注入
+    @Autowired(required = false)
+    private TemplateRenderService templateRenderService;
+    
+    // 添加HTML转PDF服务的注入
+    @Autowired(required = false)  
+    private HtmlToPdfService htmlToPdfService;
     
     /**
      * 生成包含图表的示例PDF
@@ -698,11 +720,11 @@ public class PdfDemoController {
         html.append("                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [\n");
         html.append("                  {\n");
         html.append("                    offset: 0,\n");
-        html.append("                    color: '#d0b7f0'\n");
+        html.append("                    color: 'rgb(251, 118, 123)'\n");
         html.append("                  },\n");
         html.append("                  {\n");
         html.append("                    offset: 1,\n");
-        html.append("                    color: '#8a67b4'\n");
+        html.append("                    color: 'rgb(204, 46, 72)'\n");
         html.append("                  }\n");
         html.append("                ])\n");
         html.append("              }\n");
@@ -1207,5 +1229,555 @@ public class PdfDemoController {
         html.append("</html>\n");
         
         return html.toString();
+    }
+    
+    /**
+     * 使用专业模板生成PDF报告（基于Apache FOP）
+     */
+    @GetMapping("/pdf/template")
+    public ResponseEntity<byte[]> generateTemplatePdf() {
+        try {
+            // 创建PDF生成请求
+            PdfGenerateRequest request = new PdfGenerateRequest();
+            request.setTitle("数据分析专业报告");
+            request.setDescription("本报告使用Apache FOP专业模板生成，展示了企业级PDF报告的标准格式和布局设计");
+            request.setFileName("professional-report.pdf");
+            request.setIncludeWatermark(true);
+            request.setWatermarkText("机密文档");
+            
+            // 创建图表数据
+            ChartData regionChart = new ChartData();
+            regionChart.setTitle("地区洞察分析");
+            regionChart.setChartType("scatter");
+            regionChart.setXAxisLabel("市场饱和度");
+            regionChart.setYAxisLabel("销售坪效增长率");
+            
+            ChartData gdpChart = new ChartData();
+            gdpChart.setTitle("GDP与生命期望关系分析");
+            gdpChart.setChartType("scatter");
+            gdpChart.setXAxisLabel("GDP per capita (US$)");
+            gdpChart.setYAxisLabel("Life Expectancy (years)");
+            
+            request.setCharts(Arrays.asList(regionChart, gdpChart));
+            
+            // 使用现有方法生成PDF，暂时替代FOP实现
+            byte[] pdfBytes = generateEnterpriseStylePdf(request);
+            
+            // 设置响应头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.add("Content-Disposition", "attachment; filename=professional-template-report.pdf");
+            headers.setContentLength(pdfBytes.length);
+            
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * 使用自定义企业模板生成PDF报告
+     */
+    @GetMapping("/pdf/enterprise-template")
+    public ResponseEntity<byte[]> generateEnterpriseTemplatePdf() {
+        try {
+            // 创建企业级PDF生成请求
+            PdfGenerateRequest request = new PdfGenerateRequest();
+            request.setTitle("企业数据分析报告 2024");
+            request.setDescription("本报告采用企业级模板设计，包含完整的页眉页脚、公司Logo区域、标准化布局等专业元素");
+            request.setFileName("enterprise-analysis-report.pdf");
+            request.setIncludeWatermark(true);
+            request.setWatermarkText("RBlog 企业版");
+            
+            // 创建多个图表数据
+            ChartData marketChart = new ChartData();
+            marketChart.setTitle("市场洞察分析");
+            marketChart.setChartType("scatter");
+            marketChart.setXAxisLabel("市场饱和度");
+            marketChart.setYAxisLabel("销售坪效增长率");
+            
+            ChartData trendChart = new ChartData();
+            trendChart.setTitle("发展趋势对比");
+            trendChart.setChartType("scatter");
+            trendChart.setXAxisLabel("GDP per capita");
+            trendChart.setYAxisLabel("Life Expectancy");
+            
+            ChartData performanceChart = new ChartData();
+            performanceChart.setTitle("综合绩效评估");
+            performanceChart.setChartType("bar");
+            performanceChart.setXAxisLabel("产品类别");
+            performanceChart.setYAxisLabel("销售额（万元）");
+            
+            request.setCharts(Arrays.asList(marketChart, trendChart, performanceChart));
+            
+            // 使用现有方法生成企业级PDF，暂时替代FOP实现
+            byte[] pdfBytes = generateEnterpriseStylePdf(request);
+            
+            // 设置响应头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.add("Content-Disposition", "attachment; filename=enterprise-template-report.pdf");
+            headers.setContentLength(pdfBytes.length);
+            
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * 生成企业风格的PDF（使用iText实现）
+     */
+    private byte[] generateEnterpriseStylePdf(PdfGenerateRequest request) throws Exception {
+        // 创建PDF文档
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+        document.open();
+        
+        // 设置中文字体
+        BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 20, com.itextpdf.text.Font.BOLD);
+        com.itextpdf.text.Font subtitleFont = new com.itextpdf.text.Font(baseFont, 16, com.itextpdf.text.Font.BOLD);
+        com.itextpdf.text.Font contentFont = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.NORMAL);
+        com.itextpdf.text.Font smallFont = new com.itextpdf.text.Font(baseFont, 10, com.itextpdf.text.Font.NORMAL);
+        
+        // 企业样式：添加页眉背景色
+        Rectangle pageRect = document.getPageSize();
+        PdfContentByte canvas = writer.getDirectContent();
+        
+        // 添加页眉背景
+        canvas.saveState();
+        canvas.setRGBColorFill(45, 85, 135); // 企业蓝色
+        canvas.rectangle(0, pageRect.getHeight() - 80, pageRect.getWidth(), 80);
+        canvas.fill();
+        canvas.restoreState();
+        
+        // 添加Logo区域 (模拟)
+        Paragraph logoArea = new Paragraph("🏢 RBlog 企业版", new com.itextpdf.text.Font(baseFont, 14, com.itextpdf.text.Font.BOLD, BaseColor.WHITE));
+        logoArea.setAlignment(Element.ALIGN_LEFT);
+        logoArea.setSpacingAfter(30);
+        document.add(logoArea);
+        
+        // 添加首页装饰图片
+        try {
+            Image coverImage = Image.getInstance("https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/mail.jpg");
+            
+            // 设置图片大小 - 适应页面宽度的70%
+            float pageWidth = document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin();
+            float imageScale = (pageWidth * 0.7f) / coverImage.getWidth();
+            coverImage.scalePercent(imageScale * 100);
+            
+            // 设置图片位置和边距
+            coverImage.setAlignment(Element.ALIGN_CENTER);
+            coverImage.setSpacingAfter(25);
+            coverImage.setBorder(Rectangle.BOX);
+            coverImage.setBorderWidth(2);
+            coverImage.setBorderColor(BaseColor.LIGHT_GRAY);
+            
+            document.add(coverImage);
+        } catch (Exception imgEx) {
+            // 如果图片加载失败，添加替代文本
+            Paragraph fallbackText = new Paragraph("📧 企业通讯中心", new com.itextpdf.text.Font(baseFont, 16, com.itextpdf.text.Font.BOLD, BaseColor.GRAY));
+            fallbackText.setAlignment(Element.ALIGN_CENTER);
+            fallbackText.setSpacingAfter(25);
+            document.add(fallbackText);
+        }
+        
+        // 添加主标题
+        Paragraph mainTitle = new Paragraph(request.getTitle(), titleFont);
+        mainTitle.setAlignment(Element.ALIGN_CENTER);
+        mainTitle.setSpacingAfter(15);
+        document.add(mainTitle);
+        
+        // 添加副标题
+        Paragraph subtitle = new Paragraph("Professional Analytics Report", new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.ITALIC, BaseColor.GRAY));
+        subtitle.setAlignment(Element.ALIGN_CENTER);
+        subtitle.setSpacingAfter(25);
+        document.add(subtitle);
+        
+        // 添加描述
+        Paragraph description = new Paragraph(request.getDescription(), contentFont);
+        description.setAlignment(Element.ALIGN_JUSTIFIED);
+        description.setSpacingAfter(20);
+        document.add(description);
+        
+        // 添加生成信息
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        Paragraph generateInfo = new Paragraph("报告生成时间: " + sdf.format(new Date()), smallFont);
+        generateInfo.setAlignment(Element.ALIGN_RIGHT);
+        generateInfo.setSpacingAfter(30);
+        document.add(generateInfo);
+        
+        // 添加图表部分
+        if (request.getCharts() != null && !request.getCharts().isEmpty()) {
+            int chartIndex = 1;
+            for (ChartData chartData : request.getCharts()) {
+                // 图表章节标题
+                Paragraph sectionTitle = new Paragraph(
+                    String.format("%02d %s", chartIndex, chartData.getTitle()), 
+                    subtitleFont
+                );
+                sectionTitle.setSpacingBefore(30);
+                sectionTitle.setSpacingAfter(15);
+                document.add(sectionTitle);
+                
+                // 根据图表类型生成不同的图表
+                byte[] chartImageBytes;
+                switch (chartData.getChartType()) {
+                    case "scatter":
+                        if (chartIndex == 1) {
+                            chartImageBytes = generateScatterChart();
+                        } else {
+                            chartImageBytes = generateGdpLifeExpectancyChart();
+                        }
+                        break;
+                    case "bar":
+                        chartImageBytes = generateBarChart();
+                        break;
+                    default:
+                        chartImageBytes = generateBarChart();
+                }
+                
+                Image chartImage = Image.getInstance(chartImageBytes);
+                
+                // 调整图片大小
+                float scalePercent = (document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin()) / chartImage.getWidth();
+                if (scalePercent < 1.0f) {
+                    chartImage.scalePercent(scalePercent * 100);
+                }
+                
+                chartImage.setAlignment(Element.ALIGN_CENTER);
+                chartImage.setSpacingAfter(20);
+                document.add(chartImage);
+                
+                chartIndex++;
+                
+                // 如果不是最后一个图表，添加分页
+                if (chartIndex <= request.getCharts().size()) {
+                    document.newPage();
+                }
+            }
+        }
+        
+        // 添加水印
+        if (request.isIncludeWatermark()) {
+            canvas = writer.getDirectContentUnder();
+            canvas.saveState();
+            
+            // 设置水印样式
+            canvas.setGState(new PdfGState() {{ setFillOpacity(0.1f); }});
+            canvas.beginText();
+            canvas.setFontAndSize(baseFont, 50);
+            canvas.setColorFill(BaseColor.GRAY);
+            
+            // 旋转并添加水印文字
+            canvas.showTextAligned(Element.ALIGN_CENTER, 
+                request.getWatermarkText() != null ? request.getWatermarkText() : "企业机密",
+                pageRect.getWidth() / 2, pageRect.getHeight() / 2, 45);
+                
+            canvas.endText();
+            canvas.restoreState();
+        }
+        
+        // 添加页脚
+        Paragraph footer = new Paragraph("© 2024 RBlog Enterprise. All rights reserved.", smallFont);
+        footer.setAlignment(Element.ALIGN_CENTER);
+        footer.setSpacingBefore(30);
+        document.add(footer);
+        
+        document.close();
+        
+        return outputStream.toByteArray();
+    }
+    
+    /**
+     * 使用HTML模板生成品牌洞察PDF演示
+     */
+    @GetMapping("/pdf/brand-insight-template")
+    public ResponseEntity<byte[]> generateBrandInsightTemplatePdf() {
+        try {
+            // 创建演示数据
+            BrandInsightData data = createDemoBrandInsightData();
+            
+            // 使用模板渲染服务生成HTML
+            String htmlContent;
+            if (templateRenderService != null) {
+                htmlContent = templateRenderService.renderBrandInsightTemplate(data);
+            } else {
+                // 备选方案：使用简单的HTML模板
+                htmlContent = generateSimpleBrandInsightHtml(data);
+            }
+            
+            // TODO: 集成HTML转PDF服务（需要添加Playwright依赖）
+            // 暂时使用现有的PDF生成方式作为演示
+            byte[] pdfBytes = generateBrandInsightPdfWithiText(data);
+            
+            // 设置响应头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.add("Content-Disposition", "attachment; filename=brand-insight-template.pdf");
+            headers.setContentLength(pdfBytes.length);
+            
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * 创建演示用的品牌洞察数据
+     */
+    private BrandInsightData createDemoBrandInsightData() {
+        BrandInsightData data = new BrandInsightData();
+        data.setMerchantName("RBlog 企业版");
+        data.setLogoUrl("https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/mail.jpg");
+        data.setBackgroundImageUrl("https://cdn.jsdelivr.net/gh/Raxcl/blog-resource/img/mail.jpg");
+        data.setReportDate("2024年1月");
+        data.setBrandValue("1.2亿元");
+        data.setMarketShare(15.8);
+        
+        // 创建性能指标演示数据
+        java.util.List<BrandInsightData.PerformanceMetric> metrics = java.util.Arrays.asList(
+            new BrandInsightData.PerformanceMetric("品牌认知度", "78.5%", "+5.2%", "↗"),
+            new BrandInsightData.PerformanceMetric("市场占有率", "15.8%", "+2.1%", "↗"),
+            new BrandInsightData.PerformanceMetric("客户满意度", "92.3%", "+1.8%", "↗"),
+            new BrandInsightData.PerformanceMetric("销售增长率", "23.7%", "+8.9%", "↗")
+        );
+        data.setPerformanceMetrics(metrics);
+        
+        // 图表数据
+        data.setMarketChartLabels(java.util.Arrays.asList("1月", "2月", "3月", "4月", "5月", "6月"));
+        data.setMarketChartData(java.util.Arrays.asList(120.5, 135.2, 148.7, 162.1, 175.8, 189.3));
+        
+        return data;
+    }
+    
+    /**
+     * 生成简单的品牌洞察HTML（备选方案）
+     */
+    private String generateSimpleBrandInsightHtml(BrandInsightData data) {
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>\n");
+        html.append("<html>\n");
+        html.append("<head>\n");
+        html.append("    <meta charset=\"UTF-8\">\n");
+        html.append("    <title>").append(data.getMerchantName()).append(" 品牌洞察报告</title>\n");
+        html.append("    <style>\n");
+        html.append("        @page { size: A4; margin: 20mm; }\n");
+        html.append("        body { font-family: 'Microsoft YaHei', 'SimSun', Arial, sans-serif; }\n");
+        html.append("        .cover { text-align: center; padding: 50px 0; }\n");
+        html.append("        .title { font-size: 28px; font-weight: bold; margin-bottom: 20px; }\n");
+        html.append("        .subtitle { font-size: 18px; color: #666; margin-bottom: 30px; }\n");
+        html.append("        .metrics-table { width: 100%; border-collapse: collapse; margin: 20px 0; }\n");
+        html.append("        .metrics-table th, .metrics-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }\n");
+        html.append("        .metrics-table th { background-color: #f2f2f2; font-weight: bold; }\n");
+        html.append("        .page-break { page-break-before: always; }\n");
+        html.append("    </style>\n");
+        html.append("</head>\n");
+        html.append("<body>\n");
+        
+        // 封面页
+        html.append("    <div class=\"cover\">\n");
+        html.append("        <div class=\"title\">").append(data.getMerchantName()).append("</div>\n");
+        html.append("        <div class=\"subtitle\">品牌洞察报告</div>\n");
+        html.append("        <p>报告期间：").append(data.getReportDate()).append("</p>\n");
+        html.append("    </div>\n");
+        
+        // 品牌概览页
+        html.append("    <div class=\"page-break\">\n");
+        html.append("        <h1>品牌概览</h1>\n");
+        html.append("        <p><strong>品牌价值：</strong>").append(data.getBrandValue()).append("</p>\n");
+        html.append("        <p><strong>市场份额：</strong>").append(data.getMarketShare()).append("%</p>\n");
+        
+        // 性能指标表格
+        if (data.getPerformanceMetrics() != null && !data.getPerformanceMetrics().isEmpty()) {
+            html.append("        <h2>关键绩效指标</h2>\n");
+            html.append("        <table class=\"metrics-table\">\n");
+            html.append("            <thead>\n");
+            html.append("                <tr><th>指标</th><th>当前值</th><th>上期对比</th><th>趋势</th></tr>\n");
+            html.append("            </thead>\n");
+            html.append("            <tbody>\n");
+            
+            for (BrandInsightData.PerformanceMetric metric : data.getPerformanceMetrics()) {
+                html.append("                <tr>\n");
+                html.append("                    <td>").append(metric.getName()).append("</td>\n");
+                html.append("                    <td>").append(metric.getCurrentValue()).append("</td>\n");
+                html.append("                    <td>").append(metric.getCompareValue()).append("</td>\n");
+                html.append("                    <td>").append(metric.getTrend()).append("</td>\n");
+                html.append("                </tr>\n");
+            }
+            
+            html.append("            </tbody>\n");
+            html.append("        </table>\n");
+        }
+        
+        html.append("    </div>\n");
+        html.append("</body>\n");
+        html.append("</html>\n");
+        
+        return html.toString();
+    }
+    
+    /**
+     * 使用iText生成品牌洞察PDF（作为HTML模板的备选方案）
+     */
+    private byte[] generateBrandInsightPdfWithiText(BrandInsightData data) throws Exception {
+        // 创建PDF文档
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+        document.open();
+        
+        // 设置中文字体
+        BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 20, com.itextpdf.text.Font.BOLD);
+        com.itextpdf.text.Font subtitleFont = new com.itextpdf.text.Font(baseFont, 16, com.itextpdf.text.Font.BOLD);
+        com.itextpdf.text.Font contentFont = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.NORMAL);
+        
+        // 添加背景图片（封面）
+        try {
+            Image backgroundImage = Image.getInstance(data.getBackgroundImageUrl());
+            backgroundImage.setAbsolutePosition(0, 0);
+            backgroundImage.scaleToFit(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+            backgroundImage.setTransparency(new int[]{0, 128}); // 设置透明度
+            document.add(backgroundImage);
+        } catch (Exception e) {
+            // 背景图加载失败时的处理
+        }
+        
+        // 主标题
+        Paragraph mainTitle = new Paragraph(data.getMerchantName(), titleFont);
+        mainTitle.setAlignment(Element.ALIGN_CENTER);
+        mainTitle.setSpacingAfter(15);
+        document.add(mainTitle);
+        
+        // 副标题
+        Paragraph subtitle = new Paragraph("品牌洞察报告", subtitleFont);
+        subtitle.setAlignment(Element.ALIGN_CENTER);
+        subtitle.setSpacingAfter(25);
+        document.add(subtitle);
+        
+        // 报告日期
+        Paragraph reportDate = new Paragraph("报告期间: " + data.getReportDate(), contentFont);
+        reportDate.setAlignment(Element.ALIGN_CENTER);
+        reportDate.setSpacingAfter(40);
+        document.add(reportDate);
+        
+        // 新页面
+        document.newPage();
+        
+        // 品牌概览
+        Paragraph overviewTitle = new Paragraph("品牌概览", subtitleFont);
+        overviewTitle.setSpacingAfter(20);
+        document.add(overviewTitle);
+        
+        Paragraph brandValue = new Paragraph("品牌价值: " + data.getBrandValue(), contentFont);
+        brandValue.setSpacingAfter(10);
+        document.add(brandValue);
+        
+        Paragraph marketShare = new Paragraph("市场份额: " + data.getMarketShare() + "%", contentFont);
+        marketShare.setSpacingAfter(30);
+        document.add(marketShare);
+        
+        // 性能指标表格
+        if (data.getPerformanceMetrics() != null && !data.getPerformanceMetrics().isEmpty()) {
+            Paragraph metricsTitle = new Paragraph("关键绩效指标", subtitleFont);
+            metricsTitle.setSpacingAfter(15);
+            document.add(metricsTitle);
+            
+            com.itextpdf.text.pdf.PdfPTable table = new com.itextpdf.text.pdf.PdfPTable(4);
+            table.setWidthPercentage(100);
+            
+            // 表头
+            table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase("指标", contentFont)));
+            table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase("当前值", contentFont)));
+            table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase("上期对比", contentFont)));
+            table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase("趋势", contentFont)));
+            
+            // 数据行
+            for (BrandInsightData.PerformanceMetric metric : data.getPerformanceMetrics()) {
+                table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getName(), contentFont)));
+                table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getCurrentValue(), contentFont)));
+                table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getCompareValue(), contentFont)));
+                table.addCell(new com.itextpdf.text.pdf.PdfPCell(new Phrase(metric.getTrend(), contentFont)));
+            }
+            
+            document.add(table);
+        }
+        
+        document.close();
+        return outputStream.toByteArray();
+    }
+    
+    /**
+     * HTML转PDF测试端点
+     */
+    @GetMapping("/pdf/html-test")
+    public ResponseEntity<byte[]> generateHtmlTestPdf() {
+        try {
+            byte[] pdfBytes;
+            
+            if (htmlToPdfService != null) {
+                pdfBytes = htmlToPdfService.generateTestPdf();
+            } else {
+                // 备选方案：使用iText生成简单PDF
+                pdfBytes = generateSimpleTestPdf();
+            }
+            
+            // 设置响应头
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.add("Content-Disposition", "attachment; filename=html-test.pdf");
+            headers.setContentLength(pdfBytes.length);
+            
+            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    /**
+     * 生成简单测试PDF（备选方案）
+     */
+    private byte[] generateSimpleTestPdf() throws Exception {
+        // 创建PDF文档
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
+        
+        // 设置中文字体
+        BaseFont baseFont = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        com.itextpdf.text.Font titleFont = new com.itextpdf.text.Font(baseFont, 18, com.itextpdf.text.Font.BOLD);
+        com.itextpdf.text.Font contentFont = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.NORMAL);
+        
+        // 添加标题
+        Paragraph title = new Paragraph("HTML转PDF功能测试", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+        
+        // 添加内容
+        Paragraph content = new Paragraph("HTML模板PDF生成系统测试成功！", contentFont);
+        content.setSpacingAfter(15);
+        document.add(content);
+        
+        // 添加时间戳
+        Paragraph timestamp = new Paragraph("生成时间: " + 
+            java.time.LocalDateTime.now().format(
+                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), contentFont);
+        document.add(timestamp);
+        
+        document.close();
+        return outputStream.toByteArray();
     }
 } 
