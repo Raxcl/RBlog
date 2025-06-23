@@ -39,7 +39,6 @@ import cn.raxcl.dto.PdfGenerateRequest;
 import cn.raxcl.dto.ChartData;
 import cn.raxcl.dto.BrandInsightData;
 import cn.raxcl.service.TemplateRenderService;
-import cn.raxcl.service.HtmlToPdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -57,9 +56,9 @@ public class PdfDemoController {
     @Autowired(required = false)
     private TemplateRenderService templateRenderService;
     
-    // 添加HTML转PDF服务的注入
-    @Autowired(required = false)  
-    private HtmlToPdfService htmlToPdfService;
+//    // 添加HTML转PDF服务的注入
+//    @Autowired(required = false)
+//    private HtmlToPdfService htmlToPdfService;
     
     /**
      * 生成包含图表的示例PDF
@@ -1498,44 +1497,44 @@ public class PdfDemoController {
     /**
      * 使用HTML模板生成品牌洞察PDF演示
      */
-    @GetMapping("/pdf/brand-insight-template")
-    public ResponseEntity<byte[]> generateBrandInsightTemplatePdf() {
-        try {
-            // 创建演示数据
-            BrandInsightData data = createDemoBrandInsightData();
-            
-            // 使用模板渲染服务生成HTML
-            String htmlContent;
-            if (templateRenderService != null) {
-                htmlContent = templateRenderService.renderBrandInsightTemplate(data);
-            } else {
-                // 备选方案：使用简单的HTML模板
-                htmlContent = generateSimpleBrandInsightHtml(data);
-            }
-            
-            // 使用HTML转PDF服务生成PDF
-            byte[] pdfBytes;
-            if (htmlToPdfService != null) {
-                pdfBytes = htmlToPdfService.convertHtmlToPdf(htmlContent);
-            } else {
-                // 备选方案：转换HTML为基本PDF（模拟HTML模板效果）
-                pdfBytes = convertHtmlToPdfBasic(htmlContent, data);
-            }
-            
-            // 设置响应头
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.add("Content-Disposition", "attachment; filename=brand-insight-template.pdf");
-            headers.setContentLength(pdfBytes.length);
-            
-            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-    
+//    @GetMapping("/pdf/brand-insight-template")
+//    public ResponseEntity<byte[]> generateBrandInsightTemplatePdf() {
+//        try {
+//            // 创建演示数据
+//            BrandInsightData data = createDemoBrandInsightData();
+//
+//            // 使用模板渲染服务生成HTML
+//            String htmlContent;
+//            if (templateRenderService != null) {
+//                htmlContent = templateRenderService.renderBrandInsightTemplate(data);
+//            } else {
+//                // 备选方案：使用简单的HTML模板
+//                htmlContent = generateSimpleBrandInsightHtml(data);
+//            }
+//
+//            // 使用HTML转PDF服务生成PDF
+//            byte[] pdfBytes;
+//            if (htmlToPdfService != null) {
+//                pdfBytes = htmlToPdfService.convertHtmlToPdf(htmlContent);
+//            } else {
+//                // 备选方案：转换HTML为基本PDF（模拟HTML模板效果）
+//                pdfBytes = convertHtmlToPdfBasic(htmlContent, data);
+//            }
+//
+//            // 设置响应头
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_PDF);
+//            headers.add("Content-Disposition", "attachment; filename=brand-insight-template.pdf");
+//            headers.setContentLength(pdfBytes.length);
+//
+//            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+//
     /**
      * 创建演示用的品牌洞察数据
      */
@@ -1724,32 +1723,32 @@ public class PdfDemoController {
     /**
      * HTML转PDF测试端点
      */
-    @GetMapping("/pdf/html-test")
-    public ResponseEntity<byte[]> generateHtmlTestPdf() {
-        try {
-            byte[] pdfBytes;
-            
-            if (htmlToPdfService != null) {
-                pdfBytes = htmlToPdfService.generateTestPdf();
-            } else {
-                // 备选方案：使用iText生成简单PDF
-                pdfBytes = generateSimpleTestPdf();
-            }
-            
-            // 设置响应头
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.add("Content-Disposition", "attachment; filename=html-test.pdf");
-            headers.setContentLength(pdfBytes.length);
-            
-            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-    
+//    @GetMapping("/pdf/html-test")
+//    public ResponseEntity<byte[]> generateHtmlTestPdf() {
+//        try {
+//            byte[] pdfBytes;
+//
+//            if (htmlToPdfService != null) {
+//                pdfBytes = htmlToPdfService.generateTestPdf();
+//            } else {
+//                // 备选方案：使用iText生成简单PDF
+//                pdfBytes = generateSimpleTestPdf();
+//            }
+//
+//            // 设置响应头
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_PDF);
+//            headers.add("Content-Disposition", "attachment; filename=html-test.pdf");
+//            headers.setContentLength(pdfBytes.length);
+//
+//            return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+//
     /**
      * 生成简单测试PDF（备选方案）
      */
