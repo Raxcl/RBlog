@@ -613,16 +613,40 @@
                     <!-- 市场份额饼图 -->
                     <div class="chart-container">
                         <h3 class="chart-title">🥧 市场份额分布</h3>
-                        <div class="chart-canvas">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
                             <canvas id="marketShareChart" width="300" height="300"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder pie-chart">
+                            <div class="chart-icon">🥧</div>
+                            <p><strong>市场份额饼图占位符</strong></p>
+                            <p style="font-size: 12px; opacity: 0.7;">
+                                当前市场份额: <span th:text="${marketShare} + '%'">15.8%</span>
+                            </p>
+                            <p style="font-size: 10px; color: #999;">
+                                💡 提示: 设置 enableCharts=true 启用真实图表
+                            </p>
                         </div>
                     </div>
                     
                     <!-- 收入趋势折线图 -->
                     <div class="chart-container">
                         <h3 class="chart-title">📈 收入趋势图</h3>
-                        <div class="chart-canvas">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
                             <canvas id="revenueChart" width="400" height="300"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder line-chart">
+                            <div class="chart-icon">📈</div>
+                            <p><strong>收入趋势图占位符</strong></p>
+                            <p style="font-size: 12px; opacity: 0.7;">
+                                数据范围: <span th:text="${#strings.listJoin(marketChartLabels, ', ')}">1月, 2月, 3月, 4月, 5月, 6月</span>
+                            </p>
+                            <p style="font-size: 10px; color: #999;">
+                                💡 提示: 通过API接口插入真实图表数据
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -631,16 +655,36 @@
                     <!-- 用户增长柱状图 -->
                     <div class="chart-container">
                         <h3 class="chart-title">📊 用户增长分析</h3>
-                        <div class="chart-canvas">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
                             <canvas id="userGrowthChart" width="400" height="300"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder bar-chart">
+                            <div class="chart-icon">📊</div>
+                            <p><strong>用户增长分析占位符</strong></p>
+                            <p style="font-size: 12px; opacity: 0.7;">显示各月份新增用户数量变化</p>
+                            <p style="font-size: 10px; color: #999;">
+                                📊 状态: 等待图表数据注入
+                            </p>
                         </div>
                     </div>
                     
                     <!-- 双轴对比图 -->
                     <div class="chart-container">
                         <h3 class="chart-title">⚖️ 收入与用户对比</h3>
-                        <div class="chart-canvas">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
                             <canvas id="dualAxisChart" width="400" height="300"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder dual-axis-chart">
+                            <div class="chart-icon">⚖️</div>
+                            <p><strong>双轴对比图占位符</strong></p>
+                            <p style="font-size: 12px; opacity: 0.7;">同时展示收入和用户数量的关联性</p>
+                            <p style="font-size: 10px; color: #999;">
+                                🔄 状态: 准备接收图表配置
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -677,16 +721,36 @@
                     <!-- 竞争对手雷达图 -->
                     <div class="chart-container">
                         <h3 class="chart-title">🕸️ 竞争力雷达图</h3>
-                        <div class="chart-canvas">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
                             <canvas id="radarChart" width="350" height="350"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder radar-chart">
+                            <div class="chart-icon">🕸️</div>
+                            <p><strong>竞争力雷达图占位符</strong></p>
+                            <p style="font-size: 12px; opacity: 0.7;">包含品牌知名度、产品质量、服务水平、价格竞争力等维度</p>
+                            <p style="font-size: 10px; color: #999;">
+                                🎯 维度: 品牌知名度 | 产品质量 | 服务水平 | 价格竞争力 | 创新能力 | 市场覆盖
+                            </p>
                         </div>
                     </div>
                     
                     <!-- 市场地位散点图 -->
                     <div class="chart-container">
                         <h3 class="chart-title">🎯 市场地位分析</h3>
-                        <div class="chart-canvas">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
                             <canvas id="scatterChart" width="400" height="350"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder scatter-chart">
+                            <div class="chart-icon">🎯</div>
+                            <p><strong>市场地位散点图占位符</strong></p>
+                            <p style="font-size: 12px; opacity: 0.7;">展示企业在市场中的相对位置</p>
+                            <p style="font-size: 10px; color: #999;">
+                                📍 坐标: X轴-市场份额 | Y轴-增长率
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -703,24 +767,45 @@
                     <!-- 满意度仪表盘 -->
                     <div class="dashboard-item">
                         <h4 class="dashboard-title">😊 客户满意度</h4>
-                        <div class="gauge-chart-real">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="gauge-chart-real">
                             <canvas id="satisfactionGauge" width="120" height="120"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="gauge-chart">
+                            <div class="gauge-icon">😊</div>
+                            <div class="gauge-value">4.6/5.0</div>
+                            <div class="gauge-label">当前评分</div>
                         </div>
                     </div>
                     
                     <!-- 品牌健康度仪表盘 -->
                     <div class="dashboard-item">
                         <h4 class="dashboard-title">💪 品牌健康度</h4>
-                        <div class="gauge-chart-real">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="gauge-chart-real">
                             <canvas id="healthGauge" width="120" height="120"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="gauge-chart">
+                            <div class="gauge-icon">💪</div>
+                            <div class="gauge-value">85%</div>
+                            <div class="gauge-label">健康指数</div>
                         </div>
                     </div>
                     
                     <!-- 市场活跃度仪表盘 -->
                     <div class="dashboard-item">
                         <h4 class="dashboard-title">🔥 市场活跃度</h4>
-                        <div class="gauge-chart-real">
+                        <!-- 条件渲染：有图表数据时显示真实图表 -->
+                        <div th:if="${enableCharts != null and enableCharts}" class="gauge-chart-real">
                             <canvas id="activityGauge" width="120" height="120"></canvas>
+                        </div>
+                        <!-- 条件渲染：无图表数据时显示占位符 -->
+                        <div th:unless="${enableCharts != null and enableCharts}" class="gauge-chart">
+                            <div class="gauge-icon">🔥</div>
+                            <div class="gauge-value">92%</div>
+                            <div class="gauge-label">活跃指数</div>
                         </div>
                     </div>
                 </div>
@@ -762,312 +847,318 @@
         const marketData = /*[[${marketChartData}]]*/ [120, 135, 142, 158, 167, 175];
         const marketShare = /*[[${marketShare}]]*/ 15.8;
         const merchantName = /*[[${merchantName}]]*/ '示例企业';
+        const enableCharts = /*[[${enableCharts}]]*/ false;
         
-        // 等待页面加载完成
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // 1. 市场份额饼图
-            const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
-            new Chart(marketShareCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: [merchantName, '竞争对手A', '竞争对手B', '其他'],
-                    datasets: [{
-                        data: [marketShare, 25.3, 18.9, 100 - marketShare - 25.3 - 18.9],
-                        backgroundColor: [
-                            '#667eea',
-                            '#764ba2', 
-                            '#f093fb',
-                            '#e9ecef'
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: '市场份额分布 (%)'
-                        }
-                    }
-                }
-            });
-            
-            // 2. 收入趋势折线图
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: marketLabels,
-                    datasets: [{
-                        label: '收入(万元)',
-                        data: marketData,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: '收入 (万元)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-            
-            // 3. 用户增长柱状图
-            const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-            const userGrowthData = marketLabels.map((_, index) => (index + 1) * 1200 + 5000);
-            new Chart(userGrowthCtx, {
-                type: 'bar',
-                data: {
-                    labels: marketLabels,
-                    datasets: [{
-                        label: '新增用户',
-                        data: userGrowthData,
-                        backgroundColor: 'rgba(118, 75, 162, 0.8)',
-                        borderColor: '#764ba2',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: '用户数量'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
-            
-            // 4. 双轴对比图
-            const dualAxisCtx = document.getElementById('dualAxisChart').getContext('2d');
-            new Chart(dualAxisCtx, {
-                type: 'line',
-                data: {
-                    labels: marketLabels,
-                    datasets: [{
-                        label: '收入(万元)',
-                        data: marketData,
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        yAxisID: 'y'
-                    }, {
-                        label: '用户数量',
-                        data: userGrowthData,
-                        borderColor: '#764ba2',
-                        backgroundColor: 'rgba(118, 75, 162, 0.1)',
-                        yAxisID: 'y1'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: '时间'
-                            }
-                        },
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: {
-                                display: true,
-                                text: '收入(万元)'
-                            }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: {
-                                display: true,
-                                text: '用户数量'
-                            },
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                        }
-                    }
-                }
-            });
-            
-            // 5. 竞争力雷达图
-            const radarCtx = document.getElementById('radarChart').getContext('2d');
-            new Chart(radarCtx, {
-                type: 'radar',
-                data: {
-                    labels: ['品牌知名度', '产品质量', '服务水平', '价格竞争力', '创新能力', '市场覆盖'],
-                    datasets: [{
-                        label: merchantName,
-                        data: [85, 78, 82, 65, 88, 75],
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
-                        borderWidth: 2
-                    }, {
-                        label: '行业平均',
-                        data: [70, 75, 70, 70, 65, 68],
-                        borderColor: '#764ba2',
-                        backgroundColor: 'rgba(118, 75, 162, 0.2)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            max: 100
-                        }
-                    }
-                }
-            });
-            
-            // 6. 散点图
-            const scatterCtx = document.getElementById('scatterChart').getContext('2d');
-            new Chart(scatterCtx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: merchantName,
-                        data: [{x: marketShare, y: 15.2}],
-                        backgroundColor: '#667eea',
-                        borderColor: '#667eea',
-                        pointRadius: 8
-                    }, {
-                        label: '竞争对手',
-                        data: [
-                            {x: 25.3, y: 8.5},
-                            {x: 18.9, y: 12.1},
-                            {x: 12.4, y: 18.7},
-                            {x: 8.6, y: 5.3}
-                        ],
-                        backgroundColor: '#764ba2',
-                        borderColor: '#764ba2',
-                        pointRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: '市场份额 (%)'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: '增长率 (%)'
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // 7-9. 仪表盘图表 (使用环形图模拟)
-            function createGaugeChart(canvasId, value, max, color) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                return new Chart(ctx, {
+        // 仅在启用图表时执行渲染
+        if (enableCharts) {
+            // 等待页面加载完成
+            document.addEventListener('DOMContentLoaded', function() {
+                
+                // 1. 市场份额饼图
+                const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
+                new Chart(marketShareCtx, {
                     type: 'doughnut',
                     data: {
+                        labels: [merchantName, '竞争对手A', '竞争对手B', '其他'],
                         datasets: [{
-                            data: [value, max - value],
-                            backgroundColor: [color, '#e9ecef'],
-                            borderWidth: 0
+                            data: [marketShare, 25.3, 18.9, 100 - marketShare - 25.3 - 18.9],
+                            backgroundColor: [
+                                '#667eea',
+                                '#764ba2', 
+                                '#f093fb',
+                                '#e9ecef'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
                         }]
                     },
                     options: {
-                        responsive: false,
-                        cutout: '70%',
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '市场份额分布 (%)'
+                            }
+                        }
+                    }
+                });
+                
+                // 2. 收入趋势折线图
+                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: marketLabels,
+                        datasets: [{
+                            label: '收入(万元)',
+                            data: marketData,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '收入 (万元)'
+                                }
+                            }
+                        },
                         plugins: {
                             legend: {
                                 display: false
-                            },
-                            tooltip: {
-                                enabled: false
+                            }
+                        }
+                    }
+                });
+                
+                // 3. 用户增长柱状图
+                const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+                const userGrowthData = marketLabels.map((_, index) => (index + 1) * 1200 + 5000);
+                new Chart(userGrowthCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: marketLabels,
+                        datasets: [{
+                            label: '新增用户',
+                            data: userGrowthData,
+                            backgroundColor: 'rgba(118, 75, 162, 0.8)',
+                            borderColor: '#764ba2',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '用户数量'
+                                }
                             }
                         },
-                        elements: {
-                            center: {
-                                text: value + (max === 5 ? '/5' : '%'),
-                                color: '#2c3e50',
-                                fontStyle: 'bold',
-                                sidePadding: 20,
-                                minFontSize: 12,
-                                lineHeight: 25
+                        plugins: {
+                            legend: {
+                                display: false
                             }
                         }
-                    },
-                    plugins: [{
-                        beforeDraw: function(chart) {
-                            const width = chart.width,
-                                  height = chart.height,
-                                  ctx = chart.ctx;
-                            
-                            ctx.restore();
-                            const fontSize = (height / 114).toFixed(2);
-                            ctx.font = fontSize + "em sans-serif";
-                            ctx.textBaseline = "middle";
-                            
-                            const text = chart.config.options.elements.center.text,
-                                  textX = Math.round((width - ctx.measureText(text).width) / 2),
-                                  textY = height / 2;
-                            
-                            ctx.fillText(text, textX, textY);
-                            ctx.save();
-                        }
-                    }]
+                    }
                 });
-            }
-            
-            // 创建三个仪表盘
-            createGaugeChart('satisfactionGauge', 4.6, 5, '#28a745');
-            createGaugeChart('healthGauge', 85, 100, '#667eea');
-            createGaugeChart('activityGauge', 92, 100, '#fd7e14');
-            
-        });
+                
+                // 4. 双轴对比图
+                const dualAxisCtx = document.getElementById('dualAxisChart').getContext('2d');
+                new Chart(dualAxisCtx, {
+                    type: 'line',
+                    data: {
+                        labels: marketLabels,
+                        datasets: [{
+                            label: '收入(万元)',
+                            data: marketData,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            yAxisID: 'y'
+                        }, {
+                            label: '用户数量',
+                            data: userGrowthData,
+                            borderColor: '#764ba2',
+                            backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                            yAxisID: 'y1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: '时间'
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: '收入(万元)'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: '用户数量'
+                                },
+                                grid: {
+                                    drawOnChartArea: false,
+                                },
+                            }
+                        }
+                    }
+                });
+                
+                // 5. 竞争力雷达图
+                const radarCtx = document.getElementById('radarChart').getContext('2d');
+                new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['品牌知名度', '产品质量', '服务水平', '价格竞争力', '创新能力', '市场覆盖'],
+                        datasets: [{
+                            label: merchantName,
+                            data: [85, 78, 82, 65, 88, 75],
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                            borderWidth: 2
+                        }, {
+                            label: '行业平均',
+                            data: [70, 75, 70, 70, 65, 68],
+                            borderColor: '#764ba2',
+                            backgroundColor: 'rgba(118, 75, 162, 0.2)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+                
+                // 6. 散点图
+                const scatterCtx = document.getElementById('scatterChart').getContext('2d');
+                new Chart(scatterCtx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: merchantName,
+                            data: [{x: marketShare, y: 15.2}],
+                            backgroundColor: '#667eea',
+                            borderColor: '#667eea',
+                            pointRadius: 8
+                        }, {
+                            label: '竞争对手',
+                            data: [
+                                {x: 25.3, y: 8.5},
+                                {x: 18.9, y: 12.1},
+                                {x: 12.4, y: 18.7},
+                                {x: 8.6, y: 5.3}
+                            ],
+                            backgroundColor: '#764ba2',
+                            borderColor: '#764ba2',
+                            pointRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: '市场份额 (%)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '增长率 (%)'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // 7-9. 仪表盘图表 (使用环形图模拟)
+                function createGaugeChart(canvasId, value, max, color) {
+                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    return new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: [value, max - value],
+                                backgroundColor: [color, '#e9ecef'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: false,
+                            cutout: '70%',
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    enabled: false
+                                }
+                            },
+                            elements: {
+                                center: {
+                                    text: value + (max === 5 ? '/5' : '%'),
+                                    color: '#2c3e50',
+                                    fontStyle: 'bold',
+                                    sidePadding: 20,
+                                    minFontSize: 12,
+                                    lineHeight: 25
+                                }
+                            }
+                        },
+                        plugins: [{
+                            beforeDraw: function(chart) {
+                                const width = chart.width,
+                                      height = chart.height,
+                                      ctx = chart.ctx;
+                                
+                                ctx.restore();
+                                const fontSize = (height / 114).toFixed(2);
+                                ctx.font = fontSize + "em sans-serif";
+                                ctx.textBaseline = "middle";
+                                
+                                const text = chart.config.options.elements.center.text,
+                                      textX = Math.round((width - ctx.measureText(text).width) / 2),
+                                      textY = height / 2;
+                                
+                                ctx.fillText(text, textX, textY);
+                                ctx.save();
+                            }
+                        }]
+                    });
+                }
+                
+                // 创建三个仪表盘
+                createGaugeChart('satisfactionGauge', 4.6, 5, '#28a745');
+                createGaugeChart('healthGauge', 85, 100, '#667eea');
+                createGaugeChart('activityGauge', 92, 100, '#fd7e14');
+                
+            });
+        } else {
+            console.log('📊 图表模式: 占位符模式 - 设置 enableCharts=true 启用真实图表渲染');
+        }
     </script>
 </body>
 </html> 

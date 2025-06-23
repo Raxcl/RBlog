@@ -34,7 +34,7 @@ public class BrandInsightTestController {
      * GET /api/brand/insight/generate
      */
     @GetMapping("/insight/generate")
-    public ResponseEntity<String> generateBrandInsightHtml() {
+    public ResponseEntity<String> generateBrandInsightHtml(@RequestParam(value = "enableCharts", defaultValue = "true") Boolean enableCharts) {
         try {
             // 创建模板上下文
             Context context = new Context();
@@ -45,6 +45,9 @@ public class BrandInsightTestController {
             context.setVariable("marketShare", "28.5");
             context.setVariable("reportDate", "2024年第一季度");
             context.setVariable("logoUrl", "https://img.alicdn.com/tfs/TB1_uT8a5ERMeJjSspiXXbZLFXa-143-59.png");
+            
+            // 设置图表启用状态
+            context.setVariable("enableCharts", enableCharts);
             
             // 设置性能指标数据
             List<PerformanceMetric> performanceMetrics = Arrays.asList(
@@ -72,7 +75,7 @@ public class BrandInsightTestController {
             headers.set("Content-Disposition", "inline; filename=brand-insight-report.html");
             headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
             
-            log.info("成功生成品牌洞察HTML文件，企业: {}", "阿里巴巴集团控股有限公司");
+            log.info("成功生成品牌洞察HTML文件，企业: {}，图表模式: {}", "阿里巴巴集团控股有限公司", enableCharts ? "真实图表" : "占位符");
             
             return ResponseEntity.ok()
                     .headers(headers)
@@ -105,6 +108,9 @@ public class BrandInsightTestController {
             context.setVariable("marketChartLabels", request.getMarketChartLabels());
             context.setVariable("marketChartData", request.getMarketChartData());
             
+            // 设置图表启用状态（从请求中获取，默认启用）
+            context.setVariable("enableCharts", request.getEnableCharts() != null ? request.getEnableCharts() : true);
+            
             // 渲染模板
             String htmlContent = templateEngine.process("brand-insight", context);
             
@@ -116,7 +122,8 @@ public class BrandInsightTestController {
                        "_brand_insight.html");
             headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
             
-            log.info("成功生成自定义品牌洞察HTML文件，企业: {}", request.getMerchantName());
+            log.info("成功生成自定义品牌洞察HTML文件，企业: {}，图表模式: {}", request.getMerchantName(), 
+                    request.getEnableCharts() != null && request.getEnableCharts() ? "真实图表" : "占位符");
             
             return ResponseEntity.ok()
                     .headers(headers)
@@ -172,6 +179,7 @@ public class BrandInsightTestController {
         private List<PerformanceMetric> performanceMetrics = new ArrayList<>();
         private List<String> marketChartLabels = new ArrayList<>();
         private List<String> marketChartData = new ArrayList<>();
+        private Boolean enableCharts = true; // 新增：控制是否启用图表
 
         public BrandInsightRequest() {
             initDefaultData();
@@ -214,6 +222,10 @@ public class BrandInsightTestController {
         
         public List<String> getMarketChartData() { return marketChartData; }
         public void setMarketChartData(List<String> marketChartData) { this.marketChartData = marketChartData; }
+        
+        // 新增：图表启用控制
+        public Boolean getEnableCharts() { return enableCharts; }
+        public void setEnableCharts(Boolean enableCharts) { this.enableCharts = enableCharts; }
     }
 
     /**
