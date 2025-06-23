@@ -1,4 +1,71 @@
 <!DOCTYPE html>
+<!-- 
+================================================================================
+                          品牌洞察报告模板 - PDF 优化版本
+================================================================================
+
+本模板专门优化了 Gotenberg HTML-to-PDF 转换过程中的图表渲染问题。
+
+🎯 解决的主要问题：
+1. Canvas 图表在 PDF 中变成模糊图片
+2. 图表尺寸形变和比例失调
+3. 高分辨率显示器渲染不一致
+4. 字体和样式在 PDF 中显示异常
+
+🔧 技术解决方案：
+1. **固定尺寸渲染**：关闭响应式布局，使用固定 Canvas 尺寸
+2. **高 DPI 优化**：设置 devicePixelRatio=2，提升图表清晰度
+3. **PDF 专用样式**：@media print 和 .gotenberg-optimized 类
+4. **Canvas 优化**：动态调整 Canvas 分辨率和缩放比例
+5. **字体固定**：指定明确的字体族和大小
+
+🥧 饼图形变专项修复：
+1. **正方形容器强制**：#marketShareChart 强制 300x300px
+2. **aspectRatio=1**：Chart.js 配置强制 1:1 比例
+3. **专用Canvas优化**：optimizePieChartForPdf() 函数
+4. **容器布局优化**：.pie-chart-container 弹性布局
+5. **渲染完成检测**：onAnimationComplete 回调确保完全渲染
+
+💡 使用方法：
+```java
+// 在 Controller 中设置 PDF 模式
+model.addAttribute("pdfMode", true);           // 启用 PDF 优化
+model.addAttribute("enableCharts", true);      // 启用图表渲染
+
+// 或通过 URL 参数
+?pdf=true&enableCharts=true
+```
+
+🔍 Gotenberg 调用示例：
+```bash
+curl --request POST \
+  --url http://gotenberg:3000/forms/chromium/convert/html \
+  --header 'Content-Type: multipart/form-data' \
+  --form 'files=@brand-insight.html' \
+  --form 'marginTop=0.5' \
+  --form 'marginBottom=0.5' \
+  --form 'marginLeft=0.5' \
+  --form 'marginRight=0.5' \
+  --form 'scale=1.0' \
+  --form 'format=A4' \
+  --form 'landscape=false' \
+  --form 'printBackground=true'
+```
+
+📋 检查清单：
+- ✅ 设置 pdfMode=true
+- ✅ 设置 enableCharts=true  
+- ✅ 确保 Gotenberg 启用 printBackground=true
+- ✅ 使用合适的页面边距设置
+- ✅ 验证字体可用性
+
+⚠️  注意事项：
+- 图表渲染需要 JavaScript 执行完成，建议添加等待时间
+- 某些复杂动画效果在 PDF 中会被跳过
+- 确保网络连接可访问 Chart.js CDN
+
+================================================================================
+-->
 <html lang="zh_CN" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
@@ -389,6 +456,78 @@
             max-height: 400px;
         }
         
+        /* PDF 专用图表样式 - 解决 Gotenberg 转换问题 */
+        @media print {
+            .chart-canvas {
+                padding: 15px;
+                page-break-inside: avoid;
+            }
+            
+            .chart-canvas canvas {
+                /* 固定尺寸，防止形变 */
+                width: 350px !important;
+                height: 250px !important;
+                max-height: none !important;
+                /* 高分辨率渲染 */
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: optimize-contrast;
+                image-rendering: crisp-edges;
+                /* 抗锯齿 */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            
+            /* 饼图专用正方形容器 - 防止形变 */
+            #marketShareChart {
+                width: 300px !important;
+                height: 300px !important;
+            }
+            
+            /* 仪表盘图表特殊处理 */
+            .gauge-chart-real canvas {
+                width: 120px !important;
+                height: 120px !important;
+            }
+            
+            /* 雷达图特殊处理 */
+            #radarChart {
+                width: 300px !important;
+                height: 300px !important;
+            }
+            
+            /* 防止图表容器在 PDF 中被截断 */
+            .chart-container {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+            
+            .charts-grid {
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* Gotenberg 专用优化 */
+        .gotenberg-optimized .chart-canvas canvas {
+            /* 强制固定尺寸，避免响应式计算错误 */
+            width: 350px !important;
+            height: 250px !important;
+            /* 设置高 DPI 渲染 */
+            transform-origin: top left;
+        }
+        
+        /* 饼图专用 Gotenberg 优化 */
+        .gotenberg-optimized #marketShareChart {
+            width: 300px !important;
+            height: 300px !important;
+            /* 确保正方形容器 */
+            aspect-ratio: 1 / 1;
+        }
+        
+        .gotenberg-optimized .gauge-chart-real canvas {
+            width: 120px !important;
+            height: 120px !important;
+        }
+        
         /* 仪表盘真实数据样式 */
         .gauge-chart-real {
             position: relative;
@@ -408,6 +547,21 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             margin: 20px 0;
+        }
+        
+        /* 饼图容器专用样式 - 确保正方形 */
+        .pie-chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .pie-chart-container .chart-canvas {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         @media (max-width: 768px) {
@@ -502,7 +656,7 @@
         }
     </style>
 </head>
-<body>
+<body th:class="${pdfMode != null and pdfMode} ? 'gotenberg-optimized' : ''">
     <div class="container">
         <!-- 头部区域 -->
         <div class="header">
@@ -614,8 +768,10 @@
                     <div class="chart-container">
                         <h3 class="chart-title">🥧 市场份额分布</h3>
                         <!-- 条件渲染：有图表数据时显示真实图表 -->
-                        <div th:if="${enableCharts != null and enableCharts}" class="chart-canvas">
-                            <canvas id="marketShareChart" width="300" height="300"></canvas>
+                        <div th:if="${enableCharts != null and enableCharts}" class="pie-chart-container">
+                            <div class="chart-canvas">
+                                <canvas id="marketShareChart" width="300" height="300"></canvas>
+                            </div>
                         </div>
                         <!-- 条件渲染：无图表数据时显示占位符 -->
                         <div th:unless="${enableCharts != null and enableCharts}" class="chart-placeholder pie-chart">
@@ -849,13 +1005,93 @@
         const merchantName = /*[[${merchantName}]]*/ '示例企业';
         const enableCharts = /*[[${enableCharts}]]*/ false;
         
+        // PDF 优化的全局图表配置
+        const pdfOptimizedOptions = {
+            responsive: false,  // 关闭响应式，使用固定尺寸
+            maintainAspectRatio: true,
+            devicePixelRatio: 2,  // 高分辨率渲染
+            animation: false,     // 关闭动画，避免 PDF 生成时的问题
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 12,
+                            family: 'Microsoft YaHei, SimSun, Arial, sans-serif'
+                        }
+                    }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 3  // 固定点大小
+                },
+                line: {
+                    borderWidth: 2  // 固定线条宽度
+                }
+            }
+        };
+        
+        // 检测是否为 PDF 生成环境
+        function isPdfGeneration() {
+            return window.location.search.includes('pdf=true') || 
+                   document.body.classList.contains('gotenberg-optimized') ||
+                   window.navigator.userAgent.includes('Gotenberg');
+        }
+        
+        // 为 PDF 生成优化 Canvas
+        function optimizeCanvasForPdf(canvas) {
+            if (isPdfGeneration()) {
+                const ctx = canvas.getContext('2d');
+                const dpr = window.devicePixelRatio || 2;
+                
+                // 设置 Canvas 的实际尺寸
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width * dpr;
+                canvas.height = rect.height * dpr;
+                
+                // 缩放上下文以匹配设备像素比
+                ctx.scale(dpr, dpr);
+                
+                // 设置 CSS 尺寸
+                canvas.style.width = rect.width + 'px';
+                canvas.style.height = rect.height + 'px';
+            }
+        }
+        
+        // 专门为饼图优化 Canvas - 确保正方形
+        function optimizePieChartForPdf(canvas) {
+            if (isPdfGeneration()) {
+                const ctx = canvas.getContext('2d');
+                const dpr = window.devicePixelRatio || 2;
+                
+                // 强制设置为正方形尺寸
+                const size = 300;
+                canvas.width = size * dpr;
+                canvas.height = size * dpr;
+                
+                // 缩放上下文以匹配设备像素比
+                ctx.scale(dpr, dpr);
+                
+                // 设置 CSS 尺寸为正方形
+                canvas.style.width = size + 'px';
+                canvas.style.height = size + 'px';
+            }
+        }
+        
         // 仅在启用图表时执行渲染
         if (enableCharts) {
+            // 如果是 PDF 生成，添加优化类
+            if (isPdfGeneration()) {
+                document.body.classList.add('gotenberg-optimized');
+            }
+            
             // 等待页面加载完成
             document.addEventListener('DOMContentLoaded', function() {
                 
                 // 1. 市场份额饼图
-                const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
+                const marketShareCanvas = document.getElementById('marketShareChart');
+                optimizePieChartForPdf(marketShareCanvas);
+                const marketShareCtx = marketShareCanvas.getContext('2d');
                 new Chart(marketShareCtx, {
                     type: 'doughnut',
                     data: {
@@ -873,25 +1109,59 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        responsive: false,          // 关闭响应式
+                        maintainAspectRatio: true,  // 保持纵横比
+                        aspectRatio: 1,             // 强制1:1比例（正方形）
+                        devicePixelRatio: 2,        // 高分辨率渲染
+                        animation: false,           // 关闭动画
                         plugins: {
                             legend: {
                                 position: 'bottom',
                                 labels: {
-                                    padding: 20,
-                                    usePointStyle: true
+                                    padding: 12,
+                                    usePointStyle: true,
+                                    font: {
+                                        size: 11,
+                                        family: 'Microsoft YaHei, SimSun, Arial, sans-serif'
+                                    }
                                 }
                             },
                             title: {
                                 display: true,
-                                text: '市场份额分布 (%)'
+                                text: '市场份额分布 (%)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold',
+                                    family: 'Microsoft YaHei, SimSun, Arial, sans-serif'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 20
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                top: 10,
+                                bottom: 10,
+                                left: 10,
+                                right: 10
+                            }
+                        },
+                        onAnimationComplete: function() {
+                            // 饼图渲染完成，为PDF转换做准备
+                            if (isPdfGeneration()) {
+                                console.log('🥧 饼图渲染完成，ready for PDF conversion');
+                                document.body.setAttribute('data-pie-chart-ready', 'true');
                             }
                         }
                     }
                 });
                 
                 // 2. 收入趋势折线图
-                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                const revenueCanvas = document.getElementById('revenueChart');
+                optimizeCanvasForPdf(revenueCanvas);
+                const revenueCtx = revenueCanvas.getContext('2d');
                 new Chart(revenueCtx, {
                     type: 'line',
                     data: {
@@ -907,13 +1177,28 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        ...pdfOptimizedOptions,
                         scales: {
                             y: {
                                 beginAtZero: true,
                                 title: {
                                     display: true,
-                                    text: '收入 (万元)'
+                                    text: '收入 (万元)',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
                                 }
                             }
                         },
@@ -926,7 +1211,9 @@
                 });
                 
                 // 3. 用户增长柱状图
-                const userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+                const userGrowthCanvas = document.getElementById('userGrowthChart');
+                optimizeCanvasForPdf(userGrowthCanvas);
+                const userGrowthCtx = userGrowthCanvas.getContext('2d');
                 const userGrowthData = marketLabels.map((_, index) => (index + 1) * 1200 + 5000);
                 new Chart(userGrowthCtx, {
                     type: 'bar',
@@ -941,13 +1228,28 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        ...pdfOptimizedOptions,
                         scales: {
                             y: {
                                 beginAtZero: true,
                                 title: {
                                     display: true,
-                                    text: '用户数量'
+                                    text: '用户数量',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
                                 }
                             }
                         },
@@ -960,7 +1262,9 @@
                 });
                 
                 // 4. 双轴对比图
-                const dualAxisCtx = document.getElementById('dualAxisChart').getContext('2d');
+                const dualAxisCanvas = document.getElementById('dualAxisChart');
+                optimizeCanvasForPdf(dualAxisCanvas);
+                const dualAxisCtx = dualAxisCanvas.getContext('2d');
                 new Chart(dualAxisCtx, {
                     type: 'line',
                     data: {
@@ -980,7 +1284,7 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        ...pdfOptimizedOptions,
                         interaction: {
                             mode: 'index',
                             intersect: false,
@@ -990,7 +1294,15 @@
                                 display: true,
                                 title: {
                                     display: true,
-                                    text: '时间'
+                                    text: '时间',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
                                 }
                             },
                             y: {
@@ -999,7 +1311,15 @@
                                 position: 'left',
                                 title: {
                                     display: true,
-                                    text: '收入(万元)'
+                                    text: '收入(万元)',
+                                    font: {
+                                        size: 11
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 10
+                                    }
                                 }
                             },
                             y1: {
@@ -1008,18 +1328,28 @@
                                 position: 'right',
                                 title: {
                                     display: true,
-                                    text: '用户数量'
+                                    text: '用户数量',
+                                    font: {
+                                        size: 11
+                                    }
                                 },
                                 grid: {
                                     drawOnChartArea: false,
                                 },
+                                ticks: {
+                                    font: {
+                                        size: 10
+                                    }
+                                }
                             }
                         }
                     }
                 });
                 
                 // 5. 竞争力雷达图
-                const radarCtx = document.getElementById('radarChart').getContext('2d');
+                const radarCanvas = document.getElementById('radarChart');
+                optimizeCanvasForPdf(radarCanvas);
+                const radarCtx = radarCanvas.getContext('2d');
                 new Chart(radarCtx, {
                     type: 'radar',
                     data: {
@@ -1039,18 +1369,30 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        ...pdfOptimizedOptions,
                         scales: {
                             r: {
                                 beginAtZero: true,
-                                max: 100
+                                max: 100,
+                                ticks: {
+                                    font: {
+                                        size: 10
+                                    }
+                                },
+                                pointLabels: {
+                                    font: {
+                                        size: 10
+                                    }
+                                }
                             }
                         }
                     }
                 });
                 
                 // 6. 散点图
-                const scatterCtx = document.getElementById('scatterChart').getContext('2d');
+                const scatterCanvas = document.getElementById('scatterChart');
+                optimizeCanvasForPdf(scatterCanvas);
+                const scatterCtx = scatterCanvas.getContext('2d');
                 new Chart(scatterCtx, {
                     type: 'scatter',
                     data: {
@@ -1074,20 +1416,36 @@
                         }]
                     },
                     options: {
-                        responsive: true,
+                        ...pdfOptimizedOptions,
                         scales: {
                             x: {
                                 type: 'linear',
                                 position: 'bottom',
                                 title: {
                                     display: true,
-                                    text: '市场份额 (%)'
+                                    text: '市场份额 (%)',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
                                 }
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: '增长率 (%)'
+                                    text: '增长率 (%)',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                ticks: {
+                                    font: {
+                                        size: 11
+                                    }
                                 }
                             }
                         }
@@ -1096,7 +1454,9 @@
                 
                 // 7-9. 仪表盘图表 (使用环形图模拟)
                 function createGaugeChart(canvasId, value, max, color) {
-                    const ctx = document.getElementById(canvasId).getContext('2d');
+                    const canvas = document.getElementById(canvasId);
+                    optimizeCanvasForPdf(canvas);
+                    const ctx = canvas.getContext('2d');
                     return new Chart(ctx, {
                         type: 'doughnut',
                         data: {
@@ -1108,7 +1468,9 @@
                         },
                         options: {
                             responsive: false,
+                            maintainAspectRatio: true,
                             cutout: '70%',
+                            animation: false,
                             plugins: {
                                 legend: {
                                     display: false
@@ -1123,7 +1485,7 @@
                                     color: '#2c3e50',
                                     fontStyle: 'bold',
                                     sidePadding: 20,
-                                    minFontSize: 12,
+                                    minFontSize: 11,
                                     lineHeight: 25
                                 }
                             }
@@ -1135,9 +1497,10 @@
                                       ctx = chart.ctx;
                                 
                                 ctx.restore();
-                                const fontSize = (height / 114).toFixed(2);
-                                ctx.font = fontSize + "em sans-serif";
+                                const fontSize = (height / 120).toFixed(2);
+                                ctx.font = "bold " + fontSize + "em Microsoft YaHei, SimSun, Arial, sans-serif";
                                 ctx.textBaseline = "middle";
+                                ctx.fillStyle = '#2c3e50';
                                 
                                 const text = chart.config.options.elements.center.text,
                                       textX = Math.round((width - ctx.measureText(text).width) / 2),
