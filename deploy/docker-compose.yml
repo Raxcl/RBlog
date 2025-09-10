@@ -1,0 +1,91 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: rblog-mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-r_blog}
+      MYSQL_USER: ${MYSQL_USER:-blog}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: rblog-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+  blog-api:
+    build:
+      context: ../blog-api
+      dockerfile: Dockerfile
+    container_name: rblog-api
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      SERVER_PORT: 8090
+      SPRING_MVC_SERVLET_PATH: /RBlog
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-r_blog}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-blog}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      UPLOAD_PATH: /data/upload/
+      TOKEN_SECRETKEY: ${TOKEN_SECRETKEY}
+    volumes:
+      - upload-data:/data/upload
+      - ../blog-api/log:/app/log:Z
+    ports:
+      - "${API_PORT:-8090}:8090"
+    restart: unless-stopped
+
+  blog-view:
+    build:
+      context: ../blog-view
+      dockerfile: Dockerfile
+      args:
+        VUE_APP_URL: /RBlog/
+    container_name: rblog-view
+    depends_on:
+      - blog-api
+    ports:
+      - "${VIEW_PORT:-8081}:80"
+    restart: unless-stopped
+
+  blog-cms:
+    build:
+      context: ../blog-cms
+      dockerfile: Dockerfile
+      args:
+        VUE_APP_URL: /RBlog/admin/
+    container_name: rblog-cms
+    depends_on:
+      - blog-api
+    ports:
+      - "${CMS_PORT:-8080}:80"
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  redis-data:
+  upload-data:
+
+
