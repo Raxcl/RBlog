@@ -32,8 +32,32 @@
 本项目长期维护，欢迎fork代码和star！。
 
 
+## 服务器部署
+```
+cd deploy
+docker compose build --no-cache blog-api
+# 之后如无依赖变动，可正常构建以用缓存
+docker compose build blog-api
 
-## 快速开始
+docker compose up -d
+
+# 首次导入数据库
+bash bootstrap.sh
+
+
+
+
+cd /www/wwwroot/RBlog/deploy
+# 确保 .env 已就绪且密码正确
+bash bootstrap.sh
+```
+前台页面：http://43.139.211.77:8081/
+后台页面：http://43.139.211.77:8080/
+账号`Visitor`密码`666666`
+
+
+
+## 本地启动
 
 1. 创建 MySQL 数据库`r_blog`，并执行`/blog-api/r_blog.sql`初始化表数据
 2. 修改配置信息`blog-api/src/main/resources/test(application.yml)`,需要改名为application.yml，然后修改必要配置信息
