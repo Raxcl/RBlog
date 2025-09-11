@@ -53,6 +53,7 @@ cd /www/wwwroot/RBlog/deploy
 bash bootstrap.sh
 ```
 前台页面：http://43.139.211.77:8081/
+
 后台页面：http://43.139.211.77:8080/
 账号`Visitor`密码`666666`
 
