@@ -63,7 +63,6 @@ docker logs -f rblog-api | cat
 
 ## 部署
 方式一：部署教程：[https://blog.csdn.net/RAXCL/article/details/121276028](https://blog.csdn.net/RAXCL/article/details/121276028)
-方式二：详见 项目 docker 和 docker-web 文件夹，感谢 @nanshaws 提供
 
 ## 新增的功能
 [vue-live2d](https://github.com/Raxcl/vue-live2d)
