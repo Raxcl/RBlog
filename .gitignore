@@ -35,3 +35,4 @@ build/
 
 /blog-cms-tmp
 
+.DS_Store
