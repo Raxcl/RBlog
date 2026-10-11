@@ -1,0 +1,19 @@
+# 自动识别文本文件并统一成 LF
+* text=auto
+
+# 这些要在 Linux 服务器上直接执行，一旦被 checkout 成 CRLF 就会
+# 报 "bad interpreter: /bin/bash^M" 这类错，强制锁死 LF
+*.sh    text eol=lf
+*.py    text eol=lf
+*.env   text eol=lf
+*.example text eol=lf
+
+# 二进制，别做任何换行转换
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.jar   binary

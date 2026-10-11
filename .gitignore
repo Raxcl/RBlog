@@ -36,3 +36,12 @@ build/
 /blog-cms-tmp
 
 .DS_Store
+
+### 证书自动化 ###
+# 本仓库是公开的，腾讯云 SecretId/SecretKey 绝不能提交；只留 cert.env.example 模板
+deploy/cert/cert.env
+deploy/cert/*.local.env
+
+### Python ###
+__pycache__/
+*.py[cod]
